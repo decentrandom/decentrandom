@@ -30,3 +30,13 @@ type decentRandomApp struct {
 	accountKeeper auth.AccountKeeper
 	bankKeeper    bank.Keeper
 }
+
+func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
+
+	cdc := MakeCodec()
+}
+
+func MakeCodec() *codec.Codec {
+	var cdc = codec.New()
+	return cdc
+}
