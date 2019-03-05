@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
@@ -34,6 +35,9 @@ type decentRandomApp struct {
 func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 
 	cdc := MakeCodec()
+
+	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
+
 }
 
 func MakeCodec() *codec.Codec {
