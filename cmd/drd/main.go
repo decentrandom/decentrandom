@@ -100,6 +100,37 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 			if !viper.GetBool(flagOverwrite) && common.FileExists(genFile) {
 				reutrn fmt.Errof("genesis.json file already exists: $v", genFile)
 			}
-		}
+
+			genesis := app.GenesisState{
+				AuthData: auth.DefaultGenesisState(),
+				BankData: bank.DefaultGenesisState(),
+			}
+
+			appState, err = codec.MarshalJSONIndent(cdc, genesis)
+			if err != nil {
+				return err
+			}
+
+			_, _, validator, err := SimpleAppGenTx(cdc, pk)
+			if err != nil {
+				return err
+			}
+
+			if err = gaiaInit.ExportGenesisFile(genFile, chainID, []tmtypes.GenesisValidator{validaotr}, appState); err != nil {
+				return err
+			}
+
+			cfg.WriteConfigFile(filepath.Join(config.RootDir, "config", "config.toml"), config)
+
+			fmt.Printf("Initialized drd configuration and bootstrapping files in %s...\n", viper.GetString(cli.HomeFlag))
+			return nil
+		},
 	}
+
+	cmd.Flags().String(cli.HomeFlag, DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(client.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
+	cmd.Flags().BoolP(flagOverwrite, "o", false, "overwrite the genesis.json file")
+
+	return cmd
 }
+
