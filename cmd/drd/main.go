@@ -134,3 +134,94 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	return cmd
 }
 
+func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) * cobra.Command {
+	cmd := &cobra.Command {
+		Use:	"add-genesis-account [address] [coins[,coins]]",
+		Short:	"Adds an account to the genesis file"
+		Args:	cobra.ExactArgs(2),
+		Long:	strings.TrimSpace(`
+		Adds accounts to the genesis file so that you can start a chain with coins in the CLI:
+		$ drd add-genesis-account cosmos1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAKE,1000mycoin
+		`),
+		RunE:	func(_ *cobra.Command, args []string) error {
+			addr, err := sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+			coins, err := sdk.ParseCoins(args[1])
+			if err != nil {
+				return err
+			}
+			coins.Sort()
+
+			var genDoc tmtypes.GenesisDoc
+			config := ctx.Config
+			genFile := config.GenesisFile()
+			if !common.FileExists(genFile) {
+				return fmt.Errorf("%s does not exist, run `gaiad init` first", genFile)
+			}
+			genContents, err := ioutil.ReadFile(genFile)
+			if err != nil {
+			}
+
+			if err = cdc.UnmarshalJSON(genContents, &genDoc); err != nil {
+				return err
+			}
+
+			var appState app.GenesisState
+			if err = cdc.UnmarshalJSON(genDoc.AppState, &appState); err != nil {
+				return err
+			}
+
+			for _, stateAcc := range appState.Accounts {
+				if stateAcc.Address.Equals(addr) {
+					return fmt.Errorf("the application state already contains account %v", addr)
+				}
+			}
+
+			acc := auth.NewBaseAccountWithAddress(addr)
+			acc.Coins = coins
+			appState.Accounts = append(appState.Accounts, &acc)
+			appStateJSON, err := cdc.MarshalJSON(appState)
+			if err != nil {
+				return err
+			}
+
+			return gaiaInit.ExportGenesisFile(genFile, genDoc.ChainID, genDoc.Validators, appStateJSON)
+		},
+	}
+
+	return cmd
+}
+
+func SimpleAppGenTx(cdc *codec.Codec, pk crypto.PubKey) (
+	appGenTx, cliPrint json.RawMessage, validator tmtypes.GenesisValidator, err error) {
+
+	addr, secret, err := server.GenerateCoinKey()
+	if err != nil {
+		return
+	}
+
+	bz, err := cdc.MarshalJSON(struct {
+		Addr sdk.AccAddress `json:"addr"`
+	}{addr})
+	if err != nil {
+		return
+	}
+
+	appGenTx = json.RawMessage(bz)
+
+	bz, err = cdc.MarshalJSON(map[string]string{"secret": secret})
+	if err != nil {
+		return
+	}
+
+	cliPrint = json.RawMessage(bz)
+
+	validator = tmtypes.GenesisValidator{
+		PubKey: pk,
+		Power:  10,
+	}
+
+	return
+}
