@@ -11,9 +11,16 @@ import (
 type Keeper struct {
 	coinKeeper bank.Keeper
 
-	/*
-		to-do
-	*/
+	storeKey sdk.StoreKey
 
 	cdcd *codec.Codec // The wire codec for binary encoding/decoding.
+}
+
+// NewKeeper creates new instances of the rand Keeper
+func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+	return Keeper{
+		coinKeeper: cointKeeper,
+		storeKey:   storeKey,
+		cdc:        cdc,
+	}
 }
