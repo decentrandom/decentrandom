@@ -28,5 +28,5 @@ func (r Round) String() string {
 	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
 Difficulty: %d
 Nonce: %d
-NonceHash: %s`))
+NonceHash: %s`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash))
 }
