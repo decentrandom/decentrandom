@@ -30,9 +30,10 @@ type decentRandomApp struct {
 
 	keyMain          *sdk.KVStoreKey
 	keyAccount       *sdk.KVStoreKey
-	keyNSnames       *sdk.KVStoreKey
-	keyNSowners      *sdk.KVStoreKey
-	keyNSprices      *sdk.KVStoreKey
+	keyDRids         *sdk.KVStoreKey
+	keyDRtypes       *sdk.KVStoreKey
+	keyDRtargets     *sdk.KVStoreKey
+	keyDRnonces      *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
@@ -60,9 +61,10 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 
 		keyMain:          sdk.NewKVStoreKey("main"),
 		keyAccount:       sdk.NewKVStoreKey("acc"),
-		keyNSnames:       sdk.NewKVStoreKey("ns_names"),
-		keyNSowners:      sdk.NewKVStoreKey("ns_owners"),
-		keyNSprices:      sdk.NewKVStoreKey("ns_prices"),
+		keyDRids:         sdk.NewKVStoreKey("dr_ids"),
+		keyDRtypes:       sdk.NewKVStoreKey("dr_types"),
+		keyDRtargets:     sdk.NewKVStoreKey("dr_targets"),
+		keyDRnonces:      sdk.NewKVStoreKey("dr_nonces"),
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
 		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
@@ -89,13 +91,13 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 	// The FeeCollectionKeeper collects transaction fees and renders them to the fee distribution module
 	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
 
-	// The NameserviceKeeper is the Keeper from the module for this tutorial
-	// It handles interactions with the namestore
+	// The RandKeeper handles interactions with the rand
 	app.randKeeper = rand.NewKeeper(
 		app.bankKeeper,
-		app.keyNSnames,
-		app.keyNSowners,
-		app.keyNSprices,
+		app.keyDRids,
+		app.keyDRtypes,
+		app.keyDRtargets,
+		app.keyDRnonces,
 		app.cdc,
 	)
 
@@ -118,9 +120,10 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 	app.MountStores(
 		app.keyMain,
 		app.keyAccount,
-		app.keyNSnames,
-		app.keyNSowners,
-		app.keyNSprices,
+		app.keyDRids,
+		app.keyDRtypes,
+		app.keyDRtargets,
+		app.keyDRnonces,
 		app.keyFeeCollection,
 		app.keyParams,
 		app.tkeyParams,
