@@ -32,7 +32,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	}
 
 	store := ctx.KVStore(k.storeKey)
-	store.Set([]bytepid), k.cdc.MustMarshalBinaryBare(round)
+	store.Set([]byte(id), k.cdc.MustMarshalBinaryBare(round))
 }
 
 // Getter method for the round
