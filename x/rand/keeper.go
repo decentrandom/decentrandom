@@ -24,3 +24,12 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 		cdc:        cdc,
 	}
 }
+
+func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
+	if round.Id.Empty() {
+		return
+	}
+
+	store := ctx.KVStore(k.storeKey)
+	store.Set([]bytepid), k.cdc.MustMarshalBinaryBare(round)
+}
