@@ -11,6 +11,7 @@ import (
 //var DefaultRoundDifficulty = 1
 
 type Round struct {
+	Id            string         `json:"Id"`
 	Difficulty    int16          `json:"difficulty"`
 	Owner         sdk.AccAddress `json:"owner"`
 	Nonce         int16          `json:"nonce"`
