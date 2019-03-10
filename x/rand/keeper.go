@@ -25,7 +25,7 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 	}
 }
 
-// Setter method for rounds
+// Setter method for the round
 func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	if round.Id.Empty() {
 		return
@@ -35,7 +35,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	store.Set([]bytepid), k.cdc.MustMarshalBinaryBare(round)
 }
 
-// Getter method for rounds
+// Getter method for the round
 func (k Keeper) GetRound(vtx sdk.Context, id string) Round {
 	store := ctx.KVStore(k.storeKey)
 	if !store.Has([]byte(id)) {
@@ -46,3 +46,10 @@ func (k Keeper) GetRound(vtx sdk.Context, id string) Round {
 	k.cdc.MustUnmarshalBinaryBare(bz, &round)
 	return round
 }
+
+// Setter method for the owner
+func (k Keeper) SetOwner(ctx sdk.Context, id string, owner sdk.AccAddress) {
+	store := ctx.KVStore(k.ownersStoreKey)
+	store.Set([]byte(id), owner)
+}
+
