@@ -25,6 +25,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 	if !msg.Owner.Equals(keeper.GetOwner(Ctx, msg.Id)) {
 		return sdk.ErrUnauthorized("Incorrect Owner").Result()
 	}
-	// to-do
+
+	keeper.SetRound(ctx, msg.Id, msg)
 	return sdk.Result{}
 }
