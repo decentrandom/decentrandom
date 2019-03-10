@@ -11,9 +11,11 @@ type MsgNewRound struct {
 	Id            string
 	Difficulty    int16
 	Owner         sdk.AccAddress
+	Nonce         int16
 	NonceHash     string
 	Targets       []string
 	ScheduledTime time.Time
+	SeedHeights   []string
 }
 
 func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash string, targets []string, scheduledTime time.Time) MsgNewRound {
@@ -21,9 +23,11 @@ func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash
 		Id:            id,
 		Difficulty:    difficulty,
 		Owner:         owner,
+		Nonce:         0,
 		NonceHash:     nonceHash,
 		Targets:       targets,
 		ScheduledTime: scheduledTime,
+		SeedHeights:   nil,
 	}
 }
 
