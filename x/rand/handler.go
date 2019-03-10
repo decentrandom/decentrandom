@@ -11,9 +11,8 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
 
-		/*
-			to-do
-		*/
+		case MsgNewRound:
+			return handleMsgNewRound(ctx, keeper, msg)
 
 		default:
 			errMsg := fmt.Sprintf("Unrecognized rand Msg type: %v", msg.Type())
@@ -22,6 +21,10 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
-/*
-to-do
-*/
+func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
+	if !msg.Owner.Equals(keeper.GetOwner(Ctx, msg.Id)) {
+		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+	}
+	// to-do
+	return sdk.Result{}
+}
