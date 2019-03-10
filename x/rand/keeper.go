@@ -13,7 +13,7 @@ type Keeper struct {
 
 	storeKey sdk.StoreKey
 
-	cdcd *codec.Codec // The wire codec for binary encoding/decoding.
+	cdc *codec.Codec // The wire codec for binary encoding/decoding.
 }
 
 // NewKeeper creates new instances of the rand Keeper
