@@ -47,7 +47,6 @@ func (k Keeper) GetRound(vtx sdk.Context, id string) Round {
 	return round
 }
 
-// Setter method for the owner
 func (k Keeper) SetOwner(ctx sdk.Context, id string, owner sdk.AccAddress) {
 	store := ctx.KVStore(k.ownersStoreKey)
 	store.Set([]byte(id), owner)
@@ -57,3 +56,11 @@ func (k Keeper) HasOwner(ctx sdk.Context, id string) bool {
 	return !k.GetRound(ctx, id).Owner.Empty()
 }
 
+func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
+	return k.GetRound(ctx, id).Owner
+}
+
+func (k Keeper) GetIdsIterator(ctx sdk.Context) sdk.Iterator {
+	store := ctx.KVStore(k.storeKey)
+	return sdk.KVStorePrefixIterator(store, []byteP{})
+}
