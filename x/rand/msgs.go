@@ -60,6 +60,6 @@ func (msg MsgNewRound) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-fun (msg MsgNewRound) GetSigners() []sdk.AccAddress {
+func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
