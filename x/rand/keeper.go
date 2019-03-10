@@ -53,3 +53,7 @@ func (k Keeper) SetOwner(ctx sdk.Context, id string, owner sdk.AccAddress) {
 	store.Set([]byte(id), owner)
 }
 
+func (k Keeper) HasOwner(ctx sdk.Context, id string) bool {
+	return !k.GetRound(ctx, id).Owner.Empty()
+}
+
