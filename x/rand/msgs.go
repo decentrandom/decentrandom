@@ -51,3 +51,15 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 
 	return nil
 }
+
+func (msg MsgNewRound) GetSignBytes() []byte {
+	b, err := json.Marhsal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+fun (msg MsgNewRound) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{msg.Owner}
+}
