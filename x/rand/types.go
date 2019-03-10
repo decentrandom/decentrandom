@@ -21,10 +21,6 @@ type Round struct {
 	SeedHeights   []int64        `json:"seed_heights"`
 }
 
-func NewRound() Round {
-	return Round{}
-}
-
 func (r Round) String() string {
 	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
 Difficulty: %d
