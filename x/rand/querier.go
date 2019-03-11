@@ -28,5 +28,25 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 
 func queryIds(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 
-	// to-do
+	var idsList QueryResIds
+
+	iterator := keeper.GetIdsIterator(ctx)
+
+	for ; iterator.Valid(); iterator.Next() {
+		id := string(iterator, Key())
+		idsList = append(idsList, id)
+	}
+
+	bz, err2 := code.MarshalJSONIndent(keeper.cdc, idsList)
+	if err2 != nil {
+		panic("could not marshal result to JSON")
+	}
+
+	return bz, nil
+}
+
+type QueryResIds []string
+
+func (n QueryResIds) String() string {
+	return strings.Join(n[:], "\n")
 }
