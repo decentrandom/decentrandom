@@ -7,7 +7,6 @@ import (
 // RegisterCodec registers concrete types on the Amino codec
 func RegisterCodec(cdc *codec.Codec) {
 
-	/*
-		to-do
-	*/
+	cdc.RegisterConcrete(MsgNewRound{}, "rand/NewRound", nil)
+	cdc.RegisterConcrete(MsgAddTargets{}, "rand/AddTargets", nil)
 }
