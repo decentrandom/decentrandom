@@ -14,6 +14,9 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgNewRound:
 			return handleMsgNewRound(ctx, keeper, msg)
 
+		case MsgAddTargets:
+			retur  handleMsgAddTargets(ctx, keeper, msg)
+
 		default:
 			errMsg := fmt.Sprintf("Unrecognized rand Msg type: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
@@ -28,4 +31,8 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 
 	keeper.SetRound(ctx, msg.Id, msg)
 	return sdk.Result{}
+}
+
+func handlMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
+	return sdk.Result
 }
