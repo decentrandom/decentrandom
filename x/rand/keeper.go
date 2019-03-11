@@ -19,7 +19,7 @@ type Keeper struct {
 // NewKeeper creates new instances of the rand Keeper
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
-		coinKeeper: cointKeeper,
+		coinKeeper: coinKeeper,
 		storeKey:   storeKey,
 		cdc:        cdc,
 	}
