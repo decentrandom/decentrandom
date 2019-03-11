@@ -67,3 +67,6 @@ func (msg MsgNewRound) GetSignBytes() []byte {
 func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
+
+type MsgAddTargets struct {
+}
