@@ -29,7 +29,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 		return sdk.ErrUnauthorized("Incorrect Owner").Result()
 	}
 
-	keeper.SetRound(ctx, msg.Id, msg)
+	keeper.SetRound(ctx, msg.Id, Round{Difficulty: msg.Difficulty, Owner: msg.Owner, Nonce: msg.Nonce, NonceHash: msg.NonceHash, Targets: msg.Targets, ScheduledTime: msg.ScheduledTime, SeedHeights: msg.SeedHeights})
 	return sdk.Result{}
 }
 
