@@ -18,6 +18,7 @@ type MsgNewRound struct {
 	SeedHeights   []string
 }
 
+// Nonce must be 0, SeedHeights must be nil
 func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash string, targets []string, scheduledTime time.Time) MsgNewRound {
 	return MsgNewRound{
 		Id:            id,
