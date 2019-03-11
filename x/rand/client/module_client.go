@@ -42,11 +42,7 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 		Short: "Rand transactions subcommands",
 	}
 
-	randTxCmd.AddCommand(client.PostCommands(
-	/*
-		to-do
-	*/
-	)...)
+	randTxCmd.AddCommand(client.PostCommands()...)
 
 	return randTxCmd
 }
