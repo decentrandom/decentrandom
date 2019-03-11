@@ -81,3 +81,38 @@ func NewMsgAddTargets(id string, owner sdk.AccAddress, targets []string) MsgAddT
 		Targets: targets,
 	}
 }
+
+func (msg MsgAddTargets) Route() string {
+	return "rand"
+}
+
+func (msg MsgAddTargets) Type() string {
+	return "add_targets"
+}
+
+func (msg MsgAddTargets) ValidateBasic() sdk.Error {
+	if msg.Owner.Empty() {
+		return sdk.ErrInvalidAddress(msg.Owner.String())
+	}
+	if len(msg.Id) == 0 {
+		return sdk.ErrUnknownRequest("Round ID cannot be empty.")
+	}
+
+	if targets == nil {
+		return sdk.ErrUnknownRequest("Targets cannot be empty.")
+	}
+
+	return nil
+}
+
+func (msg MsgAddTargets) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgAddTargets) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{msg.Owner}
+}
