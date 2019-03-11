@@ -69,4 +69,15 @@ func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 }
 
 type MsgAddTargets struct {
+	Id      string
+	Owner   sdk.AccAddress
+	Targets []string
+}
+
+func NewMsgAddTargets(id string, owner sdk.AccAddress, targets []string) MsgAddTargets {
+	return MsgAddTargets{
+		Id:      id,
+		Owner:   owner,
+		Targets: targets,
+	}
 }
