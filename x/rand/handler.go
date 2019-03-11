@@ -25,7 +25,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 }
 
 func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
-	if !msg.Owner.Equals(keeper.GetOwner(Ctx, msg.Id)) {
+	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.Id)) {
 		return sdk.ErrUnauthorized("Incorrect Owner").Result()
 	}
 
@@ -34,5 +34,10 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 }
 
 func handlMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
+	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.id)) {
+		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+	}
+
+	keeper.AddTargets(ctx, msg.Id, msg.Targets)
 	return sdk.Result
 }
