@@ -30,10 +30,7 @@ type decentRandomApp struct {
 
 	keyMain          *sdk.KVStoreKey
 	keyAccount       *sdk.KVStoreKey
-	keyDRids         *sdk.KVStoreKey
-	keyDRtypes       *sdk.KVStoreKey
-	keyDRtargets     *sdk.KVStoreKey
-	keyDRnonces      *sdk.KVStoreKey
+	keyRounds        *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
@@ -61,10 +58,7 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 
 		keyMain:          sdk.NewKVStoreKey("main"),
 		keyAccount:       sdk.NewKVStoreKey("acc"),
-		keyDRids:         sdk.NewKVStoreKey("dr_ids"),
-		keyDRtypes:       sdk.NewKVStoreKey("dr_types"),
-		keyDRtargets:     sdk.NewKVStoreKey("dr_targets"),
-		keyDRnonces:      sdk.NewKVStoreKey("dr_nonces"),
+		keyRounds:        sdk.NewKVStoreKey("rounds"),
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
 		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
@@ -94,10 +88,7 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 	// The RandKeeper handles interactions with the rand
 	app.randKeeper = rand.NewKeeper(
 		app.bankKeeper,
-		app.keyDRids,
-		app.keyDRtypes,
-		app.keyDRtargets,
-		app.keyDRnonces,
+		app.keyRounds,
 		app.cdc,
 	)
 
@@ -120,10 +111,7 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 	app.MountStores(
 		app.keyMain,
 		app.keyAccount,
-		app.keyDRids,
-		app.keyDRtypes,
-		app.keyDRtargets,
-		app.keyDRnonces,
+		app.keyRounds,
 		app.keyFeeCollection,
 		app.keyParams,
 		app.tkeyParams,
