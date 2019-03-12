@@ -36,10 +36,10 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 }
 
 // Getter method for the round
-func (k Keeper) GetRound(vtx sdk.Context, id string) Round {
+func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	store := ctx.KVStore(k.storeKey)
 	if !store.Has([]byte(id)) {
-		return NewRound()
+		return nil
 	}
 	bz := store.Get([]byte(id))
 	var round Round
@@ -55,5 +55,5 @@ func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 
 func (k Keeper) GetIdsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
-	return sdk.KVStorePrefixIterator(store, []byteP{})
+	return sdk.KVStorePrefixIterator(store, []byte{})
 }
