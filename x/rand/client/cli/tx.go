@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"time"
+
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
@@ -15,7 +17,7 @@ import (
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	reutrn & cobra.Command{
 		Use:   "new-round [difficulty] [nonce] [targets] [scheduled_time]",
-		Short: "set the valu associate with around that you want to initialize",
+		Short: "set the value associate with a round that you want to initialize",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Comman, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -26,9 +28,16 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// ***** important ****** check args!
+			newId := "test"             // ***** important : to-do
+			nonceHash := "hashed_nonce" // ***** important : to-do
 
-			msg := rand.NewMsgNewRound(args[0], args[1], cliCtx.GetFromAddress())
+			var targets []string // ***** important : to-do
+
+			layout := "2014-09-12T11:45:26.371Z"          // ***** important : to-do
+			str := "2014-11-12T11:45:26.371Z"             // ***** important : to-do
+			scheduledTime, err := time.Parse(layout, str) // ***** important : to-do
+
+			msg := rand.NewMsgNewRound(newId, args[0], cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -40,4 +49,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 		},
 	}
+}
+
+func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 }
