@@ -21,10 +21,10 @@ import (
 )
 
 const (
-	appName = "decentrandom"
+	appName = "rand"
 )
 
-type decentRandomApp struct {
+type randApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
@@ -42,8 +42,8 @@ type decentRandomApp struct {
 	randKeeper          rand.Keeper
 }
 
-// NewDecentRandomApp is a constructor function for decentRandomApp
-func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
+// Constructor
+func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 	// First define the top level codec that will be shared by the different modules
 	cdc := MakeCodec()
@@ -52,7 +52,7 @@ func NewDecentRandomApp(logger log.Logger, db dbm.DB) *decentRandomApp {
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
 
 	// Here you initialize your application with the store keys it requires
-	var app = &decentRandomApp{
+	var app = &randApp{
 		BaseApp: bApp,
 		cdc:     cdc,
 
@@ -132,7 +132,7 @@ type GenesisState struct {
 	Accounts []*auth.BaseAccount `json:"accounts"`
 }
 
-func (app *decentRandomApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 
 	genesisState := new(GenesisState)
@@ -153,7 +153,7 @@ func (app *decentRandomApp) initChainer(ctx sdk.Context, req abci.RequestInitCha
 }
 
 // ExportAppStateAndValidators does the things
-func (app *decentRandomApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
+func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 	ctx := app.NewContext(true, abci.Header{})
 	accounts := []*auth.BaseAccount{}
 
