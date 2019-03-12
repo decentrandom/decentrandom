@@ -21,8 +21,13 @@ type Round struct {
 }
 
 func (r Round) String() string {
+	timeString := r.ScheduledTime.Local()
 	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
 Difficulty: %d
 Nonce: %d
-NonceHash: %s`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash))
+NonceHash: %s
+Targets: %v
+ScheduledTime: %s
+SeedHeights: %v
+`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900"), r.SeedHeights))
 }
