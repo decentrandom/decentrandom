@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// MsgNewRound is a struct format for a message
 type MsgNewRound struct {
 	Id            string
 	Difficulty    int16
