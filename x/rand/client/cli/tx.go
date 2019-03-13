@@ -52,4 +52,5 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 }
 
 func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
+	// ****** important : to-do
 }
