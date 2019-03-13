@@ -40,5 +40,5 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 
 	// ****** important : It only sets, not adds
 	keeper.SetTargets(ctx, msg.Id, msg.Targets)
-	return sdk.Result
+	return sdk.Result{}
 }
