@@ -47,6 +47,11 @@ func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	return round
 }
 
+// GetOwner - get the current owner of a round
+func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
+	return k.GetRound(ctx, id).Owner
+}
+
 // SetTargets is setter method for Round.Targets
 func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	round := k.GetRound(ctx, id)
