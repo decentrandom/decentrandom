@@ -58,7 +58,7 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 }
 
 func (msg MsgNewRound) GetSignBytes() []byte {
-	b, err := json.Marhsal(msg)
+	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
 	}
