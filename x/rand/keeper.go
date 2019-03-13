@@ -47,20 +47,20 @@ func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	return round
 }
 
-// GetOwner - get the current owner of a round
+// GetOwner -
 func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
 	return k.GetRound(ctx, id).Owner
 }
 
-// SetTargets is setter method for Round.Targets
+// SetTargets -
 func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	round := k.GetRound(ctx, id)
 	round.Targets = targets
 	k.SetRound(ctx, id, round)
 }
 
-// GetIdsIterator is method for getting IDs
-func (k Keeper) GetIdsIterator(ctx sdk.Context) sdk.Iterator {
+// GetIDsIterator -
+func (k Keeper) GetIDsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return sdk.KVStorePrefixIterator(store, []byte{})
 }
