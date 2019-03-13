@@ -28,8 +28,8 @@ func (mc ModuleClient) getQueryCmd() *cobra.Command {
 
 	randQueryCmd.AddCommand(client.GetCommands(
 	/*
-		to-do
-	*/
+	****** important : to-do
+	 */
 	)...)
 
 	return randQueryCmd
@@ -42,7 +42,10 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 		Short: "Rand transactions subcommands",
 	}
 
-	randTxCmd.AddCommand(client.PostCommands()...)
+	randTxCmd.AddCommand(client.PostCommands(
+		randcmd.GetCmdNewRound(mc.cdc),
+		randcmd.GetCmdAddTargets(mc.cdc),
+	)...)
 
 	return randTxCmd
 }
