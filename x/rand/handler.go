@@ -38,6 +38,7 @@ func handlMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.R
 		return sdk.ErrUnauthorized("Incorrect Owner").Result()
 	}
 
-	keeper.AddTargets(ctx, msg.Id, msg.Targets)
+	// ****** important : It only sets, not adds
+	keeper.SetTargets(ctx, msg.Id, msg.Targets)
 	return sdk.Result
 }
