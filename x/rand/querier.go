@@ -8,6 +8,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
+// QueryIds - query for IDs
 const (
 	QueryIds = "ids"
 )
