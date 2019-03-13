@@ -9,16 +9,16 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
-// QueryIds - query for IDs
+// QueryIDs - query for IDs
 const (
-	QueryIds = "ids"
+	QueryIDs = "ids"
 )
 
 // NewQuerier -
 func NewQuerier(keeper Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err sdk.Error) {
 		switch path[0] {
-		case QueryIds:
+		case QueryIDs:
 			return queryIDs(ctx, req, keeper)
 
 		default:
