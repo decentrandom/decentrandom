@@ -31,7 +31,7 @@ func queryIds(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte
 	iterator := keeper.GetIdsIterator(ctx)
 
 	for ; iterator.Valid(); iterator.Next() {
-		id := string(iterator, Key())
+		id := string(iterator.Key())
 		idsList = append(idsList, id)
 	}
 
