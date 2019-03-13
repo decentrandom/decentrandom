@@ -10,6 +10,7 @@ import (
 
 //var DefaultRoundDifficulty = 1
 
+// Round represents a round for making a random number
 type Round struct {
 	Difficulty    int16          `json:"difficulty"`
 	Owner         sdk.AccAddress `json:"owner"`
