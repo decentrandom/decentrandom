@@ -1,11 +1,9 @@
 package rand
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
@@ -37,7 +35,7 @@ func queryIds(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte
 		idsList = append(idsList, id)
 	}
 
-	bz, err2 := code.MarshalJSONIndent(keeper.cdc, idsList)
+	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, idsList)
 	if err2 != nil {
 		panic("could not marshal result to JSON")
 	}
