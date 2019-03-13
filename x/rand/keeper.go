@@ -27,7 +27,7 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 
 // Setter method for the round
 func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
-	if round.Id.Empty() || round.Owner.Empty() {
+	if len(id) == 0 || round.Owner.Empty() {
 		return
 	}
 
