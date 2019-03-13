@@ -38,11 +38,13 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 // GetRound is getter method for the round
 func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	store := ctx.KVStore(k.storeKey)
+	var round Round
+
 	if !store.Has([]byte(id)) {
-		return nil
+		return round
 	}
 	bz := store.Get([]byte(id))
-	var round Round
+
 	k.cdc.MustUnmarshalBinaryBare(bz, &round)
 	return round
 }
