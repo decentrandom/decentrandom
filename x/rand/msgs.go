@@ -9,7 +9,7 @@ import (
 
 // MsgNewRound is a struct format for a message
 type MsgNewRound struct {
-	Id            string
+	ID            string
 	Difficulty    int16
 	Owner         sdk.AccAddress
 	Nonce         int16
@@ -22,7 +22,7 @@ type MsgNewRound struct {
 // NewMsgNewRound - Nonce must be 0, SeedHeights must be nil
 func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash string, targets []string, scheduledTime time.Time) MsgNewRound {
 	return MsgNewRound{
-		Id:            id,
+		ID:            id,
 		Difficulty:    difficulty,
 		Owner:         owner,
 		Nonce:         0,
@@ -33,21 +33,23 @@ func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash
 	}
 }
 
+// Route -
 func (msg MsgNewRound) Route() string {
 	return "rand"
 }
 
+// Type -
 func (msg MsgNewRound) Type() string {
 	return "new_round"
 }
 
-// Validate
+// ValidateBasic -
 func (msg MsgNewRound) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
 
-	if len(msg.Id) == 0 || len(msg.NonceHash) == 0 {
+	if len(msg.ID) == 0 || len(msg.NonceHash) == 0 {
 		return sdk.ErrUnknownRequest("Id and/or NonceHash cannot be empty.")
 	}
 
@@ -58,6 +60,7 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 	return nil
 }
 
+// GetSignBytes -
 func (msg MsgNewRound) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -66,37 +69,43 @@ func (msg MsgNewRound) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
+// GetSigners -
 func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
 
+// MsgAddTargets -
 type MsgAddTargets struct {
-	Id      string
+	ID      string
 	Owner   sdk.AccAddress
 	Targets []string
 }
 
+//NewMsgAddTargets -
 func NewMsgAddTargets(id string, owner sdk.AccAddress, targets []string) MsgAddTargets {
 	return MsgAddTargets{
-		Id:      id,
+		ID:      id,
 		Owner:   owner,
 		Targets: targets,
 	}
 }
 
+// Route -
 func (msg MsgAddTargets) Route() string {
 	return "rand"
 }
 
+// Type -
 func (msg MsgAddTargets) Type() string {
 	return "add_targets"
 }
 
+// ValidateBasic -
 func (msg MsgAddTargets) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
-	if len(msg.Id) == 0 {
+	if len(msg.ID) == 0 {
 		return sdk.ErrUnknownRequest("Round ID cannot be empty.")
 	}
 
