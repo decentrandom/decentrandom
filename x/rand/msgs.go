@@ -116,6 +116,7 @@ func (msg MsgAddTargets) ValidateBasic() sdk.Error {
 	return nil
 }
 
+// GetSignBytes -
 func (msg MsgAddTargets) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -124,6 +125,7 @@ func (msg MsgAddTargets) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
+// GetSigners -
 func (msg MsgAddTargets) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
