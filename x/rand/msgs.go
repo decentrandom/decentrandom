@@ -15,7 +15,7 @@ type MsgNewRound struct {
 	NonceHash     string
 	Targets       []string
 	ScheduledTime time.Time
-	SeedHeights   []string
+	SeedHeights   []int64
 }
 
 // Nonce must be 0, SeedHeights must be nil
