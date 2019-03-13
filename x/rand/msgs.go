@@ -99,7 +99,7 @@ func (msg MsgAddTargets) ValidateBasic() sdk.Error {
 		return sdk.ErrUnknownRequest("Round ID cannot be empty.")
 	}
 
-	if targets == nil {
+	if msg.Targets == nil {
 		return sdk.ErrUnknownRequest("Targets cannot be empty.")
 	}
 
