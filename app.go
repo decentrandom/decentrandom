@@ -42,7 +42,7 @@ type randApp struct {
 	randKeeper          rand.Keeper
 }
 
-// Constructor
+// NewRandApp -
 func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 	// First define the top level codec that will be shared by the different modules
