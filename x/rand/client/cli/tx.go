@@ -14,6 +14,7 @@ import (
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
+// GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	reutrn & cobra.Command{
 		Use:   "new-round [difficulty] [nonce] [targets] [scheduled_time]",
@@ -28,7 +29,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			newId := "test"             // ***** important : to-do
+			newID := "test"             // ***** important : to-do
 			nonceHash := "hashed_nonce" // ***** important : to-do
 
 			var targets []string // ***** important : to-do
@@ -51,6 +52,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	}
 }
 
+// GetCmdAddTargets -
 func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 	// ****** important : to-do
 }
