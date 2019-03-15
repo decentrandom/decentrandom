@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// GetCmdIds -
 func GetCmdIds(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "ids",
