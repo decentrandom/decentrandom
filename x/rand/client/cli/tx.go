@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -16,11 +17,11 @@ import (
 
 // GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
-	reutrn & cobra.Command{
+	return &cobra.Command{
 		Use:   "new-round [difficulty] [nonce] [targets] [scheduled_time]",
 		Short: "set the value associate with a round that you want to initialize",
 		Args:  cobra.ExactArgs(4),
-		RunE: func(cmd *cobra.Comman, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
 			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
@@ -28,6 +29,12 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
+
+			difficulty64, errConvert := strconv.ParseInt(args[0], 16, 16)
+			if errConvert != nil {
+				panic(errConvert)
+			}
+			difficulty := int16(difficulty64)
 
 			newID := "test"             // ***** important : to-do
 			nonceHash := "hashed_nonce" // ***** important : to-do
@@ -37,11 +44,13 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			layout := "2014-09-12T11:45:26.371Z"          // ***** important : to-do
 			str := "2014-11-12T11:45:26.371Z"             // ***** important : to-do
 			scheduledTime, err := time.Parse(layout, str) // ***** important : to-do
-
-			msg := rand.NewMsgNewRound(newId, args[0], cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
-			err := msg.ValidateBasic()
 			if err != nil {
-				return err
+				panic(err)
+			}
+			msg := rand.NewMsgNewRound(newID, difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
+			errValidate := msg.ValidateBasic()
+			if errValidate != nil {
+				return errValidate
 			}
 
 			cliCtx.PrintResponse = true
@@ -50,9 +59,4 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 		},
 	}
-}
-
-// GetCmdAddTargets -
-func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
-	// ****** important : to-do
 }
