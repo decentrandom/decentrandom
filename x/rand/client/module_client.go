@@ -3,7 +3,7 @@ package client
 import (
 	"github.com/cosmos/cosmos-sdk/client"
 	randcmd "github.com/decentrandom/decentrandom/x/rand/client/cli"
-	"github.com/gogo/protobuf/codec"
+	//"github.com/gogo/protobuf/codec"
 	"github.com/spf13/cobra"
 	amino "github.com/tendermint/go-amino"
 )
