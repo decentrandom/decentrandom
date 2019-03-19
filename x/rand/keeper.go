@@ -61,6 +61,13 @@ func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	k.SetRound(ctx, id, round)
 }
 
+// SetNonce -
+func (k Keeper) SetNonce(ctx sdk.Context, id string, nonce int16) {
+	round := k.GetRound(ctx, id)
+	round.Nonce = nonce
+	k.SetRound(ctx, id, round)
+}
+
 // GetIDsIterator -
 func (k Keeper) GetIDsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
