@@ -40,6 +40,16 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 	return sdk.Result{}
 }
 
+// handleMsgDepoloyNonce
+func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sdk.Result {
+	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
+		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+	}
+
+	keeper.SetNonce(ctx, msg.ID, msg.Nonce)
+	return sdk.Result{}
+}
+
 // handleMsgAddTargets -
 func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
@@ -52,3 +62,12 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 }
 
 // handleMsgRemoveTargets -
+func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
+	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
+		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+	}
+
+	// ****** important : It only sets, not adds
+	keeper.SetTargets(ctx, msg.ID, msg.Targets)
+	return sdk.Result{}
+}
