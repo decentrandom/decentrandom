@@ -14,8 +14,14 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgNewRound:
 			return handleMsgNewRound(ctx, keeper, msg)
 
+		case MsgDeployNonce:
+			return handleMsgDeployNonce(ctx, keeper, msg)
+
 		case MsgAddTargets:
 			return handleMsgAddTargets(ctx, keeper, msg)
+
+		case MsgRemoveTargets:
+			return handleMsgRemoveTargets(ctx, keeper, msg)
 
 		default:
 			errMsg := fmt.Sprintf("Unrecognized rand Msg type: %v", msg.Type())
@@ -24,6 +30,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
+// handleMsgNewRound -
 func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Incorrect Owner").Result()
@@ -33,6 +40,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 	return sdk.Result{}
 }
 
+// handleMsgAddTargets -
 func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Incorrect Owner").Result()
@@ -42,3 +50,5 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 	keeper.SetTargets(ctx, msg.ID, msg.Targets)
 	return sdk.Result{}
 }
+
+// handleMsgRemoveTargets -
