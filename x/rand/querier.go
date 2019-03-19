@@ -12,7 +12,7 @@ import (
 
 // query endpoints
 const (
-	queryRound = "round"
+	QueryRound = "round"
 )
 
 // NewQuerier -
@@ -20,7 +20,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err sdk.Error) {
 
 		switch path[0] {
-		case queryRound:
+		case QueryRound:
 			return queryRound(ctx, path[1:], req, keeper)
 		default:
 			return nil, sdk.ErrUnknownRequest("unknown query endpoint")
@@ -36,8 +36,20 @@ func queryRound(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Ke
 
 	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, round)
 	if err2 != nil {
-		panice("could not marshal result to JSON")
+		panic("could not marshal result to JSON")
 	}
 
-	return btz, nil
+	return bz, nil
+}
+
+func (r Round) String() string {
+	timeString := r.ScheduledTime.Local()
+	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
+Difficulty: %d
+Nonce: %d
+NonceHash: %s
+Targets: %v
+ScheduledTime: %s
+SeedHeights: %v
+`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900"), r.SeedHeights))
 }
