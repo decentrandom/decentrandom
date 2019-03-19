@@ -90,7 +90,7 @@ type MsgDeployNonce struct {
 }
 
 // NewMsgDeployNonce - Nonce must be 0, SeedHeights must be nil
-func NewMsgDeployNonce(id string, difficulty int16, owner sdk.AccAddress, nonce int16) NewMsgDeployNonce {
+func NewMsgDeployNonce(id string, difficulty int16, owner sdk.AccAddress, nonce int16) MsgDeployNonce {
 	return MsgDeployNonce{
 		ID:    id,
 		Owner: owner,
