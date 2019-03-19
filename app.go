@@ -43,7 +43,7 @@ type randApp struct {
 }
 
 // NewRandApp -
-func NewRandApp(logger log.Logger, db dbm.DB) *randomApp {
+func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 	// First define the top level codec that will be shared by the different modules
 	cdc := MakeCodec()
