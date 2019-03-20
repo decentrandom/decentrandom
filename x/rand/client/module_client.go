@@ -14,6 +14,7 @@ type ModuleClient struct {
 	codec    *amino.Codec
 }
 
+// NewModuleClient -
 func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 	return ModuleClient{storeKey, cdc}
 }
@@ -27,9 +28,7 @@ func (mc ModuleClient) getQueryCmd() *cobra.Command {
 	}
 
 	randQueryCmd.AddCommand(client.GetCommands(
-	/*
-	****** important : to-do
-	 */
+		randCmd.GetCmdRound(mc.storeKey, mc.cdc),
 	)...)
 
 	return randQueryCmd
@@ -44,7 +43,9 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 
 	randTxCmd.AddCommand(client.PostCommands(
 		randcmd.GetCmdNewRound(mc.cdc),
+		randcmd.GetCmdDeployNonce(mc.cdc),
 		randcmd.GetCmdAddTargets(mc.cdc),
+		randcmd.GetCmdRemoveTargets(mc.cdc),
 	)...)
 
 	return randTxCmd
