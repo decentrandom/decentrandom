@@ -2,6 +2,7 @@ package rest
 
 import (
 	"fmt"
+	"google.golang.org/grpc/balancer/base"
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
@@ -30,23 +31,44 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 
 // newRoundReq -
 type newRoundReq struct {
-	BaseReq rest.BaseReq `json:"base_req"`
-	ID      string       `json:"id"`
+	BaseReq       rest.BaseReq `json:"base_req"`
+	Difficulty    int16        `json:"difficulty"`
+	NonceHash     string       `json:"nonce_hash"`
+	ID            string       `json:"id"`
+	Owner         string       `json:"owner"`
+	Targets       []string     `json:"targets"`
+	ScheduledTime time.Time    `jsong:"scheduled_time"`
 }
 
 // newRoundHandler -
 func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		paramType := vars[restName]
+		var req newRoundReq
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeName, paramType), nil)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusNotFound.err.Error())
+		if !rest.ReadRESTReq(w, r, cdc, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		msg := rand.NewMsgNewRound(req.ID, req.Difficulty, req.Owner, req.NonceHash, req.Targets, req.ScheduledTime)
+		err = msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		clientrest.CompleteAndBroadcastTxREST(w, cliCtx, baseReq, []sdk.Msg{msg}, cdc)
 
 	}
 }
