@@ -90,3 +90,45 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 
 	}
 }
+
+// deployNonceReq -
+type deployNonceReq struct {
+	BaseReq       rest.BaseReq `json:"base_req"`
+	Nonce    int16        `json:"nonce"`
+	ID            string       `json:"id"`
+	Owner         string       `json:"owner"`
+}
+
+// deployNonceHandler
+func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req deployNonceReq
+
+		if !rest.ReadRESTReq(w, r, cdc, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			return
+		}
+
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		msg := rand.NewMsgDeployNonce(req.ID, req.Owner, req.Nonce)
+		
+		err = msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		clientrest.CompleteAndBroadcastTxREST(w, cliCtx, baseReq, []sdk.Msg{msg}, cdc)
+
+	}
+}
