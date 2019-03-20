@@ -60,3 +60,31 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 		},
 	}
 }
+
+// GetCmdDeployNonce -
+func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
+	return &cobra.Command{
+		Use:	"deploy-nonce [id] [nonce]",
+		Short:	"set the nonce associated with a ID",
+		Args:	cora.ExactArgs(2),
+		RunE:	func(cmd *cobra.Command, args []string) error {
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+			
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			
+			if err := cliCtx.EnsureAccountExists(); err != nil {
+				return err
+			}
+
+			msg := rand.NewMsgDeployNonce(args[0], args[1], cliCtx.GetFromAddress())
+			err := msg.ValidateBasic()
+			if err := nil {
+				return err
+			}
+
+			cliCtx.PrintResponse = true
+
+			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
+		},
+	}
+}
