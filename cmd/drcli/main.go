@@ -27,7 +27,7 @@ import (
 
 const (
 	storeAcc = "acc"
-	storeDR  = "decentrandom"
+	storeDR  = "random"
 )
 
 var defaultCLIHome = os.ExpandEnv("$HOME/.drcli")
