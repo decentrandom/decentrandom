@@ -88,3 +88,69 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 		},
 	}
 }
+
+// GetCmdAddTargets -
+func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
+	return &cobra.Command{
+		/*
+		****** important
+		might be changed like this, target1, target2, target3, ....
+		*/
+		Use:	"add-targets [id] [value]",
+		Short:	"add targets",
+		Args:	cobra.ExactArgs(2),
+		RunE:	func(cmd *cobra.Command, args []string) error {
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+
+
+			if err := cliCtx.EnsureAccountExists(); err != nil {
+				return err
+			}
+
+			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), args[1])
+			err := msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			cliCtx.PrintResponse = true
+
+			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
+		},
+	}
+}
+
+// GetCmdRemoveTargets -
+func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
+	return &cobra.Command{
+		/*
+		****** important
+		might be changed like this, target1, target2, target3, ....
+		*/
+		Use:	"remove-targets [id] [value]",
+		Short:	"remove targets",
+		Args:	cobra.ExactArgs(2),
+		RunE:	func(cmd *cobra.Command, args []string) error {
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+
+
+			if err := cliCtx.EnsureAccountExists(); err != nil {
+				return err
+			}
+
+			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), args[1])
+			err := msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			cliCtx.PrintResponse = true
+
+			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
+		},
+	}
+}
