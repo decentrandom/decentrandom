@@ -99,7 +99,7 @@ type deployNonceReq struct {
 	Owner         string       `json:"owner"`
 }
 
-// deployNonceHandler
+// deployNonceHandler -
 func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req deployNonceReq
@@ -121,6 +121,90 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		}
 
 		msg := rand.NewMsgDeployNonce(req.ID, req.Owner, req.Nonce)
+		
+		err = msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		clientrest.CompleteAndBroadcastTxREST(w, cliCtx, baseReq, []sdk.Msg{msg}, cdc)
+
+	}
+}
+
+// addTargetsReq -
+type addTargetsReq struct {
+	BaseReq       rest.BaseReq `json:"base_req"`
+	Targets    []string]       `json:"targets"`
+	ID            string       `json:"id"`
+	Owner         string       `json:"owner"`
+}
+
+// addTargetsHandler -
+func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req addTargetsReq
+
+		if !rest.ReadRESTReq(w, r, cdc, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			return
+		}
+
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		msg := rand.NewMsgAddTargets(req.ID, req.Owner, req.Targets)
+		
+		err = msg.ValidateBasic()
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		clientrest.CompleteAndBroadcastTxREST(w, cliCtx, baseReq, []sdk.Msg{msg}, cdc)
+
+	}
+}
+
+// removeTargetsReq -
+type removeTargetsReq struct {
+	BaseReq       rest.BaseReq `json:"base_req"`
+	Targets    []string]       `json:"targets"`
+	ID            string       `json:"id"`
+	Owner         string       `json:"owner"`
+}
+
+// removeTargetsHandler -
+func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req removeTargetsReq
+
+		if !rest.ReadRESTReq(w, r, cdc, &req) {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			return
+		}
+
+		baseReq := req.BaseReq.Sanitize()
+		if !baseReq.ValidateBasic(w) {
+			return
+		}
+
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		msg := rand.NewMsgRemoveTargets(req.ID, req.Owner, req.Targets)
 		
 		err = msg.ValidateBasic()
 		if err != nil {
