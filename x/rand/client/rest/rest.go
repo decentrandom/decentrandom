@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	restName = "round"
+	restRound = "round"
 )
 
 // RegisterRoutes - Central function to define routes that get registered by the main application
@@ -29,6 +29,24 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 
 }
 
+// Query Handler(s)
+// roundHandler -
+func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandleFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		paramType := vars[restRound]
+
+		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeNamem paramType), nil)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+	}
+}
+
+// TX Handlers
 // newRoundReq -
 type newRoundReq struct {
 	BaseReq       rest.BaseReq `json:"base_req"`
