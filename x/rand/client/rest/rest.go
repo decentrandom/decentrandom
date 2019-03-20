@@ -22,8 +22,19 @@ const (
 func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/$s/rounds", storeName), addTargetsHandler(cdc, cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/$s/rounds", storeName), deployNonceHandler(cdc, cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/$s/rounds", storeName), removeTargetsHandler(cdc, cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restName), roundHandler(cdc, cliCtx, storeName)).Methods("GET")
+
 }
 
+// newRoundReq -
+type newRoundReq struct {
+	BaseReq rest.BaseReq `json:"base_req"`
+	ID      string       `json:"id"`
+}
+
+// newRoundHandler -
 func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -38,10 +49,4 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
 
 	}
-}
-
-type newRoundReq struct {
-	/*
-		to-do
-	*/
 }
