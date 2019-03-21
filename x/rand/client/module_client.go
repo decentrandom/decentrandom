@@ -11,7 +11,7 @@ import (
 // ModuleClient exports all client functionality from this module
 type ModuleClient struct {
 	storeKey string
-	codec    *amino.Codec
+	cdc      *amino.Codec
 }
 
 // NewModuleClient -
@@ -28,7 +28,7 @@ func (mc ModuleClient) getQueryCmd() *cobra.Command {
 	}
 
 	randQueryCmd.AddCommand(client.GetCommands(
-		randCmd.GetCmdRound(mc.storeKey, mc.cdc),
+		randcmd.GetCmdRound(mc.storeKey, mc.cdc),
 	)...)
 
 	return randQueryCmd
