@@ -21,8 +21,8 @@ import (
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
 	app "github.com/decentrandom/decentrandom"
-	nsclient "github.com/decentrandom/decentrandom/x/rand/client"
-	nsrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
+	randclient "github.com/decentrandom/decentrandom/x/rand/client"
+	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
 )
 
 const (
@@ -39,13 +39,13 @@ func main() {
 
 	// Read in the configuration file for the sdk
 	config := sdk.GetConfig()
-	config.SetBench32PrefixForAccount(sdk.Bech32PrefixAccAddr, sdk.Bech32PrefixAccPub)
+	config.SetBech32PrefixForAccount(sdk.Bech32PrefixAccAddr, sdk.Bech32PrefixAccPub)
 	config.SetBech32PrefixForValidator(sdk.Bech32PrefixValAddr, sdk.Bech32PrefixValPub)
 	config.SetBech32PrefixForConsensusNode(sdk.Bech32PrefixConsAddr, sdk.Bech32PrefixConsPub)
 	config.Seal()
 
 	mc := []sdk.ModuleClients{
-		nsclient.NewModuleClient(storeDR, cdc),
+		randclient.NewModuleClient(storeDR, cdc),
 	}
 
 	rootCmd := &cobra.Command{
@@ -87,7 +87,7 @@ func registerRoutes(rs *lcd.RestServer) {
 	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
 	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
 	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	drrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeNS)
+	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeDR)
 }
 
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
