@@ -777,7 +777,6 @@
     "github.com/tendermint/tendermint/libs/db",
     "github.com/tendermint/tendermint/libs/log",
     "github.com/tendermint/tendermint/types",
-    "google.golang.org/grpc/balancer/base",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
