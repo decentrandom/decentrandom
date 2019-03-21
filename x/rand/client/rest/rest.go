@@ -2,7 +2,8 @@ package rest
 
 import (
 	"fmt"
-	"google.golang.org/grpc/balancer/base"
+	"time"
+	//"google.golang.org/grpc/balancer/base"
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
@@ -21,22 +22,22 @@ const (
 
 // RegisterRoutes - Central function to define routes that get registered by the main application
 func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cdc, cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/$s/rounds", storeName), addTargetsHandler(cdc, cliCtx)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/$s/rounds", storeName), deployNonceHandler(cdc, cliCtx)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/$s/rounds", storeName), removeTargetsHandler(cdc, cliCtx)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restName), roundHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cdc, cliCtx, storeName)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), deployNonceHandler(cdc, cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), removeTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restRound), roundHandler(cdc, cliCtx, storeName)).Methods("GET")
 
 }
 
 // Query Handler(s)
 // roundHandler -
-func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandleFunc {
+func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		paramType := vars[restRound]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeNamem paramType), nil)
+		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeName, paramType), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
@@ -79,7 +80,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 			return
 		}
 
-		msg := rand.NewMsgNewRound(req.ID, req.Difficulty, req.Owner, req.NonceHash, req.Targets, req.ScheduledTime)
+		msg := rand.NewMsgNewRound(req.ID, req.Difficulty, addr, req.NonceHash, req.Targets, req.ScheduledTime)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -93,10 +94,10 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 
 // deployNonceReq -
 type deployNonceReq struct {
-	BaseReq       rest.BaseReq `json:"base_req"`
-	Nonce    int16        `json:"nonce"`
-	ID            string       `json:"id"`
-	Owner         string       `json:"owner"`
+	BaseReq rest.BaseReq `json:"base_req"`
+	Nonce   int16        `json:"nonce"`
+	ID      string       `json:"id"`
+	Owner   string       `json:"owner"`
 }
 
 // deployNonceHandler -
@@ -120,8 +121,8 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		msg := rand.NewMsgDeployNonce(req.ID, req.Owner, req.Nonce)
-		
+		msg := rand.NewMsgDeployNonce(req.ID, addr, req.Nonce)
+
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -135,10 +136,10 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 
 // addTargetsReq -
 type addTargetsReq struct {
-	BaseReq       rest.BaseReq `json:"base_req"`
-	Targets    []string]       `json:"targets"`
-	ID            string       `json:"id"`
-	Owner         string       `json:"owner"`
+	BaseReq rest.BaseReq `json:"base_req"`
+	Targets []string     `json:"targets"`
+	ID      string       `json:"id"`
+	Owner   string       `json:"owner"`
 }
 
 // addTargetsHandler -
@@ -162,8 +163,8 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 			return
 		}
 
-		msg := rand.NewMsgAddTargets(req.ID, req.Owner, req.Targets)
-		
+		msg := rand.NewMsgAddTargets(req.ID, addr, req.Targets)
+
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -177,10 +178,10 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 
 // removeTargetsReq -
 type removeTargetsReq struct {
-	BaseReq       rest.BaseReq `json:"base_req"`
-	Targets    []string]       `json:"targets"`
-	ID            string       `json:"id"`
-	Owner         string       `json:"owner"`
+	BaseReq rest.BaseReq `json:"base_req"`
+	Targets []string     `json:"targets"`
+	ID      string       `json:"id"`
+	Owner   string       `json:"owner"`
 }
 
 // removeTargetsHandler -
@@ -204,8 +205,8 @@ func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 			return
 		}
 
-		msg := rand.NewMsgRemoveTargets(req.ID, req.Owner, req.Targets)
-		
+		msg := rand.NewMsgRemoveTargets(req.ID, addr, req.Targets)
+
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
