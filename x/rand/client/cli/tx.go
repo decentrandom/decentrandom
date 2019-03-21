@@ -2,6 +2,7 @@ package cli
 
 import (
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -66,7 +67,7 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "deploy-nonce [id] [nonce]",
 		Short: "set the nonce associated with a ID",
-		Args:  cora.ExactArgs(2),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
@@ -76,7 +77,13 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			msg := rand.NewMsgDeployNonce(args[0], args[1], cliCtx.GetFromAddress())
+			nonceInt64, errInt := strconv.ParseInt(args[1], 10, 64)
+			if errInt != nil {
+				return errInt
+			}
+			nonceInt16 := int16(nonceInt64)
+
+			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), nonceInt16)
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -108,7 +115,13 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), args[1])
+			// first, clean/remove the comma
+			cleaned := strings.Replace(args[1], ",", " ", -1)
+
+			// convert 'clened' comma separated string to slice
+			strSlice := strings.Fields(cleaned)
+
+			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -140,7 +153,14 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), args[1])
+			// first, clean/remove the comma
+			cleaned := strings.Replace(args[1], ",", " ", -1)
+
+			// convert 'clened' comma separated string to slice
+			strSlice := strings.Fields(cleaned)
+
+			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
