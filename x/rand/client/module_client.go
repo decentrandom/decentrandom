@@ -20,7 +20,7 @@ func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 }
 
 // GetQueryCmd returns the cli query commands for this module
-func (mc ModuleClient) getQueryCmd() *cobra.Command {
+func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	// Group rand queries under a subcommand
 	randQueryCmd := &cobra.Command{
 		Use:   "rand",
