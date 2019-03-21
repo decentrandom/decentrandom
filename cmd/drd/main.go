@@ -45,7 +45,7 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:               "drd",
-		Short:             "decentrandom App Daemon (server)",
+		Short:             "DecentRandom App Daemon (server)",
 		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
