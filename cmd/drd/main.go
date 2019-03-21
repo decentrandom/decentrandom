@@ -30,6 +30,7 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
+// DefaultNodeHome -
 var DefaultNodeHome = os.ExpandEnv("$HOME/.drd")
 
 const (
@@ -42,10 +43,10 @@ func main() {
 	cdc := app.MakeCodec()
 	ctx := server.NewDefaultContext()
 
-	rootCmd := &cobra.Command {
-		Use:				"drd",
-		Short:				"decentrandom App Daemon (server)",
-		PersistentPreRunE:	server.PersistentPreRunEFn(ctx),
+	rootCmd := &cobra.Command{
+		Use:               "drd",
+		Short:             "decentrandom App Daemon (server)",
+		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
 	rootCmd.AddCommand(InitCmd(ctx, cdc))
@@ -63,26 +64,27 @@ func main() {
 }
 
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
-	return app.DecentRandomApp(logger, db)
+	return app.NewRandApp(logger, db)
 }
 
 func appExporter() server.AppExporter {
-	return func(logger log.logger, db dbm.DB, _ io.Writer, _ int64, _ bool, _ []string) ()
+	return func(logger log.Logger, db dbm.DB, _ io.Writer, _ int64, _ bool, _ []string) (
 		json.RawMessage, []tmtypes.GenesisValidator, error) {
-			dapp := app.NewDecentRandomApp(logger, db)
-			return dapp.ExportAppStateAndValidators()
-		}
+		dapp := app.NewRandApp(logger, db)
+		return dapp.ExportAppStateAndValidators()
+
 	}
 }
 
+// InitCmd -
 func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
-	cmd := &cobra.Command {
-		Use:		"init",
-		Short:		"Initialize genesis config, priv-validator file, and p2p-node file",
-		Args:		cobra.NoArgs,
-		RunE:		func(_ *cobra.Command, _ []string) error {
+	cmd := &cobra.Command{
+		Use:   "init",
+		Short: "Initialize genesis config, priv-validator file, and p2p-node file",
+		Args:  cobra.NoArgs,
+		RunE: func(_ *cobra.Command, _ []string) error {
 			config := ctx.Config
-			config.SetRoot(viper.GetString(clie.HomeFlag))
+			config.SetRoot(viper.GetString(cli.HomeFlag))
 
 			chainID := viper.GetString(client.FlagChainID)
 			if chainID == "" {
@@ -98,7 +100,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 			genFile := config.GenesisFile()
 
 			if !viper.GetBool(flagOverwrite) && common.FileExists(genFile) {
-				reutrn fmt.Errof("genesis.json file already exists: $v", genFile)
+				return fmt.Errorf("genesis.json file already exists: %v", genFile)
 			}
 
 			genesis := app.GenesisState{
@@ -116,7 +118,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			if err = gaiaInit.ExportGenesisFile(genFile, chainID, []tmtypes.GenesisValidator{validaotr}, appState); err != nil {
+			if err = gaiaInit.ExportGenesisFile(genFile, chainID, []tmtypes.GenesisValidator{validator}, appState); err != nil {
 				return err
 			}
 
@@ -134,16 +136,17 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	return cmd
 }
 
-func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) * cobra.Command {
-	cmd := &cobra.Command {
-		Use:	"add-genesis-account [address] [coins[,coins]]",
-		Short:	"Adds an account to the genesis file"
-		Args:	cobra.ExactArgs(2),
-		Long:	strings.TrimSpace(`
+// AddGenesisAccountCmd -
+func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "add-genesis-account [address] [coins[,coins]]",
+		Short: "Adds an account to the genesis file",
+		Args:  cobra.ExactArgs(2),
+		Long: strings.TrimSpace(`
 		Adds accounts to the genesis file so that you can start a chain with coins in the CLI:
 		$ drd add-genesis-account cosmos1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAKE,1000mycoin
 		`),
-		RunE:	func(_ *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			addr, err := sdk.AccAddressFromBech32(args[0])
 			if err != nil {
 				return err
@@ -194,6 +197,7 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) * cobra.Command
 	return cmd
 }
 
+// SimpleAppGenTx -
 func SimpleAppGenTx(cdc *codec.Codec, pk crypto.PubKey) (
 	appGenTx, cliPrint json.RawMessage, validator tmtypes.GenesisValidator, err error) {
 
