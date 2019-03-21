@@ -64,21 +64,21 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 // GetCmdDeployNonce -
 func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:	"deploy-nonce [id] [nonce]",
-		Short:	"set the nonce associated with a ID",
-		Args:	cora.ExactArgs(2),
-		RunE:	func(cmd *cobra.Command, args []string) error {
+		Use:   "deploy-nonce [id] [nonce]",
+		Short: "set the nonce associated with a ID",
+		Args:  cora.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
-			
+
 			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
-			
+
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
 
 			msg := rand.NewMsgDeployNonce(args[0], args[1], cliCtx.GetFromAddress())
 			err := msg.ValidateBasic()
-			if err := nil {
+			if err != nil {
 				return err
 			}
 
@@ -93,17 +93,16 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		/*
-		****** important
-		might be changed like this, target1, target2, target3, ....
+			****** important
+			might be changed like this, target1, target2, target3, ....
 		*/
-		Use:	"add-targets [id] [value]",
-		Short:	"add targets",
-		Args:	cobra.ExactArgs(2),
-		RunE:	func(cmd *cobra.Command, args []string) error {
+		Use:   "add-targets [id] [value]",
+		Short: "add targets",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
 			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
-
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
@@ -126,17 +125,16 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		/*
-		****** important
-		might be changed like this, target1, target2, target3, ....
+			****** important
+			might be changed like this, target1, target2, target3, ....
 		*/
-		Use:	"remove-targets [id] [value]",
-		Short:	"remove targets",
-		Args:	cobra.ExactArgs(2),
-		RunE:	func(cmd *cobra.Command, args []string) error {
+		Use:   "remove-targets [id] [value]",
+		Short: "remove targets",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
 			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
-
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
