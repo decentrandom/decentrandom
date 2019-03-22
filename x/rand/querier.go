@@ -13,7 +13,7 @@ import (
 // query endpoints
 const (
 	QueryRoundInfo = "round_info"
-	QueryRounds    = "rounds"
+	QueryRoundIDs  = "round_ids"
 )
 
 // NewQuerier -
@@ -23,13 +23,17 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 		switch path[0] {
 		case QueryRoundInfo:
 			return queryRoundInfo(ctx, path[1:], req, keeper)
+
+		case QueryRoundIDs:
+			return queryRoundIDs(ctx, req, keeper)
+
 		default:
 			return nil, sdk.ErrUnknownRequest("unknown query endpoint")
 		}
 	}
 }
 
-// queryRound
+// queryRoundInfo -
 func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	id := path[0]
 
@@ -53,4 +57,31 @@ Targets: %v
 ScheduledTime: %s
 SeedHeights: %v
 `, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900"), r.SeedHeights))
+}
+
+// queryRoundIDs -
+func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
+	var roundIDs QueryResRoundIDs
+
+	iterator := keeper.GetIDsIterator(ctx)
+
+	for ; iterator.Valid(); iterator.Next() {
+		id := string(iterator.Key())
+		roundIDs = append(roundIDs, id)
+	}
+
+	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, roundIDs)
+	if err2 != nil {
+		panic("could not marshal result to JSON")
+	}
+
+	return bz, nil
+
+}
+
+// QueryResRoundIDs -
+type QueryResRoundIDs []string
+
+func (n QueryResRoundIDs) String() string {
+	return strings.Join(n[:], "\n")
 }
