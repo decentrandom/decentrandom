@@ -6,8 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-//var DefaultRoundDifficulty = 1
-
 // Round -
 type Round struct {
 	Difficulty    int16          `json:"difficulty"`
