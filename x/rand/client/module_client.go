@@ -28,7 +28,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	}
 
 	randQueryCmd.AddCommand(client.GetCommands(
-		randcmd.GetCmdRound(mc.storeKey, mc.cdc),
+		randcmd.GetCmdRoundInfo(mc.storeKey, mc.cdc),
 	)...)
 
 	return randQueryCmd
