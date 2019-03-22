@@ -35,8 +35,8 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 // GetCmdRounds -
 func GetCmdRounds(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:	"rounds",
-		Short:	"rounds",
+		Use:   "rounds",
+		Short: "rounds",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
@@ -51,6 +51,6 @@ func GetCmdRounds(queryRoute string, cdc *codec.Codec) *cobra.Command {
 
 			return cliCtx.PrintOutput(out)
 
-		}
+		},
 	}
 }
