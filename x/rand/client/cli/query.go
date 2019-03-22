@@ -42,7 +42,7 @@ func GetCmdRoundIDs(queryRoute string, cdc *codec.Codec) *cobra.Command {
 
 			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", queryRoute), nil)
 			if err != nil {
-				fmt.Printf("could not get query rounds\n")
+				fmt.Printf("could not get query round IDs\n")
 				return nil
 			}
 
