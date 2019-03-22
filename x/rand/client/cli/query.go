@@ -9,10 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// GetCmdRound -
-func GetCmdRound(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// GetCmdRoundInfo -
+func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "round [id]",
+		Use:   "round_info [id]",
 		Short: "Query round info of ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
