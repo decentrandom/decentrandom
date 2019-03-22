@@ -13,6 +13,7 @@ import (
 // query endpoints
 const (
 	QueryRoundInfo = "round_info"
+	QueryRounds    = "rounds"
 )
 
 // NewQuerier -
