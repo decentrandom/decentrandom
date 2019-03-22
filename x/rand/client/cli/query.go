@@ -46,7 +46,7 @@ func GetCmdRounds(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return nil
 			}
 
-			var out rand.QueryResRounds
+			var out rand.QueryRounds
 			cdc.MustUnmarshalJSON(res, &out)
 
 			return cliCtx.PrintOutput(out)
