@@ -32,21 +32,21 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdRounds -
-func GetCmdRounds(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// GetCmdRoundIDs -
+func GetCmdRoundIDs(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "rounds",
-		Short: "rounds",
+		Use:   "round_ids",
+		Short: "round_ids",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/rounds", queryRoute), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", queryRoute), nil)
 			if err != nil {
 				fmt.Printf("could not get query rounds\n")
 				return nil
 			}
 
-			var out rand.QueryRounds
+			var out rand.QueryResRoundIDs
 			cdc.MustUnmarshalJSON(res, &out)
 
 			return cliCtx.PrintOutput(out)
