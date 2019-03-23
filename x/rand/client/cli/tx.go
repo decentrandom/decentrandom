@@ -1,7 +1,8 @@
 package cli
 
 import (
-	"encoding/hex"
+	"hash"
+	//"encoding/hex"
 	"strconv"
 	"strings"
 	"time"
