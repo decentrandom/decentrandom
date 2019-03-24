@@ -42,6 +42,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			newID := "test" // ***** important : to-do
 
+			// Nonce를 SHA256으로 해시
 			hasher := tmhash.New()
 			nonceVector := []byte(args[1])
 			hasher.Write(nonceVector)
