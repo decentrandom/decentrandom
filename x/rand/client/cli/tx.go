@@ -1,13 +1,14 @@
 package cli
 
 import (
-	"hash"
-	//"encoding/hex"
+
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
+
+	"github.com/tendermint/tendermint/crypto/tmhash"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
@@ -41,6 +42,12 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			newID := "test"             // ***** important : to-do
 			nonceHash := "hashed_nonce" // ***** important : to-do
+
+			hasher := tmhash.New()
+			nonceVector := []byte[args[1]]
+			hasher.Write(nonceVector)
+			bz := tmhash.Sum(nonceVector)
+			
 
 			var targets []string // ***** important : to-do
 
