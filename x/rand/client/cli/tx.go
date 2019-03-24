@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/tendermint/tendermint/crypto/tmhash"
+	cmn "github.com/tendermint/tendermint/libs/common"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
@@ -19,6 +20,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
+
+type hashItem []byte
+
+func (hI hashItem) Hash() []byte {
+	return []byte(hI)
+}
 
 // GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
@@ -42,6 +49,13 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			difficulty := int16(difficulty64)
 
 			newID := "test" // ***** important : to-do
+
+			roundArgs := make([][]byte, 5)
+			for i := 0; i < 5; i++ {
+				roundArgs[i] = hashItem(cmn.RandBytes(tmhash.Size))
+			}
+
+			rootHash := SimpleProofsFromByteSlices(roundArgs)
 
 			// Nonce를 주소와 함께 SHA256으로 해시
 			hasher := tmhash.New()
