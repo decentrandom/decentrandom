@@ -1,7 +1,7 @@
 package cli
 
 import (
-
+	"encoding/hex"
 	"strconv"
 	"strings"
 	"time"
@@ -40,14 +40,13 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 			difficulty := int16(difficulty64)
 
-			newID := "test"             // ***** important : to-do
-			nonceHash := "hashed_nonce" // ***** important : to-do
+			newID := "test" // ***** important : to-do
 
 			hasher := tmhash.New()
-			nonceVector := []byte[args[1]]
+			nonceVector := []byte(args[1])
 			hasher.Write(nonceVector)
 			bz := tmhash.Sum(nonceVector)
-			
+			nonceHash := hex.EncodeToString(bz)
 
 			var targets []string // ***** important : to-do
 
