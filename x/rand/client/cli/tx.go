@@ -2,6 +2,7 @@ package cli
 
 import (
 	"encoding/hex"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -42,9 +43,9 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			newID := "test" // ***** important : to-do
 
-			// Nonce를 SHA256으로 해시
+			// Nonce를 주소와 함께 SHA256으로 해시
 			hasher := tmhash.New()
-			nonceVector := []byte(args[1])
+			nonceVector := []byte(fmt.Sprintf("%s%s", args[1], cliCtx.GetFromAddress()))
 			hasher.Write(nonceVector)
 			bz := tmhash.Sum(nonceVector)
 			nonceHash := hex.EncodeToString(bz)
