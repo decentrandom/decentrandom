@@ -27,7 +27,7 @@ func (hI hashItem) Hash() []byte {
 	return []byte(hI)
 }
 
-// GetCmdNewRound -
+// GetCmdNewRound - 신규 라운드 생성
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "new-round [difficulty] [nonce] [target1,target2,...,target(n)] [scheduled_time]",
@@ -113,12 +113,6 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 			}
 			nonceInt16 := int16(nonceInt64)
 
-			// NonceHash와 일치하는지 확인
-			// important ****** to-do
-
-			// Round 소유주가 맞는가?
-			// important ****** to-do
-
 			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), nonceInt16)
 			err := msg.ValidateBasic()
 			if err != nil {
@@ -151,10 +145,8 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// first, clean/remove the comma
+			// 컴마로 구분된 string을 slice로 변환
 			cleaned := strings.Replace(args[1], ",", " ", -1)
-
-			// convert 'clened' comma separated string to slice
 			strSlice := strings.Fields(cleaned)
 
 			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
@@ -170,7 +162,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdRemoveTargets -
+// GetCmdRemoveTargets - 타겟 데이터 삭제
 func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "remove-targets [id] [target1,target2,...,target(n)]",
@@ -185,10 +177,8 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// first, clean/remove the comma
+			// 컴마로 구분된 string을 slice로 변환
 			cleaned := strings.Replace(args[1], ",", " ", -1)
-
-			// convert 'clened' comma separated string to slice
 			strSlice := strings.Fields(cleaned)
 
 			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
