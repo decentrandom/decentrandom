@@ -31,7 +31,7 @@ func (hI hashItem) Hash() []byte {
 // GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "new-round [difficulty] [nonce] [targets] [scheduled_time]",
+		Use:   "new-round [difficulty] [nonce] [target1,target2,...] [scheduled_time]",
 		Short: "set the value associate with a round that you want to initialize",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -65,11 +65,13 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			bz := tmhash.Sum(nonceVector)
 			nonceHash := hex.EncodeToString(bz)
 
-			var targets []string // ***** important : to-do
+			// 컴마로 구분된 string을 slice로 변환
+			cleaned := strings.Replace(args[2], ",", " ", -1)
+			targets := strings.Fields(cleaned)
 
-			layout := "2014-09-12T11:45:26.371Z"          // ***** important : to-do
-			str := "2014-11-12T11:45:26.371Z"             // ***** important : to-do
-			scheduledTime, err := time.Parse(layout, str) // ***** important : to-do
+			// string 타입의 시간을 time.Time 으로 변환
+			layout := "2014-09-12T11:45:26.371Z"
+			scheduledTime, err := time.Parse(layout, args[3])
 			if err != nil {
 				panic(err)
 			}
