@@ -11,7 +11,6 @@ import (
 
 	"github.com/tendermint/tendermint/crypto/merkle"
 	"github.com/tendermint/tendermint/crypto/tmhash"
-	cmn "github.com/tendermint/tendermint/libs/common"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
@@ -50,13 +49,6 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 			difficulty := int16(difficulty64)
 
-			roundArgs := make([][]byte, 5)
-			for i := 0; i < 5; i++ {
-				roundArgs[i] = hashItem(cmn.RandBytes(tmhash.Size))
-			}
-
-			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
-
 			// Nonce를 주소와 함께 SHA256으로 해시
 			hasher := tmhash.New()
 			nonceVector := []byte(fmt.Sprintf("%s%s", args[1], cliCtx.GetFromAddress()))
@@ -74,6 +66,16 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			if err != nil {
 				panic(err)
 			}
+
+			// ID 생성
+			roundArgs := make([][]byte, 5)
+			roundArgs[0] = []byte(args[0])
+			roundArgs[1] = []byte(args[1])
+			roundArgs[2] = []byte(args[2])
+			roundArgs[3] = []byte(args[3])
+
+			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
+
 			msg := rand.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
