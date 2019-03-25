@@ -43,6 +43,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
+			// string 타입의 난이도를 int16으로 변경
 			difficulty64, errConvert := strconv.ParseInt(args[0], 16, 16)
 			if errConvert != nil {
 				panic(errConvert)
