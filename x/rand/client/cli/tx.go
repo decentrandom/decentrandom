@@ -30,7 +30,7 @@ func (hI hashItem) Hash() []byte {
 // GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "new-round [difficulty] [nonce] [target1,target2,...] [scheduled_time]",
+		Use:   "new-round [difficulty] [nonce] [target1,target2,...,target(n)] [scheduled_time]",
 		Short: "set the value associate with a round that you want to initialize",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -106,11 +106,18 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
+			// string 타입의 Nonce를 int16으로 변환
 			nonceInt64, errInt := strconv.ParseInt(args[1], 10, 64)
 			if errInt != nil {
 				return errInt
 			}
 			nonceInt16 := int16(nonceInt64)
+
+			// NonceHash와 일치하는지 확인
+			// important ****** to-do
+
+			// Round 소유주가 맞는가?
+			// important ****** to-do
 
 			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), nonceInt16)
 			err := msg.ValidateBasic()
@@ -132,7 +139,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 			****** important
 			might be changed like this, target1, target2, target3, ....
 		*/
-		Use:   "add-targets [id] [value]",
+		Use:   "add-targets [id] [target1,target2,...,target(n)]",
 		Short: "add targets",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -166,11 +173,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 // GetCmdRemoveTargets -
 func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		/*
-			****** important
-			might be changed like this, target1, target2, target3, ....
-		*/
-		Use:   "remove-targets [id] [value]",
+		Use:   "remove-targets [id] [target1,target2,...,target(n)]",
 		Short: "remove targets",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
