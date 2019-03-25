@@ -73,6 +73,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			roundArgs[1] = []byte(args[1])
 			roundArgs[2] = []byte(args[2])
 			roundArgs[3] = []byte(args[3])
+			roundArgs[4] = []byte(cliCtx.GetFromAddress().String())
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
