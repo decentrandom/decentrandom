@@ -23,7 +23,7 @@ type MsgNewRound struct {
 	SeedHeights   []int64
 }
 
-// NewMsgNewRound - Nonce must be 0, SeedHeights must be nil
+// NewMsgNewRound - 초기이므로 Nonce는 0이고, SeedHeights는 빈 값
 func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash string, targets []string, scheduledTime time.Time) MsgNewRound {
 	return MsgNewRound{
 		ID:            id,
@@ -56,6 +56,9 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 	if len(msg.ID) == 0 || len(msg.NonceHash) == 0 {
 		return sdk.ErrUnknownRequest("Id and/or NonceHash cannot be empty.")
 	}
+
+	// 그럴리는 없지만 ID hash 값이 중복되는 경우는 어떻게?
+	// important ****** to-do
 
 	if msg.Difficulty < 1 {
 		return sdk.ErrUnknownRequest("Difficulty must greater than zero(0).")
