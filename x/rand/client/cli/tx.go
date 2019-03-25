@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/tendermint/tendermint/crypto/merkle/"
+	"github.com/tendermint/tendermint/crypto/merkle"
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	cmn "github.com/tendermint/tendermint/libs/common"
 
@@ -50,14 +50,12 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 			difficulty := int16(difficulty64)
 
-			newID := "test" // ***** important : to-do
-
 			roundArgs := make([][]byte, 5)
 			for i := 0; i < 5; i++ {
 				roundArgs[i] = hashItem(cmn.RandBytes(tmhash.Size))
 			}
 
-			rootHash := SimpleProofsFromByteSlices(roundArgs)
+			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
 			// Nonce를 주소와 함께 SHA256으로 해시
 			hasher := tmhash.New()
@@ -76,7 +74,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			if err != nil {
 				panic(err)
 			}
-			msg := rand.NewMsgNewRound(newID, difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
+			msg := rand.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
 				return errValidate
