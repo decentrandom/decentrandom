@@ -67,7 +67,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				panic(err)
 			}
 
-			// ID 생성
+			// ID 생성, 파라메터 값들과 계정의 머클트리 해시를 이용
 			roundArgs := make([][]byte, 5)
 			roundArgs[0] = []byte(args[0])
 			roundArgs[1] = []byte(args[1])
