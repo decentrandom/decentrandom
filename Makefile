@@ -19,5 +19,5 @@ update_vendor_deps:
 	@dep ensure -v -update
 
 install:
-	go install ./cmd/drd
-	go install ./cmd/drcli
+	go install ./cmd/randd
+	go install ./cmd/randcli
