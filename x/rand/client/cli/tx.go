@@ -61,10 +61,18 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			targets := strings.Fields(cleaned)
 
 			// string 타입의 시간을 time.Time 으로 변환
-			layout := "2014-09-12T11:45:26.371Z"
-			scheduledTime, err := time.Parse(layout, args[3])
-			if err != nil {
-				panic(err)
+			var scheduledTime time.Time
+			if args[3] != "" {
+				var err error
+				layout := "2014-09-12T11:45:26.371Z"
+				scheduledTime, err = time.Parse(layout, args[3])
+
+				if err != nil {
+					panic(err)
+				}
+			} else {
+
+				scheduledTime = time.Now()
 			}
 
 			// ID 생성, 파라메터 값들과 계정의 머클트리 해시를 이용
