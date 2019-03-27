@@ -28,7 +28,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryRoundIDs(ctx, req, keeper)
 
 		default:
-			return nil, sdk.ErrUnknownRequest("unknown query endpoint")
+			return nil, sdk.ErrUnknownRequest("알 수 없는 질의입니다.")
 		}
 	}
 }
@@ -41,7 +41,7 @@ func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 
 	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, round)
 	if err2 != nil {
-		panic("could not marshal result to JSON")
+		panic("결과를 JSON으로 만들 수 없습니다.")
 	}
 
 	return bz, nil
@@ -72,7 +72,7 @@ func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res [
 
 	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, roundIDs)
 	if err2 != nil {
-		panic("could not marshal result to JSON")
+		panic("결과를 JSON으로 만들 수 없습니다.")
 	}
 
 	return bz, nil
