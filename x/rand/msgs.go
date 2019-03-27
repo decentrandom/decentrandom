@@ -9,9 +9,10 @@ import (
 
 /*
 NewRound
+: 라운드 신규 생성
 */
 
-// MsgNewRound is a struct format for a message
+// MsgNewRound - 신규 라운드 생성을 위한 msg 구조체
 type MsgNewRound struct {
 	ID            string
 	Difficulty    int16
@@ -37,17 +38,17 @@ func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash
 	}
 }
 
-// Route -
+// Route - 라운드 신규 생성 Route
 func (msg MsgNewRound) Route() string {
 	return "rand"
 }
 
-// Type -
+// Type - 라운드 신규 생성 Type
 func (msg MsgNewRound) Type() string {
 	return "new_round"
 }
 
-// ValidateBasic -
+// ValidateBasic - 라운드 신규 생성 ValidateBasic
 func (msg MsgNewRound) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
@@ -67,7 +68,7 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 	return nil
 }
 
-// GetSignBytes -
+// GetSignBytes - 라운드 신규 생성 GetSignBytes
 func (msg MsgNewRound) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -76,23 +77,24 @@ func (msg MsgNewRound) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-// GetSigners -
+// GetSigners - 라운드 신규 생성 GetSigners
 func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
 
 /*
 DeployNonce
+: 라운드 Nonce 배포
 */
 
-// MsgDeployNonce is a struct format for a message
+// MsgDeployNonce - 라운드 논스 배포 msg의 구조체
 type MsgDeployNonce struct {
 	ID    string
 	Owner sdk.AccAddress
 	Nonce int16
 }
 
-// NewMsgDeployNonce -
+// NewMsgDeployNonce - 라운드 논스 배포
 func NewMsgDeployNonce(id string, owner sdk.AccAddress, nonce int16) MsgDeployNonce {
 	return MsgDeployNonce{
 		ID:    id,
@@ -101,17 +103,17 @@ func NewMsgDeployNonce(id string, owner sdk.AccAddress, nonce int16) MsgDeployNo
 	}
 }
 
-// Route -
+// Route - 라운드 논스 배포 Route
 func (msg MsgDeployNonce) Route() string {
 	return "rand"
 }
 
-// Type -
+// Type - 라운드 논스 배포 Type
 func (msg MsgDeployNonce) Type() string {
 	return "deploy_round"
 }
 
-// ValidateBasic -
+// ValidateBasic - 라운드 논스 배포 ValidateBasic
 func (msg MsgDeployNonce) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
@@ -124,7 +126,7 @@ func (msg MsgDeployNonce) ValidateBasic() sdk.Error {
 	return nil
 }
 
-// GetSignBytes -
+// GetSignBytes - 라운드 논스 배포 GetSignBytes
 func (msg MsgDeployNonce) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -133,23 +135,24 @@ func (msg MsgDeployNonce) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-// GetSigners -
+// GetSigners - 라운드 논스 배포 GetSigners
 func (msg MsgDeployNonce) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
 
 /*
 AddTargets
+: 라운드에 모집단 추가, 현재는 동일한 값을 중복 등록할 수 없음
 */
 
-// MsgAddTargets -
+// MsgAddTargets - 모집단 추가 msg 구조체
 type MsgAddTargets struct {
 	ID      string
 	Owner   sdk.AccAddress
 	Targets []string
 }
 
-// NewMsgAddTargets -
+// NewMsgAddTargets - 모집단 추가
 func NewMsgAddTargets(id string, owner sdk.AccAddress, targets []string) MsgAddTargets {
 	return MsgAddTargets{
 		ID:      id,
@@ -158,17 +161,17 @@ func NewMsgAddTargets(id string, owner sdk.AccAddress, targets []string) MsgAddT
 	}
 }
 
-// Route -
+// Route - 모집단 추가 Route
 func (msg MsgAddTargets) Route() string {
 	return "rand"
 }
 
-// Type -
+// Type - 모집단 추가 Type
 func (msg MsgAddTargets) Type() string {
 	return "add_targets"
 }
 
-// ValidateBasic -
+// ValidateBasic - 모집단 추가 ValidateBasic
 func (msg MsgAddTargets) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
@@ -184,7 +187,7 @@ func (msg MsgAddTargets) ValidateBasic() sdk.Error {
 	return nil
 }
 
-// GetSignBytes -
+// GetSignBytes - 모집단 추가 GetSignBytes
 func (msg MsgAddTargets) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -193,21 +196,24 @@ func (msg MsgAddTargets) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-// GetSigners -
+// GetSigners - 모집단 추가 GetSigners
 func (msg MsgAddTargets) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
 
-// MsgRemoveTargets
+/*
+MsgRemoveTargets
+: 라운드 모집단 삭제
+*/
 
-// MsgRemoveTargets -
+// MsgRemoveTargets - 라운드 모집단 삭제 msg 구조체
 type MsgRemoveTargets struct {
 	ID      string
 	Owner   sdk.AccAddress
 	Targets []string
 }
 
-// NewMsgRemoveTargets -
+// NewMsgRemoveTargets - 라운드 모집단 삭제
 func NewMsgRemoveTargets(id string, owner sdk.AccAddress, targets []string) MsgRemoveTargets {
 	return MsgRemoveTargets{
 		ID:      id,
@@ -216,17 +222,17 @@ func NewMsgRemoveTargets(id string, owner sdk.AccAddress, targets []string) MsgR
 	}
 }
 
-// Route -
+// Route - 라운드 모집단 삭제 Route
 func (msg MsgRemoveTargets) Route() string {
 	return "rand"
 }
 
-// Type -
+// Type - 라운드 모집단 삭제 Type
 func (msg MsgRemoveTargets) Type() string {
 	return "remove_targets"
 }
 
-// ValidateBasic -
+// ValidateBasic - 라운드 모집단 삭제 ValidateBasic
 func (msg MsgRemoveTargets) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
@@ -242,7 +248,7 @@ func (msg MsgRemoveTargets) ValidateBasic() sdk.Error {
 	return nil
 }
 
-// GetSignBytes -
+// GetSignBytes - 라운드 모집단 삭제 GetSignBytes
 func (msg MsgRemoveTargets) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -251,7 +257,7 @@ func (msg MsgRemoveTargets) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-// GetSigners -
+// GetSigners - 라운드 모집단 삭제 GetSigners
 func (msg MsgRemoveTargets) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
