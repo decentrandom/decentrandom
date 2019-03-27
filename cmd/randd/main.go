@@ -159,7 +159,7 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 			config := ctx.Config
 			genFile := config.GenesisFile()
 			if !common.FileExists(genFile) {
-				return fmt.Errorf("%s이 존재하지 않습니다. `gaiad init` 를 먼저 실행하시기 바랍니다.", genFile)
+				return fmt.Errorf("%s 파일이 존재하지 않습니다. `gaiad init` 를 먼저 실행하시기 바랍니다", genFile)
 			}
 			genContents, err := ioutil.ReadFile(genFile)
 			if err != nil {
@@ -176,7 +176,7 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 
 			for _, stateAcc := range appState.Accounts {
 				if stateAcc.Address.Equals(addr) {
-					return fmt.Errorf("이미 %v 계정에 대한 정보를 가지고 있습니다.", addr)
+					return fmt.Errorf("이미 %v 계정에 대한 정보를 가지고 있습니다", addr)
 				}
 			}
 
