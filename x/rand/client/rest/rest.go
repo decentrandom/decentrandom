@@ -31,7 +31,7 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 }
 
 // Query Handler(s)
-// roundHandler -
+// roundHandler - 라운드 정보 handler
 func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -48,7 +48,7 @@ func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string)
 }
 
 // TX Handlers
-// newRoundReq -
+// newRoundReq - 라운드 생성 요청 구조체
 type newRoundReq struct {
 	BaseReq       rest.BaseReq `json:"base_req"`
 	Difficulty    int16        `json:"difficulty"`
@@ -59,7 +59,7 @@ type newRoundReq struct {
 	ScheduledTime time.Time    `jsong:"scheduled_time"`
 }
 
-// newRoundHandler -
+// newRoundHandler - 라운드 생성 handler
 func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req newRoundReq
@@ -92,7 +92,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 	}
 }
 
-// deployNonceReq -
+// deployNonceReq - Nonce 배포 구조체
 type deployNonceReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Nonce   int16        `json:"nonce"`
@@ -100,7 +100,7 @@ type deployNonceReq struct {
 	Owner   string       `json:"owner"`
 }
 
-// deployNonceHandler -
+// deployNonceHandler - Nonce 배포 handler
 func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req deployNonceReq
@@ -134,7 +134,7 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 	}
 }
 
-// addTargetsReq -
+// addTargetsReq - 라운드 모집단 추가 구조체
 type addTargetsReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Targets []string     `json:"targets"`
@@ -142,7 +142,7 @@ type addTargetsReq struct {
 	Owner   string       `json:"owner"`
 }
 
-// addTargetsHandler -
+// addTargetsHandler - 라운드 모집단 추가 handler
 func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req addTargetsReq
@@ -176,7 +176,7 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 	}
 }
 
-// removeTargetsReq -
+// removeTargetsReq - 라운드 모집단 삭제 구조체
 type removeTargetsReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Targets []string     `json:"targets"`
@@ -184,7 +184,7 @@ type removeTargetsReq struct {
 	Owner   string       `json:"owner"`
 }
 
-// removeTargetsHandler -
+// removeTargetsHandler - 라운드 모집단 삭제 handler
 func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req removeTargetsReq
