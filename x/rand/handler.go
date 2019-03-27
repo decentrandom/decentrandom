@@ -24,7 +24,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 			return handleMsgRemoveTargets(ctx, keeper, msg)
 
 		default:
-			errMsg := fmt.Sprintf("Unrecognized rand Msg type: %v", msg.Type())
+			errMsg := fmt.Sprintf("알 수 없는 rand Msg 형식: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}
@@ -33,7 +33,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 // handleMsgNewRound -
 func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+		return sdk.ErrUnauthorized("소유주 불일치").Result()
 	}
 
 	keeper.SetRound(ctx, msg.ID, Round{Difficulty: msg.Difficulty, Owner: msg.Owner, Nonce: msg.Nonce, NonceHash: msg.NonceHash, Targets: msg.Targets, ScheduledTime: msg.ScheduledTime, SeedHeights: msg.SeedHeights})
@@ -43,7 +43,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 // handleMsgDepoloyNonce
 func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+		return sdk.ErrUnauthorized("소유주 불일치").Result()
 	}
 
 	keeper.SetNonce(ctx, msg.ID, msg.Nonce)
@@ -53,7 +53,7 @@ func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sd
 // handleMsgAddTargets -
 func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+		return sdk.ErrUnauthorized("소유주 불일치").Result()
 	}
 
 	// ****** important : It only sets, not adds
@@ -64,7 +64,7 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 // handleMsgRemoveTargets -
 func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Incorrect Owner").Result()
+		return sdk.ErrUnauthorized("소유주 불일치").Result()
 	}
 
 	// ****** important : It only sets, not adds
