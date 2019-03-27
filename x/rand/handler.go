@@ -67,6 +67,9 @@ func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets
 		return sdk.ErrUnauthorized("소유주 불일치").Result()
 	}
 
+	// 기존 Target에서 일치하는 것 삭제
+	// ****** important to-do
+
 	// ****** important : It only sets, not adds
 	keeper.SetTargets(ctx, msg.ID, msg.Targets)
 	return sdk.Result{}
