@@ -24,7 +24,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	// Group rand queries under a subcommand
 	randQueryCmd := &cobra.Command{
 		Use:   "rand",
-		Short: "Querying commands for the rand module",
+		Short: "질의 관련 명령어",
 	}
 
 	randQueryCmd.AddCommand(client.GetCommands(
@@ -38,7 +38,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	randTxCmd := &cobra.Command{
 		Use:   "rand",
-		Short: "Rand transactions subcommands",
+		Short: "트랜잭션 하위 명령어",
 	}
 
 	randTxCmd.AddCommand(client.PostCommands(
