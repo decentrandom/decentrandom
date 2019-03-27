@@ -65,7 +65,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 		var req newRoundReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
 			return
 		}
 
@@ -106,7 +106,7 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		var req deployNonceReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
 			return
 		}
 
@@ -148,7 +148,7 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 		var req addTargetsReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
 			return
 		}
 
@@ -190,7 +190,7 @@ func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 		var req removeTargetsReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
 			return
 		}
 
