@@ -30,7 +30,7 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
-// DefaultNodeHome -
+// DefaultNodeHome - 기본 노드 홈
 var DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 const (
@@ -54,11 +54,9 @@ func main() {
 
 	server.AddCommands(ctx, cdc, rootCmd, newApp, appExporter())
 
-	// prepare and add flags
 	executor := cli.PrepareBaseCmd(rootCmd, "DR", DefaultNodeHome)
 	err := executor.Execute()
 	if err != nil {
-		// handle with #870
 		panic(err)
 	}
 }
@@ -76,7 +74,7 @@ func appExporter() server.AppExporter {
 	}
 }
 
-// InitCmd -
+// InitCmd - init 명령어
 func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "init",
@@ -136,7 +134,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	return cmd
 }
 
-// AddGenesisAccountCmd -
+// AddGenesisAccountCmd - add-genesis-account 명령어
 func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add-genesis-account [address] [coins[,coins]]",
