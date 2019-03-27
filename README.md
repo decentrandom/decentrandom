@@ -12,8 +12,7 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 # Building
 
-<pre><code>
-make get_tools
+<pre><code>make get_tools
 dep ensure -v
 dep ensure -update -v
 make install
