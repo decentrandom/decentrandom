@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// GetCmdRoundInfo -
+// GetCmdRoundInfo - 라운드 정보
 func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_info [id]",
@@ -32,7 +32,7 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdRoundIDs -
+// GetCmdRoundIDs - 라운드 ID 리스트
 func GetCmdRoundIDs(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_ids",
