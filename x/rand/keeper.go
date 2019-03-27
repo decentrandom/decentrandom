@@ -54,6 +54,11 @@ func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
 	return k.GetRound(ctx, id).Owner
 }
 
+// GetTargets - 설정된 타겟 받아오기
+func (k Keeper) GetTargets(ctx sdk.Context, id string) []string {
+	return k.GetRound(ctx, id).Targets
+}
+
 // SetTargets -
 func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	round := k.GetRound(ctx, id)
