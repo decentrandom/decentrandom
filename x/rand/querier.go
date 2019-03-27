@@ -10,13 +10,13 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
-// query endpoints
+// 질의 endpoints
 const (
 	QueryRoundInfo = "round_info"
 	QueryRoundIDs  = "round_ids"
 )
 
-// NewQuerier -
+// NewQuerier - 신규 질의 생성
 func NewQuerier(keeper Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err sdk.Error) {
 
@@ -33,7 +33,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 	}
 }
 
-// queryRoundInfo -
+// queryRoundInfo - 라운드 정보를 위한 질의
 func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	id := path[0]
 
@@ -59,7 +59,7 @@ SeedHeights: %v
 `, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900"), r.SeedHeights))
 }
 
-// queryRoundIDs -
+// queryRoundIDs - 라운드 ID 리스트를 위한 질의
 func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	var roundIDs QueryResRoundIDs
 
@@ -79,7 +79,7 @@ func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res [
 
 }
 
-// QueryResRoundIDs -
+// QueryResRoundIDs - 라운드 ID 리스트를 위한 구조체
 type QueryResRoundIDs []string
 
 func (n QueryResRoundIDs) String() string {
