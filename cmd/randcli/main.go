@@ -50,11 +50,11 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:   "randcli",
-		Short: "decentrandom Client",
+		Short: "DecentRandom 클라이언트",
 	}
 
 	// Add --chain-id to persistent flags and mark it required
-	rootCmd.PersistentFlags().String(client.FlagChainID, "", "Chain ID of tendermint node")
+	rootCmd.PersistentFlags().String(client.FlagChainID, "", "텐더민트 노드의 체인 ID")
 	rootCmd.PersistentPreRunE = func(_ *cobra.Command, _ []string) error {
 		return initConfig(rootCmd)
 	}
@@ -94,7 +94,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	queryCmd := &cobra.Command{
 		Use:     "query",
 		Aliases: []string{"q"},
-		Short:   "Querying subcommands",
+		Short:   "질의 하부 명령어",
 	}
 
 	queryCmd.AddCommand(
@@ -116,7 +116,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:   "tx",
-		Short: "Transactions subcommands",
+		Short: "트랜잭션 하부 명령어",
 	}
 
 	txCmd.AddCommand(
