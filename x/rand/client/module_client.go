@@ -8,20 +8,20 @@ import (
 	amino "github.com/tendermint/go-amino"
 )
 
-// ModuleClient exports all client functionality from this module
+// ModuleClient - ModuleClient 구조체
 type ModuleClient struct {
 	storeKey string
 	cdc      *amino.Codec
 }
 
-// NewModuleClient -
+// NewModuleClient - ModuleClient 생성
 func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 	return ModuleClient{storeKey, cdc}
 }
 
-// GetQueryCmd returns the cli query commands for this module
+// GetQueryCmd - 질의 명령어 리턴
 func (mc ModuleClient) GetQueryCmd() *cobra.Command {
-	// Group rand queries under a subcommand
+
 	randQueryCmd := &cobra.Command{
 		Use:   "rand",
 		Short: "질의 관련 명령어",
@@ -34,7 +34,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	return randQueryCmd
 }
 
-// GetTxCmd returns the transaction commands for this module
+// GetTxCmd - 트랜잭션 명령어 리턴
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	randTxCmd := &cobra.Command{
 		Use:   "rand",
