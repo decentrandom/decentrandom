@@ -37,7 +37,6 @@ func main() {
 
 	cdc := app.MakeCodec()
 
-	// Read in the configuration file for the sdk
 	config := sdk.GetConfig()
 	config.SetBech32PrefixForAccount(sdk.Bech32PrefixAccAddr, sdk.Bech32PrefixAccPub)
 	config.SetBech32PrefixForValidator(sdk.Bech32PrefixValAddr, sdk.Bech32PrefixValPub)
@@ -53,13 +52,11 @@ func main() {
 		Short: "DecentRandom 클라이언트",
 	}
 
-	// Add --chain-id to persistent flags and mark it required
 	rootCmd.PersistentFlags().String(client.FlagChainID, "", "텐더민트 노드의 체인 ID")
 	rootCmd.PersistentPreRunE = func(_ *cobra.Command, _ []string) error {
 		return initConfig(rootCmd)
 	}
 
-	// Construct Root Command
 	rootCmd.AddCommand(
 		rpc.StatusCommand(),
 		client.ConfigCmd(defaultCLIHome),
