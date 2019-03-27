@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// NewHandler returns a handler for "rand" type messages.
+// NewHandler - 각각의 Msg에 필요한 handler를 리턴
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
@@ -30,7 +30,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
-// handleMsgNewRound -
+// handleMsgNewRound - 신규 라운드 생성을 위한 handler
 func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("소유주 불일치").Result()
@@ -40,7 +40,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 	return sdk.Result{}
 }
 
-// handleMsgDepoloyNonce
+// handleMsgDepoloyNonce - Nonce 배포를 위한 handler
 func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("소유주 불일치").Result()
@@ -50,7 +50,7 @@ func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sd
 	return sdk.Result{}
 }
 
-// handleMsgAddTargets -
+// handleMsgAddTargets - 모집단 추가를 위한 handler
 func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("소유주 불일치").Result()
@@ -76,12 +76,11 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 		}
 	}
 
-	// ****** important : It only sets, not adds
 	keeper.SetTargets(ctx, msg.ID, newTargets)
 	return sdk.Result{}
 }
 
-// handleMsgRemoveTargets -
+// handleMsgRemoveTargets - 모집단 삭제를 위한 handler
 func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("소유주 불일치").Result()
