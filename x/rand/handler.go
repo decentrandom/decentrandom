@@ -56,8 +56,28 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 		return sdk.ErrUnauthorized("소유주 불일치").Result()
 	}
 
+	// 기존 Targets에 추가
+	// 현재 Target에 중복된 값을 넣을 수는 없음
+	// important ******
+	// 만약 중복 응모가 가능하게 하려면 이를 어떻게 처리할 것인가? 이것이 필요한가는 의문
+	newTargets := keeper.GetTargets(ctx, msg.ID)
+
+	for _, b := range msg.Targets {
+		exist := false
+		for _, n := range newTargets {
+			if n == b {
+				exist = true
+				break
+			}
+		}
+
+		if !exist {
+			newTargets = append(newTargets, b)
+		}
+	}
+
 	// ****** important : It only sets, not adds
-	keeper.SetTargets(ctx, msg.ID, msg.Targets)
+	keeper.SetTargets(ctx, msg.ID, newTargets)
 	return sdk.Result{}
 }
 
