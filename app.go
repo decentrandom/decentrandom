@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
+	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	"github.com/decentrandom/decentrandom/x/rand"
 
@@ -32,14 +33,16 @@ type randApp struct {
 	keyAccount       *sdk.KVStoreKey
 	keyRounds        *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
-	keyStake         *sdk.KVStoreKey
-	tKeyStake        *sdk.TransientStoreKey
+	keyStaking       *sdk.KVStoreKey
+	tKeyStaking      *sdk.TransientStoreKey
+	keySlashing      *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 
 	accountKeeper       auth.AccountKeeper
 	bankKeeper          bank.Keeper
-	stakeKeeper         staking.Keeper
+	stakingKeeper       staking.Keeper
+	slashingKeeper      slashing.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
 	randKeeper          rand.Keeper
@@ -61,8 +64,9 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		keyRounds:        sdk.NewKVStoreKey("rounds"),
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
-		keyStake:         sdk.NewKVStoreKey("stake"),
-		tKeyStake:        sdk.NewTransientStoreKey("transient_stake"),
+		keyStaking:       sdk.NewKVStoreKey("staking"),
+		keySlashing:      sdk.NewKVStoreKey("slashsing"),
+		tKeyStaking:      sdk.NewTransientStoreKey("transient_stake"),
 
 		tkeyParams: sdk.NewTransientStoreKey("transient_params"),
 	}
@@ -84,11 +88,19 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
 
-	app.stakeKeeper = staking.NewKeeper(
+	app.stakingKeeper = staking.NewKeeper(
 		app.cdc,
-		app.keyStake, app.tKeyStake,
+		app.keyStaking, app.tKeyStaking,
 		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
 		staking.DefaultCodespace,
+	)
+
+	app.slashingKeeper = slashing.NewKeeper(
+		app.cdc,
+		app.keySlashing,
+		app.stakingKeeper,
+		app.paramsKeeper.Subspace(slashing.DefaultParamspace),
+		slashing.DefaultCodespace,
 	)
 
 	app.randKeeper = rand.NewKeeper(
