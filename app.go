@@ -98,7 +98,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.slashingKeeper = slashing.NewKeeper(
 		app.cdc,
 		app.keySlashing,
-		app.stakingKeeper,
+		app.stakingKeeper.GetValidatorSet(),
 		app.paramsKeeper.Subspace(slashing.DefaultParamspace),
 		slashing.DefaultCodespace,
 	)
