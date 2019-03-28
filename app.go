@@ -32,11 +32,14 @@ type randApp struct {
 	keyAccount       *sdk.KVStoreKey
 	keyRounds        *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
+	keyStaking       *sdk.KVStoreKey
+	tKeyStaking      *sdk.TransientStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 
 	accountKeeper       auth.AccountKeeper
 	bankKeeper          bank.Keeper
+	stakingKeeper       staking.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
 	randKeeper          rand.Keeper
@@ -58,7 +61,10 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		keyRounds:        sdk.NewKVStoreKey("rounds"),
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
-		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
+		keyStaking:       sdk.NewKVStoreKey("staking"),
+		tKeyStaking:      sdk.NewTransientStoreKey("transient_staking"),
+
+		tkeyParams: sdk.NewTransientStoreKey("transient_params"),
 	}
 
 	app.paramsKeeper = params.NewKeeper(app.cdc, app.keyParams, app.tkeyParams)
@@ -77,6 +83,13 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	)
 
 	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
+
+	app.stakingKeeper = staking.NewKeeper(
+		app.cdc,
+		app.keyStaking, app.tKeyStaking,
+		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
+		app.RegisterCodespace(staking.DefaultCodespace),
+	)
 
 	app.randKeeper = rand.NewKeeper(
 		app.bankKeeper,
