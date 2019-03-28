@@ -88,7 +88,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.cdc,
 		app.keyStake, app.tKeyStake,
 		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
-		app.RegisterCodespace(staking.DefaultCodespace),
+		staking.DefaultCodespace,
 	)
 
 	app.randKeeper = rand.NewKeeper(
