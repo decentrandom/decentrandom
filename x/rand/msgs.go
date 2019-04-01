@@ -120,7 +120,7 @@ func (msg MsgAddSeedHeight) ValidateBasic() sdk.Error {
 		return sdk.ErrInvalidAddress(msg.Owner.String()) // important ****** to-do 실제로는 Validator면 가능
 	}
 
-	if len(msg.Height) == 0 {
+	if msg.Height < 1 {
 		return sdk.ErrUnknownRequest("ID와 Height 값은 필수 항목 입니다.")
 	}
 
