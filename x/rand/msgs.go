@@ -83,6 +83,65 @@ func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 }
 
 /*
+AddSeedHeight
+: Seed 추가
+important ****** to-do 이 메시지는 Validator만 실행할 수 있어야 하는데?
+*/
+
+// MsgAddSeedHeight - Seed로 사용할 블록 높이 계산
+type MsgAddSeedHeight struct {
+	ID     string
+	Owner  sdk.AccAddress
+	Height int64
+}
+
+// NewMsgAddSeedHeight - Seed 높이 추가 함수
+func NewMsgAddSeedHeight(id string, owner sdk.AccAddress, height int64) MsgAddSeedHeight {
+	return MsgAddSeedHeight{
+		ID:     id,
+		Owner:  owner,
+		Height: height,
+	}
+}
+
+// Route - Seed 높이 추가 Route
+func (msg MsgAddSeedHeight) Route() string {
+	return "rand"
+}
+
+// Type - Seed 높이 추가 Type
+func (msg MsgAddSeedHeight) Type() string {
+	return "add_seed_height"
+}
+
+// ValidateBasic - Seed 높이 추가 ValidateBasic
+func (msg MsgAddSeedHeight) ValidateBasic() sdk.Error {
+	if msg.Owner.Empty() {
+		return sdk.ErrInvalidAddress(msg.Owner.String()) // important ****** to-do 실제로는 Validator면 가능
+	}
+
+	if len(msg.Height) == 0 {
+		return sdk.ErrUnknownRequest("ID와 Height 값은 필수 항목 입니다.")
+	}
+
+	return nil
+}
+
+// GetSignBytes - Seed 높이 추가 GetSignBytes
+func (msg MsgAddSeedHeight) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+// GetSigners - Seed 높이 추가 GetSigners
+func (msg MsgAddSeedHeight) GetSigners() []sdk.AccAddress {
+	return []sdk.AccAddress{msg.Owner}
+}
+
+/*
 DeployNonce
 : 라운드 Nonce 배포
 */
