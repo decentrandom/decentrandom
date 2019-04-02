@@ -86,6 +86,7 @@ func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 AddSeedHeight
 : Seed 추가
 important ****** to-do 이 메시지는 Validator만 실행할 수 있어야 하는데?
++ 하나의 메시지로 전체 Round를 커버할 수 있도록 해야함
 */
 
 // MsgAddSeedHeight - Seed로 사용할 블록 높이 계산
