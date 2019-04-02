@@ -2,6 +2,7 @@ package rand
 
 import (
 	"encoding/json"
+	"github.com/cosmos/cosmos-sdk/x/staking"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -92,12 +93,12 @@ important ****** to-do 이 메시지는 Validator만 실행할 수 있어야 하
 // MsgAddSeedHeight - Seed로 사용할 블록 높이 계산
 type MsgAddSeedHeight struct {
 	ID     string
-	Owner  sdk.AccAddress
+	Owner  sdk.ValAddress
 	Height int64
 }
 
 // NewMsgAddSeedHeight - Seed 높이 추가 함수
-func NewMsgAddSeedHeight(id string, owner sdk.AccAddress, height int64) MsgAddSeedHeight {
+func NewMsgAddSeedHeight(id string, owner sdk.ValAddress, height int64) MsgAddSeedHeight {
 	return MsgAddSeedHeight{
 		ID:     id,
 		Owner:  owner,
@@ -120,6 +121,10 @@ func (msg MsgAddSeedHeight) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String()) // important ****** to-do 실제로는 Validator면 가능
 	}
+
+	// Validator가 아닐 경우 오류 처리
+
+	// Jail 상태일 경우 오류 처리
 
 	if msg.Height < 1 {
 		return sdk.ErrUnknownRequest("ID와 Height 값은 필수 항목 입니다.")
