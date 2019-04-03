@@ -2,7 +2,6 @@ package rand
 
 import (
 	"encoding/json"
-	"github.com/cosmos/cosmos-sdk/x/staking"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
