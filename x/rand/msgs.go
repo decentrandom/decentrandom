@@ -142,8 +142,8 @@ func (msg MsgAddSeedHeight) GetSignBytes() []byte {
 }
 
 // GetSigners - Seed 높이 추가 GetSigners
-func (msg MsgAddSeedHeight) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Owner}
+func (msg MsgAddSeedHeight) GetSigners() []sdk.ValAddress {
+	return []sdk.ValAddress{msg.Owner}
 }
 
 /*
