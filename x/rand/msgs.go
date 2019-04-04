@@ -21,7 +21,6 @@ type MsgNewRound struct {
 	NonceHash     string
 	Targets       []string
 	ScheduledTime time.Time
-	SeedHeights   []int64
 }
 
 // NewMsgNewRound - 초기이므로 Nonce는 0이고, SeedHeights는 빈 값
@@ -34,7 +33,6 @@ func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash
 		NonceHash:     nonceHash,
 		Targets:       targets,
 		ScheduledTime: scheduledTime,
-		SeedHeights:   nil,
 	}
 }
 
@@ -80,70 +78,6 @@ func (msg MsgNewRound) GetSignBytes() []byte {
 // GetSigners - 라운드 신규 생성 GetSigners
 func (msg MsgNewRound) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
-}
-
-/*
-AddSeedHeight
-: Seed 추가
-important ****** to-do 이 메시지는 Validator만 실행할 수 있어야 하는데?
-+ 하나의 메시지로 전체 Round를 커버할 수 있도록 해야함
-*/
-
-// MsgAddSeedHeight - Seed로 사용할 블록 높이 계산
-type MsgAddSeedHeight struct {
-	ID     string
-	Owner  sdk.ValAddress
-	Height int64
-}
-
-// NewMsgAddSeedHeight - Seed 높이 추가 함수
-func NewMsgAddSeedHeight(id string, owner sdk.ValAddress, height int64) MsgAddSeedHeight {
-	return MsgAddSeedHeight{
-		ID:     id,
-		Owner:  owner,
-		Height: height,
-	}
-}
-
-// Route - Seed 높이 추가 Route
-func (msg MsgAddSeedHeight) Route() string {
-	return "rand"
-}
-
-// Type - Seed 높이 추가 Type
-func (msg MsgAddSeedHeight) Type() string {
-	return "add_seed_height"
-}
-
-// ValidateBasic - Seed 높이 추가 ValidateBasic
-func (msg MsgAddSeedHeight) ValidateBasic() sdk.Error {
-	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress(msg.Owner.String()) // important ****** to-do 실제로는 Validator면 가능
-	}
-
-	// Validator가 아닐 경우 오류 처리
-
-	// Jail 상태일 경우 오류 처리
-
-	if msg.Height < 1 {
-		return sdk.ErrUnknownRequest("ID와 Height 값은 필수 항목 입니다.")
-	}
-
-	return nil
-}
-
-// GetSignBytes - Seed 높이 추가 GetSignBytes
-func (msg MsgAddSeedHeight) GetSignBytes() []byte {
-	b, err := json.Marshal(msg)
-	if err != nil {
-		panic(err)
-	}
-	return sdk.MustSortJSON(b)
-}
-
-// GetSigners - Seed 높이 추가 GetSigners
-func (msg MsgAddSeedHeight) GetSigners() []sdk.ValAddress {
-	return []sdk.ValAddress{msg.Owner}
 }
 
 /*
