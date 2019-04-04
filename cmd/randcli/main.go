@@ -28,6 +28,23 @@ import (
 const (
 	storeAcc = "acc"
 	storeDR  = "random"
+
+	RandBech32MainPrefix = "rand"
+
+	RandPrefixAccount   = "acc"
+	RandPrefixValidator = "val"
+	RandPrefixConsensus = "cons"
+	RandPrefixPublic    = "pub"
+	RandPrefixOperator  = "oper"
+
+	RandPrefixAddress = "addr"
+
+	RandBech32PrefixAccAddr  = RandBech32MainPrefix
+	RandBech32PrefixAccPub   = RandBech32MainPrefix + RandPrefixPublic
+	RandBech32PrefixValAddr  = RandBech32MainPrefix + RandPrefixValidator + RandPrefixOperator
+	RandBech32PrefixValPub   = RandBech32MainPrefix + RandPrefixValidator + RandPrefixOperator + RandPrefixPublic
+	RandBech32PrefixConsAddr = RandBech32MainPrefix + RandPrefixValidator + RandPrefixConsensus
+	RandBech32PrefixConsPub  = RandBech32MainPrefix + RandPrefixValidator + RandPrefixConsensus + RandPrefixPublic
 )
 
 var defaultCLIHome = os.ExpandEnv("$HOME/.randcli")
@@ -38,9 +55,9 @@ func main() {
 	cdc := app.MakeCodec()
 
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(sdk.Bech32PrefixAccAddr, sdk.Bech32PrefixAccPub)
-	config.SetBech32PrefixForValidator(sdk.Bech32PrefixValAddr, sdk.Bech32PrefixValPub)
-	config.SetBech32PrefixForConsensusNode(sdk.Bech32PrefixConsAddr, sdk.Bech32PrefixConsPub)
+	config.SetBech32PrefixForAccount(RandBech32PrefixAccAddr, RandBech32PrefixAccPub)
+	config.SetBech32PrefixForValidator(RandBech32PrefixValAddr, RandBech32PrefixValPub)
+	config.SetBech32PrefixForConsensusNode(RandBech32PrefixConsAddr, RandBech32PrefixConsPub)
 	config.Seal()
 
 	mc := []sdk.ModuleClients{
