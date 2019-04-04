@@ -14,5 +14,4 @@ type Round struct {
 	NonceHash     string         `json:"nonce_hash"`
 	Targets       []string       `json:"targets"`
 	ScheduledTime time.Time      `json:"scheduled_time"`
-	SeedHeights   []int64        `json:"seed_heights"`
 }
