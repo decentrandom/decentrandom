@@ -55,8 +55,7 @@ Nonce: %d
 NonceHash: %s
 Targets: %v
 ScheduledTime: %s
-SeedHeights: %v
-`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900"), r.SeedHeights))
+`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900")))
 }
 
 // queryRoundIDs - 라운드 ID 리스트를 위한 질의
