@@ -17,6 +17,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/crypto"
+	"github.com/tendermint/tendermint/libs/bech32"
 	"github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/common"
 	"github.com/tendermint/tendermint/libs/log"
@@ -193,6 +194,26 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 	}
 
 	return cmd
+}
+
+// NewAccAddressFromBech32 creates an AccAddress from a Bech32 string.
+func NewAccAddressFromBech32(address string) (addr AccAddress, err error) {
+	if len(strings.TrimSpace(address)) == 0 {
+		return AccAddress{}, nil
+	}
+
+	bech32PrefixAccAddr := "rand"
+
+	bz, err := NewGetFromBech32(address, bech32PrefixAccAddr)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(bz) != AddrLen {
+		return nil, errors.New("Incorrect address length")
+	}
+
+	return AccAddress(bz), nil
 }
 
 // SimpleAppGenTx -
