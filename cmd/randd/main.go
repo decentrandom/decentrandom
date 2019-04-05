@@ -142,7 +142,7 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 		Args:  cobra.ExactArgs(2),
 		Long: strings.TrimSpace(`
 		제네시스 파일을 추가하여 CLI를 통해 코인과 함께 체인을 구동할 수 있도록 합니다.:
-		$ randd add-genesis-account rand1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAKE,1000mycoin
+		$ randd add-genesis-account cosmos1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAKE,1000mycoin
 		`),
 		RunE: func(_ *cobra.Command, args []string) error {
 			addr, err := sdk.AccAddressFromBech32(args[0])
