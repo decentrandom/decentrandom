@@ -195,26 +195,6 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 	return cmd
 }
 
-// NewAccAddressFromBech32 creates an AccAddress from a Bech32 string.
-func NewAccAddressFromBech32(address string) (addr AccAddress, err error) {
-	if len(strings.TrimSpace(address)) == 0 {
-		return AccAddress{}, nil
-	}
-
-	bech32PrefixAccAddr := "rand"
-
-	bz, err := NewGetFromBech32(address, bech32PrefixAccAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(bz) != AddrLen {
-		return nil, errors.New("Incorrect address length")
-	}
-
-	return AccAddress(bz), nil
-}
-
 // SimpleAppGenTx -
 func SimpleAppGenTx(cdc *codec.Codec, pk crypto.PubKey) (
 	appGenTx, cliPrint json.RawMessage, validator tmtypes.GenesisValidator, err error) {
