@@ -10,9 +10,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
+	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	amino "github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/libs/cli"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -23,6 +23,7 @@ import (
 	app "github.com/decentrandom/decentrandom"
 	randclient "github.com/decentrandom/decentrandom/x/rand/client"
 	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
+	amino "github.com/tendermint/go-amino"
 )
 
 const (
@@ -38,9 +39,9 @@ func main() {
 	cdc := app.MakeCodec()
 
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(sdk.Bech32PrefixAccAddr, sdk.Bech32PrefixAccPub)
-	config.SetBech32PrefixForValidator(sdk.Bech32PrefixValAddr, sdk.Bech32PrefixValPub)
-	config.SetBech32PrefixForConsensusNode(sdk.Bech32PrefixConsAddr, sdk.Bech32PrefixConsPub)
+	config.SetBech32PrefixForAccount(util.Bech32PrefixAccAddr, util.Bech32PrefixAccPub)
+	config.SetBech32PrefixForValidator(util.Bech32PrefixValAddr, util.Bech32PrefixValPub)
+	config.SetBech32PrefixForConsensusNode(util.Bech32PrefixConsAddr, util.Bech32PrefixConsPub)
 	config.Seal()
 
 	mc := []sdk.ModuleClients{
@@ -49,10 +50,10 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:   "randcli",
-		Short: "DecentRandom 클라이언트",
+		Short: "Command line interface for interacting with randd",
 	}
 
-	rootCmd.PersistentFlags().String(client.FlagChainID, "", "텐더민트 노드의 체인 ID")
+	rootCmd.PersistentFlags().String(client.FlagChainID, "", "Chain ID of tendermint node")
 	rootCmd.PersistentPreRunE = func(_ *cobra.Command, _ []string) error {
 		return initConfig(rootCmd)
 	}
@@ -91,7 +92,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	queryCmd := &cobra.Command{
 		Use:     "query",
 		Aliases: []string{"q"},
-		Short:   "질의 하부 명령어",
+		Short:   "Querying subcommands",
 	}
 
 	queryCmd.AddCommand(
@@ -113,7 +114,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:   "tx",
-		Short: "트랜잭션 하부 명령어",
+		Short: "Transactions subcommands",
 	}
 
 	txCmd.AddCommand(
