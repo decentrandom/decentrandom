@@ -221,12 +221,12 @@
   version = "v0.0.1"
 
 [[projects]]
-  digest = "1:ca59b1175189b3f0e9f1793d2c350114be36eaabbe5b9f554b35edee1de50aea"
+  digest = "1:d5f97fc268267ec1b61c3453058c738246fc3e746f14b1ae25161513b7367b0c"
   name = "github.com/gorilla/mux"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a7962380ca08b5a188038c69871b8d3fbdf31e89"
-  version = "v1.7.0"
+  revision = "c5c6c98bc25355028a63748a498942a6398ccd22"
+  version = "v1.7.1"
 
 [[projects]]
   digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
@@ -312,12 +312,12 @@
   version = "v1.1.2"
 
 [[projects]]
-  digest = "1:95741de3af260a92cc5c7f3f3061e85273f5a81b5db20d4bd68da74bd521675e"
+  digest = "1:e0f50a07c0def90588d69f77178712c6fdc67eb6576365f551cce98b44b501bf"
   name = "github.com/pelletier/go-toml"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c01d1270ff3e442a8a57cddc1c92dc1138598194"
-  version = "v1.2.0"
+  revision = "63909f0a90ab0f36909e8e044e46ace10cf13ba2"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
@@ -369,17 +369,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:c31163bd62461e0c5f7ddc7363e39ef8d9e929693e77b5c11c709b05f9cb9219"
+  digest = "1:f806b417865e83457c3659232926203f5b0d39aa741b71d9e3e4c0c774e71a5c"
   name = "github.com/prometheus/procfs"
-  packages = [
-    ".",
-    "internal/util",
-    "iostats",
-    "nfs",
-    "xfs",
-  ]
+  packages = ["."]
   pruneopts = "UT"
-  revision = "55ae3d9d557340b5bc24cd8aa5f6fa2c2ab31352"
+  revision = "ea9eea63887261e4d8ed8315f4078e88d540c725"
 
 [[projects]]
   digest = "1:ea0700160aca4ef099f4e06686a665a87691f4248dddd40796925eda2e46bd64"
@@ -512,7 +506,7 @@
   version = "v0.12.2"
 
 [[projects]]
-  digest = "1:791d8e6add900a4f6bb2e8dbb6da423576fc69cffa61368cb3df0552ff34aa06"
+  digest = "1:d04614cf7112381eccc5ad4abcbd967b55b5b0090c513b73ee28df80ade2f9bd"
   name = "github.com/tendermint/tendermint"
   packages = [
     "abci/client",
@@ -578,8 +572,8 @@
     "version",
   ]
   pruneopts = "UT"
-  revision = "976819537d199aa43c6ad55ec4e8958323322bb0"
-  version = "v0.30.2"
+  revision = "91fd55343e3b16f489caf69e76333882188130e5"
+  version = "v0.30.3"
 
 [[projects]]
   digest = "1:5a736f4722932d9a45d28852e85b83f68292d9af2ef0be29d4e5fe6fd89d5d96"
@@ -649,14 +643,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d3229d0c4f5a29399fe3d39cd64de216af15f8bce9a00932c0a7a5ddaa6418f7"
+  digest = "1:17d4aa98cea38b7de4fe214aa57f8b1a39c85b45d8cdc6e9b37d575f9cf5f23d"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
     "unix",
   ]
   pruneopts = "UT"
-  revision = "f49334f85ddcf0f08d7fb6dd7363e9e6d6b777eb"
+  revision = "81d4e9dc473e5e8c933f2aaeba2a3d81efb9aed2"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -687,7 +681,7 @@
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "e79c0c59cdb5e117ef82a6f885294df3d74065d5"
+  revision = "64821d5d210748c883cd2b809589555ae4654203"
 
 [[projects]]
   digest = "1:c00eb80d7b152379c3e94c38d82b29deca98b1d0f53e4e20362589b7fcbffa07"
@@ -764,6 +758,7 @@
     "github.com/cosmos/cosmos-sdk/x/bank/client/cli",
     "github.com/cosmos/cosmos-sdk/x/bank/client/rest",
     "github.com/cosmos/cosmos-sdk/x/params",
+    "github.com/cosmos/cosmos-sdk/x/slashing",
     "github.com/cosmos/cosmos-sdk/x/staking",
     "github.com/gorilla/mux",
     "github.com/spf13/cobra",
