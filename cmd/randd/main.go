@@ -14,6 +14,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
+	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/crypto"
@@ -41,11 +42,18 @@ func main() {
 	cobra.EnableCommandSorting = false
 
 	cdc := app.MakeCodec()
+
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount(util.Bech32PrefixAccAddr, util.Bech32PrefixAccPub)
+	config.SetBech32PrefixForValidator(util.Bech32PrefixValAddr, util.Bech32PrefixValPub)
+	config.SetBech32PrefixForConsensusNode(util.Bech32PrefixConsAddr, util.Bech32PrefixConsPub)
+	config.Seal()
+
 	ctx := server.NewDefaultContext()
 
 	rootCmd := &cobra.Command{
 		Use:               "randd",
-		Short:             "DecentRandom 앱 데몬 (서버)",
+		Short:             "DecentRandom Daemon (server)",
 		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
