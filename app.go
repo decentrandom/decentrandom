@@ -101,8 +101,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		staking.DefaultCodespace,
 	)
 
-	app.stakingKeeper = *stakingKeeper.SetHooks(
-		NewStakingHooks(app.distrKeeper.Hooks(), app.slashsingKeeper.Hooks()))
+	app.stakingKeeper = *stakingKeeper.SetHooks(NewStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
 
 	app.slashingKeeper = slashing.NewKeeper(
 		app.cdc,
@@ -216,6 +215,8 @@ func MakeCodec() *codec.Codec {
 	return cdc
 }
 
+var _ sdk.StakingHooks = StakingHooks{}
+
 // StakingHooks -
 type StakingHooks struct {
 	dh distr.Hooks
@@ -225,4 +226,64 @@ type StakingHooks struct {
 // NewStakingHooks -
 func NewStakingHooks(dh distr.Hooks, sh slashing.Hooks) StakingHooks {
 	return StakingHooks{dh, sh}
+}
+
+// AfterValidatorCreated -
+func (h StakingHooks) AfterValidatorCreated(ctx sdk.Context, valAddr sdk.ValAddress) {
+	h.dh.AfterValidatorCreated(ctx, valAddr)
+	h.sh.AfterValidatorCreated(ctx, valAddr)
+}
+
+// BeforeValidatorModified -
+func (h StakingHooks) BeforeValidatorModified(ctx sdk.Context, valAddr sdk.ValAddress) {
+	h.dh.BeforeValidatorModified(ctx, valAddr)
+	h.sh.BeforeValidatorModified(ctx, valAddr)
+}
+
+// AfterValidatorRemoved -
+func (h StakingHooks) AfterValidatorRemoved(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) {
+	h.dh.AfterValidatorRemoved(ctx, consAddr, valAddr)
+	h.sh.AfterValidatorRemoved(ctx, consAddr, valAddr)
+}
+
+// AfterValidatorBonded -
+func (h StakingHooks) AfterValidatorBonded(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) {
+	h.dh.AfterValidatorBonded(ctx, consAddr, valAddr)
+	h.sh.AfterValidatorBonded(ctx, consAddr, valAddr)
+}
+
+// AfterValidatorBeginUnbonding -
+func (h StakingHooks) AfterValidatorBeginUnbonding(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) {
+	h.dh.AfterValidatorBeginUnbonding(ctx, consAddr, valAddr)
+	h.sh.AfterValidatorBeginUnbonding(ctx, consAddr, valAddr)
+}
+
+// BeforeDelegationCreated -
+func (h StakingHooks) BeforeDelegationCreated(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
+	h.dh.BeforeDelegationCreated(ctx, delAddr, valAddr)
+	h.sh.BeforeDelegationCreated(ctx, delAddr, valAddr)
+}
+
+// BeforeDelegationSharesModified -
+func (h StakingHooks) BeforeDelegationSharesModified(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
+	h.dh.BeforeDelegationSharesModified(ctx, delAddr, valAddr)
+	h.sh.BeforeDelegationSharesModified(ctx, delAddr, valAddr)
+}
+
+// BeforeDelegationRemoved -
+func (h StakingHooks) BeforeDelegationRemoved(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
+	h.dh.BeforeDelegationRemoved(ctx, delAddr, valAddr)
+	h.sh.BeforeDelegationRemoved(ctx, delAddr, valAddr)
+}
+
+// AfterDelegationModified -
+func (h StakingHooks) AfterDelegationModified(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
+	h.dh.AfterDelegationModified(ctx, delAddr, valAddr)
+	h.sh.AfterDelegationModified(ctx, delAddr, valAddr)
+}
+
+// BeforeValidatorSlashed -
+func (h StakingHooks) BeforeValidatorSlashed(ctx sdk.Context, valAddr sdk.ValAddress, fraction sdk.Dec) {
+	h.dh.BeforeValidatorSlashed(ctx, valAddr, fraction)
+	h.sh.BeforeValidatorSlashed(ctx, valAddr, fraction)
 }
