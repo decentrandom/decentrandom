@@ -40,7 +40,7 @@
   revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
 
 [[projects]]
-  digest = "1:aaba47dcb27782c544df8603e4b58148a30fea3050ed31e60cb17ff1d1de8b65"
+  digest = "1:cbd87aa906269398a77258a802f5d099ba7205de2be5f3d458b7085ab8bac8a4"
   name = "github.com/cosmos/cosmos-sdk"
   packages = [
     "baseapp",
@@ -89,6 +89,8 @@
     "x/bank/client/rest",
     "x/bank/simulation",
     "x/distribution",
+    "x/distribution/client",
+    "x/distribution/client/cli",
     "x/distribution/client/common",
     "x/distribution/client/rest",
     "x/distribution/keeper",
@@ -105,9 +107,12 @@
     "x/params",
     "x/params/subspace",
     "x/slashing",
+    "x/slashing/client",
+    "x/slashing/client/cli",
     "x/slashing/client/rest",
     "x/slashing/tags",
     "x/staking",
+    "x/staking/client",
     "x/staking/client/cli",
     "x/staking/client/rest",
     "x/staking/keeper",
@@ -758,9 +763,15 @@
     "github.com/cosmos/cosmos-sdk/x/bank/client/cli",
     "github.com/cosmos/cosmos-sdk/x/bank/client/rest",
     "github.com/cosmos/cosmos-sdk/x/distribution",
+    "github.com/cosmos/cosmos-sdk/x/distribution/client",
+    "github.com/cosmos/cosmos-sdk/x/distribution/client/rest",
     "github.com/cosmos/cosmos-sdk/x/params",
     "github.com/cosmos/cosmos-sdk/x/slashing",
+    "github.com/cosmos/cosmos-sdk/x/slashing/client",
+    "github.com/cosmos/cosmos-sdk/x/slashing/client/rest",
     "github.com/cosmos/cosmos-sdk/x/staking",
+    "github.com/cosmos/cosmos-sdk/x/staking/client",
+    "github.com/cosmos/cosmos-sdk/x/staking/client/rest",
     "github.com/gorilla/mux",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
