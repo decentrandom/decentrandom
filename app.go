@@ -88,7 +88,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
 
-	app.stakingKeeper = staking.NewKeeper(
+	stakingKeeper = staking.NewKeeper(
 		app.cdc,
 		app.keyStaking, app.tKeyStaking,
 		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
