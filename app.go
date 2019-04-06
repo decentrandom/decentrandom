@@ -215,6 +215,30 @@ func MakeCodec() *codec.Codec {
 	return cdc
 }
 
+// BeginBlocker -
+func (app *randApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+
+	// distribute rewards for the previous block
+	distr.BeginBlocker(ctx, req, app.distrKeeper)
+
+	// 감액 처리
+	tags := slashing.BeginBlocker(ctx, req, app.slashingKeeper)
+
+	return abci.ResponseBeginBlock{
+		Tags: tags.ToKVPairs(),
+	}
+}
+
+// EndBlocker -
+func (app *randApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+	validatorUpdates, tags := staking.EndBlocker(ctx, app.stakingKeeper)
+
+	return abci.ResponseEndBlock{
+		ValidatorUpdates: validatorUpdates,
+		Tags:             tags,
+	}
+}
+
 var _ sdk.StakingHooks = StakingHooks{}
 
 // StakingHooks -
