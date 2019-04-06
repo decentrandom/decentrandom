@@ -15,6 +15,7 @@ import (
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	abci "github.com/tendermint/tendermint/abci/types"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	dbm "github.com/tendermint/tendermint/libs/db"
@@ -34,8 +35,10 @@ type randApp struct {
 	keyRounds        *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
 	keyStaking       *sdk.KVStoreKey
-	tKeyStaking      *sdk.TransientStoreKey
+	tkeyStaking      *sdk.TransientStoreKey
 	keySlashing      *sdk.KVStoreKey
+	keyDistr         *sdk.KVStoreKey
+	tkeyDistr        *sdk.TransientStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 
@@ -43,6 +46,7 @@ type randApp struct {
 	bankKeeper          bank.Keeper
 	stakingKeeper       staking.Keeper
 	slashingKeeper      slashing.Keeper
+	distrKeeper         distr.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
 	randKeeper          rand.Keeper
@@ -66,7 +70,9 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		keyParams:        sdk.NewKVStoreKey("params"),
 		keyStaking:       sdk.NewKVStoreKey("staking"),
 		keySlashing:      sdk.NewKVStoreKey("slashsing"),
-		tKeyStaking:      sdk.NewTransientStoreKey("transient_stake"),
+		tkeyStaking:      sdk.NewTransientStoreKey("transient_stake"),
+		keyDistr:         sdk.NewKVStoreKey(distr.StoreKey),
+		tkeyDistr:        sdk.NewTransientStoreKey(distr.TStoreKey),
 
 		tkeyParams: sdk.NewTransientStoreKey("transient_params"),
 	}
@@ -88,12 +94,15 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
 
-	stakingKeeper = staking.NewKeeper(
+	stakingKeeper := staking.NewKeeper(
 		app.cdc,
-		app.keyStaking, app.tKeyStaking,
+		app.keyStaking, app.tkeyStaking,
 		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
 		staking.DefaultCodespace,
 	)
+
+	app.stakingKeeper = *stakingKeeper.SetHooks(
+		NewStakingHooks(app.distrKeeper.Hooks(), app.slashsingKeeper.Hooks()))
 
 	app.slashingKeeper = slashing.NewKeeper(
 		app.cdc,
@@ -205,4 +214,15 @@ func MakeCodec() *codec.Codec {
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 	return cdc
+}
+
+// StakingHooks -
+type StakingHooks struct {
+	dh distr.Hooks
+	sh slashing.Hooks
+}
+
+// NewStakingHooks -
+func NewStakingHooks(dh distr.Hooks, sh slashing.Hooks) StakingHooks {
+	return StakingHooks{dh, sh}
 }
