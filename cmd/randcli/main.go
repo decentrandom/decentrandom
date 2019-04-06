@@ -25,6 +25,7 @@ import (
 	dist "github.com/cosmos/cosmos-sdk/x/distribution/client/rest"
 	sl "github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingClient "github.com/cosmos/cosmos-sdk/x/slashing/client"
+	slashing "github.com/cosmos/cosmos-sdk/x/slashing/client/rest"
 	st "github.com/cosmos/cosmos-sdk/x/staking"
 	stakingClient "github.com/cosmos/cosmos-sdk/x/staking/client"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/client/rest"
@@ -97,6 +98,10 @@ func registerRoutes(rs *lcd.RestServer) {
 	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
 	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
 	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeDR)
+	dist.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, distcmd.StoreKey)
+	staking.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
+	slashing.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
+
 }
 
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
