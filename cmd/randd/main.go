@@ -82,6 +82,22 @@ func appExporter() server.AppExporter {
 	}
 }
 
+// exportAppStateAndTMValidators -
+func exportAppStateAndTMValidators(
+	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
+) (json.RawMessage, []tmtypes.GenesisValidator, error) {
+	if height != -1 {
+		rApp := app.NewRandApp(logger, db, traceStore, false)
+		err := rApp.LoadHeight(height)
+		if err != nil {
+			return nil, nil, err
+		}
+		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
+	}
+	rApp := app.NewRandApp(logger, db, traceStore, true)
+	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
+}
+
 // InitCmd - init 명령어
 func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
