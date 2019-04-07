@@ -22,3 +22,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
+
+// GenesisState - 제네시스 상태 구조체
+type GenesisState struct {
+	AuthData     auth.GenesisState      `json:"auth"`
+	BankData     bank.GenesisState      `json:"bank"`
+	Accounts     []*auth.BaseAccount    `json:"accounts"`
+	StakingData  staking.GenesisState   `json:"staking"`
+	SlashingData slashsing.GenesisState `json:"slashing"`
+}
