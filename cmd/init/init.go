@@ -45,8 +45,7 @@ func displayInfo(cdc *codec.Codec, info printInfo) error {
 	return nil
 }
 
-// InitCmd returns a command that initializes all files needed for Tendermint
-// and the respective application.
+// InitCmd -
 func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command { // nolint: golint
 	cmd := &cobra.Command{
 		Use:   "init [moniker]",
