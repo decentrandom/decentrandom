@@ -275,6 +275,11 @@ func (app *randApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 	}
 }
 
+// LoadHeight loads a particular height
+func (app *randApp) LoadHeight(height int64) error {
+	return app.LoadVersion(height, app.keyMain)
+}
+
 var _ sdk.StakingHooks = StakingHooks{}
 
 // StakingHooks -
