@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 
 	"github.com/tendermint/tendermint/libs/log"
@@ -53,6 +54,12 @@ type randApp struct {
 	paramsKeeper        params.Keeper
 	randKeeper          rand.Keeper
 }
+
+// default home directories for expected binaries
+var (
+	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
+	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
+)
 
 // NewRandApp - 앱 생성
 func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
