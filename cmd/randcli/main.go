@@ -40,8 +40,6 @@ const (
 	storeDR  = "random"
 )
 
-var defaultCLIHome = os.ExpandEnv("$HOME/.randcli")
-
 func main() {
 	cobra.EnableCommandSorting = false
 
@@ -72,7 +70,7 @@ func main() {
 
 	rootCmd.AddCommand(
 		rpc.StatusCommand(),
-		client.ConfigCmd(defaultCLIHome),
+		client.ConfigCmd(app.DefaultCLIHome),
 		queryCmd(cdc, mc),
 		txCmd(cdc, mc),
 		client.LineBreak,
@@ -83,7 +81,7 @@ func main() {
 		version.VersionCmd,
 	)
 
-	executor := cli.PrepareMainCmd(rootCmd, "DR", defaultCLIHome)
+	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
