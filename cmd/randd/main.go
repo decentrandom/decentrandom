@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	// "io/ioutil"
-	"os"
+	//"os"
 	"path/filepath"
 	// "strings"
 
@@ -31,9 +31,6 @@ import (
 	dbm "github.com/tendermint/tendermint/libs/db"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
-
-// DefaultNodeHome - 기본 노드 홈
-var DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 const (
 	flagOverwrite = "overwrite"
@@ -64,7 +61,7 @@ func main() {
 
 	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
 
-	executor := cli.PrepareBaseCmd(rootCmd, "DR", DefaultNodeHome)
+	executor := cli.PrepareBaseCmd(rootCmd, "DR", app.DefaultNodeHome)
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
@@ -144,7 +141,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(cli.HomeFlag, DefaultNodeHome, "노드의 홈 디렉토리")
+	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "노드의 홈 디렉토리")
 	cmd.Flags().String(client.FlagChainID, "", "제네시스 파일 체인 ID 입니다. 공백으로 남겨두면 임의로 생성합니다.")
 	cmd.Flags().BoolP(flagOverwrite, "o", false, "genesis.json 파일을 덮어씁니다.")
 
