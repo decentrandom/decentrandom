@@ -60,7 +60,7 @@ func main() {
 	rootCmd.AddCommand(InitCmd(ctx, cdc))
 	rootCmd.AddCommand(AddGenesisAccountCmd(ctx, cdc))
 
-	server.AddCommands(ctx, cdc, rootCmd, newApp, appExporter())
+	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
 
 	executor := cli.PrepareBaseCmd(rootCmd, "DR", DefaultNodeHome)
 	err := executor.Execute()
@@ -73,21 +73,12 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application
 	return app.NewRandApp(logger, db)
 }
 
-func appExporter() server.AppExporter {
-	return func(logger log.Logger, db dbm.DB, _ io.Writer, _ int64, _ bool, _ []string) (
-		json.RawMessage, []tmtypes.GenesisValidator, error) {
-		dapp := app.NewRandApp(logger, db)
-		return dapp.ExportAppStateAndValidators()
-
-	}
-}
-
 // exportAppStateAndTMValidators -
 func exportAppStateAndTMValidators(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
 	if height != -1 {
-		rApp := app.NewRandApp(logger, db, traceStore, false)
+		rApp := app.NewRandApp(logger, db)
 		err := rApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
