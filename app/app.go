@@ -1,7 +1,8 @@
 package app
 
 import (
-	"encoding/json"
+	"fmt"
+	"sort"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -19,7 +20,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	dbm "github.com/tendermint/tendermint/libs/db"
-	tmtypes "github.com/tendermint/tendermint/types"
+	// tmtypes "github.com/tendermint/tendermint/types"
 )
 
 const (
@@ -210,54 +211,32 @@ func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 
-	genesisState := new(GenesisState)
-	err := app.cdc.UnmarshalJSON(stateJSON, genesisState)
+	var genesisState GenesisState
+	err := app.cdc.UnmarshalJSON(stateJSON, &genesisState)
 	if err != nil {
 		panic(err)
 	}
 
 	validators := app.initFromGenesisState(ctx, genesisState)
 
-	for _, acc := range genesisState.Accounts {
-		acc.AccountNumber = app.accountKeeper.GetNextAccountNumber(ctx)
-		app.accountKeeper.SetAccount(ctx, acc)
+	// sanity check
+	if len(req.Validators) > 0 {
+		if len(req.Validators) != len(validators) {
+			panic(fmt.Errorf("len(RequestInitChain.Validators) != len(validators) (%d != %d)",
+				len(req.Validators), len(validators)))
+		}
+		sort.Sort(abci.ValidatorUpdates(req.Validators))
+		sort.Sort(abci.ValidatorUpdates(validators))
+		for i, val := range validators {
+			if !val.Equal(req.Validators[i]) {
+				panic(fmt.Errorf("validators[%d] != req.Validators[%d] ", i, i))
+			}
+		}
 	}
 
-	auth.InitGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper, genesisState.AuthData)
-	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
+	app.assertRuntimeInvariants()
 
 	return abci.ResponseInitChain{}
-}
-
-// ExportAppStateAndValidators - 앱 상태와 검증인 export
-func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
-	ctx := app.NewContext(true, abci.Header{})
-	accounts := []*auth.BaseAccount{}
-
-	appendAccountsFn := func(acc auth.Account) bool {
-		account := &auth.BaseAccount{
-			Address: acc.GetAddress(),
-			Coins:   acc.GetCoins(),
-		}
-
-		accounts = append(accounts, account)
-		return false
-	}
-
-	app.accountKeeper.IterateAccounts(ctx, appendAccountsFn)
-
-	genState := GenesisState{
-		Accounts: accounts,
-		AuthData: auth.DefaultGenesisState(),
-		BankData: bank.DefaultGenesisState(),
-	}
-
-	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return appState, validators, err
 }
 
 // MakeCodec - Amino를 사용하기 위한 codec 생성
