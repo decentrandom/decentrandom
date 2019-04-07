@@ -120,10 +120,16 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.SetAnteHandler(auth.NewAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
 
 	app.Router().
-		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
+		AddRoute(bank.RouterKey, bank.NewHandler(app.bankKeeper)).
+		AddRoute(staking.RouterKey, staking.NewHandler(app.stakingKeeper)).
+		AddRoute(distr.RouterKey, distr.NewHandler(app.distrKeeper)).
+		AddRoute(slashing.RouterKey, slashing.NewHandler(app.slashingKeeper)).
 		AddRoute("rand", rand.NewHandler(app.randKeeper))
 
 	app.QueryRouter().
+		AddRoute(distr.QuerierRoute, distr.NewQuerier(app.distrKeeper)).
+		AddRoute(slashing.QuerierRoute, slashing.NewQuerier(app.slashingKeeper, app.cdc)).
+		AddRoute(staking.QuerierRoute, staking.NewQuerier(app.stakingKeeper, app.cdc)).
 		AddRoute("rand", rand.NewQuerier(app.randKeeper))
 
 	app.SetInitChainer(app.initChainer)
@@ -131,9 +137,14 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.MountStores(
 		app.keyMain,
 		app.keyAccount,
+		app.keyStaking,
+		app.keyDistr,
+		app.keySlashing,
 		app.keyRounds,
 		app.keyFeeCollection,
 		app.keyParams,
+		app.tkeyStaking,
+		app.tkeyDistr,
 		app.tkeyParams,
 	)
 
@@ -145,6 +156,57 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	return app
 }
 
+// initFromGenesisState -
+func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
+	genesisState.Sanitize()
+
+	// load the accounts
+	for _, gacc := range genesisState.Accounts {
+		acc := gacc.ToAccount()
+		acc = app.accountKeeper.NewAccount(ctx, acc) // set account number
+		app.accountKeeper.SetAccount(ctx, acc)
+	}
+
+	// initialize distribution (must happen before staking)
+	distr.InitGenesis(ctx, app.distrKeeper, genesisState.DistrData)
+
+	// load the initial staking information
+	validators, err := staking.InitGenesis(ctx, app.stakingKeeper, genesisState.StakingData)
+	if err != nil {
+		panic(err) // TODO find a way to do this w/o panics
+	}
+
+	// initialize module-specific stores
+	auth.InitGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper, genesisState.AuthData)
+	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
+	slashing.InitGenesis(ctx, app.slashingKeeper, genesisState.SlashingData, genesisState.StakingData.Validators.ToSDKValidators())
+
+	// validate genesis state
+	if err := RandValidateGenesisState(genesisState); err != nil {
+		panic(err) // TODO find a way to do this w/o panics
+	}
+
+	if len(genesisState.GenTxs) > 0 {
+		for _, genTx := range genesisState.GenTxs {
+			var tx auth.StdTx
+			err = app.cdc.UnmarshalJSON(genTx, &tx)
+			if err != nil {
+				panic(err)
+			}
+
+			bz := app.cdc.MustMarshalBinaryLengthPrefixed(tx)
+			res := app.BaseApp.DeliverTx(bz)
+			if !res.IsOK() {
+				panic(res.Log)
+			}
+		}
+
+		validators = app.stakingKeeper.ApplyAndReturnValidatorSetUpdates(ctx)
+	}
+	return validators
+}
+
+// initChainer -
 func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 
@@ -153,6 +215,8 @@ func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 	if err != nil {
 		panic(err)
 	}
+
+	validators := app.initFromGenesisState(ctx, genesisState)
 
 	for _, acc := range genesisState.Accounts {
 		acc.AccountNumber = app.accountKeeper.GetNextAccountNumber(ctx)
