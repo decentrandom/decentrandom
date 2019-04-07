@@ -85,7 +85,7 @@ func exportAppStateAndTMValidators(
 		}
 		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-	rApp := app.NewRandApp(logger, db, traceStore, true)
+	rApp := app.NewRandApp(logger, db)
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }
 
@@ -145,67 +145,6 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd.Flags().String(cli.HomeFlag, DefaultNodeHome, "노드의 홈 디렉토리")
 	cmd.Flags().String(client.FlagChainID, "", "제네시스 파일 체인 ID 입니다. 공백으로 남겨두면 임의로 생성합니다.")
 	cmd.Flags().BoolP(flagOverwrite, "o", false, "genesis.json 파일을 덮어씁니다.")
-
-	return cmd
-}
-
-// AddGenesisAccountCmd - add-genesis-account 명령어
-func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "add-genesis-account [address] [coins[,coins]]",
-		Short: "제네시스 파일에 계정을 추가합니다.",
-		Args:  cobra.ExactArgs(2),
-		Long: strings.TrimSpace(`
-		제네시스 파일을 추가하여 CLI를 통해 코인과 함께 체인을 구동할 수 있도록 합니다.:
-		$ randd add-genesis-account cosmos1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAKE,1000mycoin
-		`),
-		RunE: func(_ *cobra.Command, args []string) error {
-			addr, err := sdk.AccAddressFromBech32(args[0])
-			if err != nil {
-				return err
-			}
-			coins, err := sdk.ParseCoins(args[1])
-			if err != nil {
-				return err
-			}
-			coins.Sort()
-
-			var genDoc tmtypes.GenesisDoc
-			config := ctx.Config
-			genFile := config.GenesisFile()
-			if !common.FileExists(genFile) {
-				return fmt.Errorf("%s 파일이 존재하지 않습니다. `gaiad init` 를 먼저 실행하시기 바랍니다", genFile)
-			}
-			genContents, err := ioutil.ReadFile(genFile)
-			if err != nil {
-			}
-
-			if err = cdc.UnmarshalJSON(genContents, &genDoc); err != nil {
-				return err
-			}
-
-			var appState app.GenesisState
-			if err = cdc.UnmarshalJSON(genDoc.AppState, &appState); err != nil {
-				return err
-			}
-
-			for _, stateAcc := range appState.Accounts {
-				if stateAcc.Address.Equals(addr) {
-					return fmt.Errorf("이미 %v 계정에 대한 정보를 가지고 있습니다", addr)
-				}
-			}
-
-			acc := auth.NewBaseAccountWithAddress(addr)
-			acc.Coins = coins
-			appState.Accounts = append(appState.Accounts, &acc)
-			appStateJSON, err := cdc.MarshalJSON(appState)
-			if err != nil {
-				return err
-			}
-
-			return gaiaInit.ExportGenesisFile(genFile, genDoc.ChainID, genDoc.Validators, appStateJSON)
-		},
-	}
 
 	return cmd
 }
