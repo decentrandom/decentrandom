@@ -5,11 +5,11 @@ instances:
   search_string: ['ssh', 'sshd']
   thresholds:
     critical: [1, 5]
-- name: terrad
-  search_string: ['terrad']
+- name: randd
+  search_string: ['randd']
   thresholds:
     critical: [1, 1]
-- name: terracli
-  search_string: ['terracli']
+- name: randcli
+  search_string: ['randcli']
   thresholds:
     critical: [1, 1]
