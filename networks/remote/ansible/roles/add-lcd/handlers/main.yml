@@ -1,9 +1,7 @@
 ---
 
 - name: systemctl
-  systemd: name=terracli enabled=yes daemon_reload=yes
+  systemd: name=randcli enabled=yes daemon_reload=yes
 
-- name: restart terracli
-  service: name=terracli state=restarted
-
-
+- name: restart randcli
+  service: name=randcli state=restarted
