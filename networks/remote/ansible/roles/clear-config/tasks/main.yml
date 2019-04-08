@@ -1,12 +1,12 @@
 ---
 
 - name: Stop service
-  service: name=terrad state=stopped
+  service: name=randd state=stopped
 
 - name: Delete files
   file: "path={{item}} state=absent"
   with_items:
-  - /usr/bin/terrad
-  - /home/terrad/.terrad
-  - /home/terrad/.terracli
+  - /usr/bin/randd
+  - /home/randd/.randd
+  - /home/randd/.randcli
 
