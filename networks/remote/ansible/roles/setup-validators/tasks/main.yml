@@ -6,8 +6,8 @@
   run_once: true
   become: no
 
-- name: Create terrad user
-  user: name=terrad home=/home/terrad shell=/bin/bash
+- name: Create randd user
+  user: name=randd home=/home/randd shell=/bin/bash
 
 - name: Copy binary
   copy:
@@ -16,7 +16,7 @@
     mode: 0755
 
 - name: Copy service file
-  copy: src=terrad.service dest=/etc/systemd/system/terrad.service mode=0755
+  copy: src=randd.service dest=/etc/systemd/system/randd.service mode=0755
   notify: reload systemd
 
 - name: Get node ID
@@ -43,34 +43,34 @@
 
 - name: Copy testnet node configurations
   copy:
-    src: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node{{nodeid.stdout_lines[0]}}/terrad/config"
-    dest: "/home/terrad/.terrad"
+    src: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node{{nodeid.stdout_lines[0]}}/randd/config"
+    dest: "/home/randd/.randd"
     mode: 0755
-    owner: terrad
-    group: terrad
+    owner: randd
+    group: randd
     directory_mode: yes
     force: yes
 
 - name: Copy testnet node data
   copy:
-    src: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node{{nodeid.stdout_lines[0]}}/terrad/data"
-    dest: "/home/terrad/.terrad"
+    src: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node{{nodeid.stdout_lines[0]}}/randd/data"
+    dest: "/home/randd/.randd"
     mode: 0755
-    owner: terrad
-    group: terrad
+    owner: randd
+    group: randd
     directory_mode: yes
     force: yes
 
 - name: fix permissions
   file:
-    path: "/home/terrad/.terrad"
-    owner: terrad
-    group: terrad
+    path: "/home/randd/.randd"
+    owner: randd
+    group: randd
     mode: 0755
     recurse: yes
 
     #- name: Update genesis.json to add faucet address
-    #  command: "/usr/bin/terrad add-genesis-account {{FAUCET_ADDRESS}} {{FAUCET_COINS}}"
+    #  command: "/usr/bin/randd add-genesis-account {{FAUCET_ADDRESS}} {{FAUCET_COINS}}"
     #  become: yes
-    #  become_user: terra
+    #  become_user: rand
 
