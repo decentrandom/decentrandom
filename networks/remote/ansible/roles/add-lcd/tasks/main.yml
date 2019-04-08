@@ -2,14 +2,14 @@
 
 - name: Copy binary
   copy:
-    src: "{{TERRACLI_BINARY}}"
-    dest: /usr/bin/terracli
+    src: "{{RANDCLI_BINARY}}"
+    dest: /usr/bin/randcli
     mode: 0755
-  notify: restart terracli
+  notify: restart randcli
 
 - name: Copy service
   template:
-    src: terracli.service.j2
-    dest: /etc/systemd/system/terracli.service
+    src: randcli.service.j2
+    dest: /etc/systemd/system/randcli.service
   notify: systemctl
 
