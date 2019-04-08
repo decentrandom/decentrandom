@@ -1,0 +1,76 @@
+---
+
+- name: Ensure keys folder exists locally
+  file: path=keys state=directory
+  connection: local
+  run_once: true
+  become: no
+
+- name: Create terrad user
+  user: name=terrad home=/home/terrad shell=/bin/bash
+
+- name: Copy binary
+  copy:
+    src: "{{BINARY}}"
+    dest: /usr/bin
+    mode: 0755
+
+- name: Copy service file
+  copy: src=terrad.service dest=/etc/systemd/system/terrad.service mode=0755
+  notify: reload systemd
+
+- name: Get node ID
+  command: "cat /etc/nodeid"
+  changed_when: false
+  register: nodeid
+
+- name: Make node infomation
+  command: "echo node{{nodeid.stdout}}@{{inventory_hostname}}"
+  register: nodeinfo
+
+- name: debug dump of node informations
+  run_once: true
+  debug:
+    msg: "{{ groups[ansible_limit] |  map('extract', hostvars, ['nodeinfo', 'stdout']) | join(',') }}"
+
+- name: Create remote testnet configurations
+  command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --faucet={{FAUCET_ADDRESS}} --faucet-coins={{FAUCET_COINS}} --chain-id={{TESTNET_NAME}} --predefined-nodes=\"{{ groups[ansible_limit] |  map('extract', hostvars, ['nodeinfo', 'stdout']) | join(',') }}\""
+  connection: local
+  become: no
+  run_once: true
+  args:
+    creates: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}"
+
+- name: Copy testnet node configurations
+  copy:
+    src: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node{{nodeid.stdout_lines[0]}}/terrad/config"
+    dest: "/home/terrad/.terrad"
+    mode: 0755
+    owner: terrad
+    group: terrad
+    directory_mode: yes
+    force: yes
+
+- name: Copy testnet node data
+  copy:
+    src: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node{{nodeid.stdout_lines[0]}}/terrad/data"
+    dest: "/home/terrad/.terrad"
+    mode: 0755
+    owner: terrad
+    group: terrad
+    directory_mode: yes
+    force: yes
+
+- name: fix permissions
+  file:
+    path: "/home/terrad/.terrad"
+    owner: terrad
+    group: terrad
+    mode: 0755
+    recurse: yes
+
+    #- name: Update genesis.json to add faucet address
+    #  command: "/usr/bin/terrad add-genesis-account {{FAUCET_ADDRESS}} {{FAUCET_COINS}}"
+    #  become: yes
+    #  become_user: terra
+
