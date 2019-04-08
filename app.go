@@ -182,7 +182,7 @@ func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 	// load the initial staking information
 	validators, err := staking.InitGenesis(ctx, app.stakingKeeper, genesisState.StakingData)
 	if err != nil {
-		panic(err) // TODO find a way to do this w/o panics
+		panic(err)
 	}
 
 	// initialize module-specific stores
@@ -192,7 +192,7 @@ func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 
 	// validate genesis state
 	if err := RandValidateGenesisState(genesisState); err != nil {
-		panic(err) // TODO find a way to do this w/o panics
+		panic(err)
 	}
 
 	if len(genesisState.GenTxs) > 0 {
