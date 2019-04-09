@@ -37,8 +37,11 @@ $ export CLUSTER_NAME="remotenetvalidators"
 $ export SSH_PRIVATE_FILE="$HOME/.ssh/id_rsa"
 $ export SSH_PUBLIC_FILE="$HOME/.ssh/id_rsa.pub"</code></pre>
 
-# Cosmos-sdk Build
+# Build
 
-<pre><code>$ go get -u -v github.com/cosmos/cosmos-sdk
-$ make build-linux
-$ make build-docker-gaiadnode</code></pre>
+<pre><code>$ go get -u -v github.com/decentrandom/decentrandom
+$ make build-linux</code></pre>
+
+# Remote Network 생성
+
+<pre><code>$ SERVERS=1 REGION_LIMIT=1 make validators-start</code></pre>
