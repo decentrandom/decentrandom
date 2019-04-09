@@ -19,7 +19,7 @@
 
 [https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html)
 
-## SSH Key 생성
+## EXPORT 추가
 
     export AWS_ACCESS_KEY_ID="(access key)"
     export AWS_SECRET_ACCESS_KEY="(secret access key)"
