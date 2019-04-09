@@ -8,7 +8,7 @@ Restart=on-failure
 User=randd
 Group=randd
 PermissionsStartOnly=true
-ExecStart=/usr/bin/terracli rest-server --laddr {{RANDCLI_ADDRESS}}
+ExecStart=/usr/bin/randcli rest-server --laddr {{RANDCLI_ADDRESS}}
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
 
