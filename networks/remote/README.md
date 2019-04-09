@@ -3,14 +3,14 @@
 - name : remotenet
 - AWS 기준
 
-# Docker 설치
+//# Docker 설치
 
-<pre><code>$ sudo yum install docker-io</code></pre>
+//<pre><code>$ sudo yum install docker-io</code></pre>
 
-# Docker 실행
+//# Docker 실행
 
-<pre><code>$sudo usermod -a -G docker $USER
-$ sudo service docker start</code></pre>
+//<pre><code>$sudo usermod -a -G docker $USER
+//$ sudo service docker start</code></pre>
 
 # Terraform 설치
 
