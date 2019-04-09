@@ -21,3 +21,6 @@ update_vendor_deps:
 install:
 	go install ./cmd/randd
 	go install ./cmd/randcli
+
+build-linux:
+	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
