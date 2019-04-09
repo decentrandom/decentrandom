@@ -12,8 +12,8 @@ CLUSTER_NAME?=$(TESTNET_NAME)
 # Number of servers to put in one availability zone in AWS.
 SERVERS?=1
 
-# Path to terrad for deployment. Must be a Linux binary.
-BINARY?=$(CURDIR)/../build/terrad
+# Path to randd for deployment. Must be a Linux binary.
+BINARY?=$(CURDIR)/../build/randd
 
 # Path to the genesis.json and config.toml files to deploy on full nodes.
 GENESISFILE?=$(CURDIR)/../build/genesis.json
@@ -78,7 +78,7 @@ upgrade-terrad:
 	@if [ -z "$(DO_API_TOKEN)" ]; then echo "DO_API_TOKEN environment variable not set." ; false ; fi
 	@if ! [ -f $(HOME)/.ssh/id_rsa.pub ]; then ssh-keygen ; fi
 	@if [ -z "`file $(BINARY) | grep 'ELF 64-bit'`" ]; then echo "Please build a linux binary using 'make build-linux'." ; false ; fi
-	cd remote/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory/digital_ocean.py -l "$(CLUSTER_NAME)" -e BINARY=$(BINARY) upgrade-terrad.yml
+	cd remote/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory/digital_ocean.py -l "$(CLUSTER_NAME)" -e BINARY=$(BINARY) upgrade-randd.yml
 
 list:
 	remote/ansible/inventory/digital_ocean.py | python -c 'import json,sys ; print "\n".join(json.loads("".join(sys.stdin.readlines()))["$(CLUSTER_NAME)"]["hosts"])'
