@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/decnetrandom/decentrandom/types/util"
+	"github.com/decentrandom/decentrandom/types/util"
 
 	"github.com/tendermint/tendermint/libs/bech32"
 )
