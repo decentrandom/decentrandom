@@ -19,3 +19,12 @@ $ terraform --version</code></pre>
 # AWS Access Key 생성
 
 https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html
+
+# SSH Key 생성
+
+<pre><code>$ export AWS_ACCESS_KEY_ID="(access key)"
+$ export AWS_SECRET_ACCESS_KEY="(secret access key)"
+$ export TESTNET_NAME="remotenet"
+$ export CLUSTER_NAME="remotenetvalidators"
+$ export SSH_PRIVATE_FILE="$HOME/.ssh/id_rsa"
+$ export SSH_PUBLIC_FILE="$HOME/.ssh/id_rsa.pub"</code></pre>
