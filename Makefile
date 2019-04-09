@@ -18,6 +18,17 @@ update_vendor_deps:
 	@rm -rf .vendor-new
 	@dep ensure -v -update
 
+build: update_rand_lite_docs
+ifeq ($(OS),Windows_NT)
+	go build $(BUILD_FLAGS) -o build/randd.exe ./cmd/randd
+	go build $(BUILD_FLAGS) -o build/randcli.exe ./cmd/randcli
+	go build $(BUILD_FLAGS) -o build/randkeyutil.exe ./cmd/randkeyutil
+else
+	go build $(BUILD_FLAGS) -o build/randd ./cmd/randd
+	go build $(BUILD_FLAGS) -o build/randcli ./cmd/randcli
+	go build $(BUILD_FLAGS) -o build/randkeyutil ./cmd/randkeyutil
+endif
+
 install:
 	go install ./cmd/randd
 	go install ./cmd/randcli
