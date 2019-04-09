@@ -24,3 +24,6 @@ install:
 
 build-linux:
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
+
+build-docker-randdnode:
+	$(MAKE) -C networks/local
