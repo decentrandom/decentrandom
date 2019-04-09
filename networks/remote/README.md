@@ -9,7 +9,8 @@
 
 # Docker 실행
 
-<pre><code>$ sudo service docker start</code></pre>
+<pre><code>$sudo usermod -a -G docker $USER
+$ sudo service docker start</code></pre>
 
 # Terraform 설치
 
