@@ -33,6 +33,14 @@
     go get -u -v github.com/decentrandom/decentrandom
     make build-linux</code></pre>
 
+## Config
+
+/home/randd/.randd/config/ 에 아래 파일 저장
+
+- priv_validator_state.json
+- genesis.json
+- config.toml
+
 ## Remote Network 생성
 
     SERVERS=1 REGION_LIMIT=1 make validators-start
