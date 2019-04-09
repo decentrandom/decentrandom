@@ -13,7 +13,7 @@ $ terraform --version</code></pre>
 
 ## Ansible 설치
 
-<pre><code>$ sudo amazon-linux-extras install ansible2</code></pre>
+    $ sudo amazon-linux-extras install ansible2</code></pre>
 
 ## AWS Access Key 생성
 
