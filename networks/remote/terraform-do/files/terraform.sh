@@ -3,6 +3,6 @@
 
 #Usage: terraform.sh <testnet_name> <testnet_node_number>
 
-#Add terrad node number for remote identification
+#Add randd node number for remote identification
 echo "$2" > /etc/nodeid
 
