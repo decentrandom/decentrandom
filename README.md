@@ -17,7 +17,7 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 ## Building
 
-- golang 1.12 이상을 필요로 합니다.
+golang 1.12 이상을 필요로 합니다.
 
     make get_tools
     dep ensure -v
