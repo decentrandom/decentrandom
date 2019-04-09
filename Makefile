@@ -29,6 +29,9 @@ else
 	go build $(BUILD_FLAGS) -o build/randkeyutil ./cmd/randkeyutil
 endif
 
+update_rand_lite_docs:
+	@statik -src=client/lcd/swagger-ui -dest=client/lcd -f
+
 install:
 	go install ./cmd/randd
 	go install ./cmd/randcli
