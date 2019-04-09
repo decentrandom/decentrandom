@@ -3,6 +3,13 @@
 - name : remotenet
 - AWS 기준
 
+# Docker 설치
+
+<pre><code>$ sudo yum install docker-io</code></pre>
+
+# Docker 실행
+
+<pre><code>$ sudo service docker start</code></pre>
 
 # Terraform 설치
 
@@ -28,3 +35,9 @@ $ export TESTNET_NAME="remotenet"
 $ export CLUSTER_NAME="remotenetvalidators"
 $ export SSH_PRIVATE_FILE="$HOME/.ssh/id_rsa"
 $ export SSH_PUBLIC_FILE="$HOME/.ssh/id_rsa.pub"</code></pre>
+
+# Cosmos-sdk Build
+
+<pre><code>$ go get -u -v github.com/cosmos/cosmos-sdk
+$ make build-linux
+$ make build-docker-gaiadnode</code></pre>
