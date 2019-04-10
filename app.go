@@ -27,7 +27,7 @@ import (
 
 const (
 	appName = "rand"
-	// DefaultKeyPass -
+	// DefaultKeyPass - 노드 기본 암호
 	DefaultKeyPass = "12345678"
 )
 
