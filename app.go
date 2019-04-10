@@ -162,6 +162,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetAnteHandler(auth.NewAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
 	app.SetEndBlocker(app.EndBlocker)
+
 	err := app.LoadLatestVersion(app.keyMain)
 	if err != nil {
 		cmn.Exit(err.Error())
@@ -259,6 +260,8 @@ func MakeCodec() *codec.Codec {
 	bank.RegisterCodec(cdc)
 	rand.RegisterCodec(cdc)
 	staking.RegisterCodec(cdc)
+	distr.RegisterCodec(cdc)
+	slashing.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 	return cdc
