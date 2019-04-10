@@ -112,8 +112,6 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		staking.DefaultCodespace,
 	)
 
-	app.stakingKeeper = *stakingKeeper.SetHooks(NewStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
-
 	app.distrKeeper = distr.NewKeeper(app.cdc, app.keyDistr, app.paramsKeeper.Subspace(distr.DefaultParamspace), app.bankKeeper, &stakingKeeper, app.feeCollectionKeeper, distr.DefaultCodespace)
 
 	app.slashingKeeper = slashing.NewKeeper(
@@ -130,7 +128,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.cdc,
 	)
 
-	app.SetAnteHandler(auth.NewAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
+	app.stakingKeeper = *stakingKeeper.SetHooks(NewStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
 
 	app.Router().
 		AddRoute(bank.RouterKey, bank.NewHandler(app.bankKeeper)).
@@ -140,12 +138,11 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		AddRoute("rand", rand.NewHandler(app.randKeeper))
 
 	app.QueryRouter().
+		AddRoute(auth.QuerierRoute, auth.NewQuerier(app.accountKeeper)).
 		AddRoute(distr.QuerierRoute, distr.NewQuerier(app.distrKeeper)).
 		AddRoute(slashing.QuerierRoute, slashing.NewQuerier(app.slashingKeeper, app.cdc)).
 		AddRoute(staking.QuerierRoute, staking.NewQuerier(app.stakingKeeper, app.cdc)).
 		AddRoute("rand", rand.NewQuerier(app.randKeeper))
-
-	app.SetInitChainer(app.initChainer)
 
 	app.MountStores(
 		app.keyMain,
@@ -161,6 +158,10 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.tkeyParams,
 	)
 
+	app.SetInitChainer(app.initChainer)
+	app.SetBeginBlocker(app.BeginBlocker)
+	app.SetAnteHandler(auth.NewAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
+	app.SetEndBlocker(app.EndBlocker)
 	err := app.LoadLatestVersion(app.keyMain)
 	if err != nil {
 		cmn.Exit(err.Error())
