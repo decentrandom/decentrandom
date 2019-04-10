@@ -7,6 +7,6 @@
   file: "path={{item}} state=absent"
   with_items:
   - /usr/bin/randd
-  - /home/randd/.randd
-  - /home/randd/.randcli
+  - /home/ec2-user/.randd
+  - /home/ec2-user/.randcli
 
