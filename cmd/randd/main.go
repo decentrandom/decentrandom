@@ -58,8 +58,8 @@ func main() {
 	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.CollectGenTxsCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.TestnetFilesCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 
@@ -90,37 +90,4 @@ func exportAppStateAndTMValidators(
 	}
 	rApp := app.NewRandApp(logger, db)
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
-}
-
-// SimpleAppGenTx -
-func SimpleAppGenTx(cdc *codec.Codec, pk crypto.PubKey) (
-	appGenTx, cliPrint json.RawMessage, validator tmtypes.GenesisValidator, err error) {
-
-	addr, secret, err := server.GenerateCoinKey()
-	if err != nil {
-		return
-	}
-
-	bz, err := cdc.MarshalJSON(struct {
-		Addr sdk.AccAddress `json:"addr"`
-	}{addr})
-	if err != nil {
-		return
-	}
-
-	appGenTx = json.RawMessage(bz)
-
-	bz, err = cdc.MarshalJSON(map[string]string{"secret": secret})
-	if err != nil {
-		return
-	}
-
-	cliPrint = json.RawMessage(bz)
-
-	validator = tmtypes.GenesisValidator{
-		PubKey: pk,
-		Power:  10,
-	}
-
-	return
 }
