@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	//"fmt"
+	"fmt"
 	"io"
 	// "io/ioutil"
 	//"os"
@@ -68,6 +68,7 @@ func main() {
 	executor := cli.PrepareBaseCmd(rootCmd, "DR", app.DefaultNodeHome)
 	err := executor.Execute()
 	if err != nil {
+		fmt.Println("something's wrong...")
 		panic(err)
 	}
 }
