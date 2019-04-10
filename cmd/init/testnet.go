@@ -236,7 +236,7 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			return err
 		}
 
-		terraConfigFilePath := filepath.Join(nodeDir, "config/terrad.toml")
+		terraConfigFilePath := filepath.Join(nodeDir, "config/randd.toml")
 		srvconfig.WriteConfigFile(terraConfigFilePath, terraConfig)
 	}
 
