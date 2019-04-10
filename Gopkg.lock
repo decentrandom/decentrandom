@@ -40,7 +40,7 @@
   revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
 
 [[projects]]
-  digest = "1:cbd87aa906269398a77258a802f5d099ba7205de2be5f3d458b7085ab8bac8a4"
+  digest = "1:b363d004ade07f6fe467adf4495ea19fafcdc1c52c21b6d0450b985b01f92900"
   name = "github.com/cosmos/cosmos-sdk"
   packages = [
     "baseapp",
@@ -54,7 +54,6 @@
     "client/tx",
     "client/utils",
     "cmd/gaia/app",
-    "cmd/gaia/init",
     "codec",
     "crypto",
     "crypto/keys",
@@ -145,8 +144,8 @@
   name = "github.com/ethereum/go-ethereum"
   packages = ["crypto/secp256k1"]
   pruneopts = "UT"
-  revision = "c942700427557e3ff6de3aaf6b916e2f056c1ec2"
-  version = "v1.8.23"
+  revision = "14ae1246b789dd2a0a2bd22f0c7d3256daa26759"
+  version = "v1.8.25"
 
 [[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
@@ -689,7 +688,7 @@
   revision = "64821d5d210748c883cd2b809589555ae4654203"
 
 [[projects]]
-  digest = "1:c00eb80d7b152379c3e94c38d82b29deca98b1d0f53e4e20362589b7fcbffa07"
+  digest = "1:31d87f39886fb38a2b6c097ff3b9f985d6960772170d64a68246f7790e955746"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -706,6 +705,7 @@
     "grpclog",
     "internal",
     "internal/backoff",
+    "internal/balancerload",
     "internal/binarylog",
     "internal/channelz",
     "internal/envconfig",
@@ -725,8 +725,8 @@
     "tap",
   ]
   pruneopts = "UT"
-  revision = "3507fb8e1a5ad030303c106fef3a47c9fdad16ad"
-  version = "v1.19.1"
+  revision = "236199dd5f8031d698fb64091194aecd1c3895b2"
+  version = "v1.20.0"
 
 [[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
@@ -749,7 +749,6 @@
     "github.com/cosmos/cosmos-sdk/client/rpc",
     "github.com/cosmos/cosmos-sdk/client/tx",
     "github.com/cosmos/cosmos-sdk/client/utils",
-    "github.com/cosmos/cosmos-sdk/cmd/gaia/init",
     "github.com/cosmos/cosmos-sdk/codec",
     "github.com/cosmos/cosmos-sdk/server",
     "github.com/cosmos/cosmos-sdk/types",
@@ -762,16 +761,20 @@
     "github.com/cosmos/cosmos-sdk/x/bank",
     "github.com/cosmos/cosmos-sdk/x/bank/client/cli",
     "github.com/cosmos/cosmos-sdk/x/bank/client/rest",
+    "github.com/cosmos/cosmos-sdk/x/bank/simulation",
     "github.com/cosmos/cosmos-sdk/x/distribution",
     "github.com/cosmos/cosmos-sdk/x/distribution/client",
     "github.com/cosmos/cosmos-sdk/x/distribution/client/rest",
+    "github.com/cosmos/cosmos-sdk/x/distribution/simulation",
     "github.com/cosmos/cosmos-sdk/x/params",
     "github.com/cosmos/cosmos-sdk/x/slashing",
     "github.com/cosmos/cosmos-sdk/x/slashing/client",
     "github.com/cosmos/cosmos-sdk/x/slashing/client/rest",
     "github.com/cosmos/cosmos-sdk/x/staking",
     "github.com/cosmos/cosmos-sdk/x/staking/client",
+    "github.com/cosmos/cosmos-sdk/x/staking/client/cli",
     "github.com/cosmos/cosmos-sdk/x/staking/client/rest",
+    "github.com/cosmos/cosmos-sdk/x/staking/simulation",
     "github.com/gorilla/mux",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
@@ -781,10 +784,13 @@
     "github.com/tendermint/tendermint/crypto",
     "github.com/tendermint/tendermint/crypto/merkle",
     "github.com/tendermint/tendermint/crypto/tmhash",
+    "github.com/tendermint/tendermint/libs/bech32",
     "github.com/tendermint/tendermint/libs/cli",
     "github.com/tendermint/tendermint/libs/common",
     "github.com/tendermint/tendermint/libs/db",
     "github.com/tendermint/tendermint/libs/log",
+    "github.com/tendermint/tendermint/p2p",
+    "github.com/tendermint/tendermint/privval",
     "github.com/tendermint/tendermint/types",
   ]
   solver-name = "gps-cdcl"
