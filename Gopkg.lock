@@ -40,7 +40,7 @@
   revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
 
 [[projects]]
-  digest = "1:b363d004ade07f6fe467adf4495ea19fafcdc1c52c21b6d0450b985b01f92900"
+  digest = "1:f064d072cb80fb91ec7634dddfa5b740f8331bfc5d7d7b3c0ccf029eed44af8f"
   name = "github.com/cosmos/cosmos-sdk"
   packages = [
     "baseapp",
@@ -54,6 +54,7 @@
     "client/tx",
     "client/utils",
     "cmd/gaia/app",
+    "cmd/gaia/app/x/bank",
     "codec",
     "crypto",
     "crypto/keys",
@@ -79,7 +80,6 @@
     "types/rest",
     "version",
     "x/auth",
-    "x/auth/client",
     "x/auth/client/cli",
     "x/auth/client/rest",
     "x/auth/client/txbuilder",
@@ -121,8 +121,8 @@
     "x/staking/types",
   ]
   pruneopts = "UT"
-  revision = "906e9509cfcae3330584416c8b8e9cfe6c8d2766"
-  version = "v0.32.0"
+  revision = "dba33693c4b714db7c01eb3926edf780be12a8e5"
+  version = "v0.33.2"
 
 [[projects]]
   digest = "1:e8a3550c8786316675ff54ad6f09d265d129c9d986919af7f541afba50d87ce2"
@@ -130,6 +130,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "52158e4697b87de16ed390e1bdaf813e581008fa"
+
+[[projects]]
+  digest = "1:a2b34d1436ac24a0db176f84c015d80438602eeec12f2f8358bb72749711ab52"
+  name = "github.com/cosmos/ledger-cosmos-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e2f595b3b7b222e1cbe9daf89e73e4dcab02d54c"
+  version = "v0.9.8"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -586,14 +594,6 @@
   pruneopts = "UT"
   revision = "302fd402163c34626286195dfa9adac758334acc"
   version = "v0.9.0"
-
-[[projects]]
-  digest = "1:fca24169988a61ea725d1326de30910d8049fe68bcbc194d28803f9a76dda380"
-  name = "github.com/zondax/ledger-cosmos-go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "69fdb8ce5e5b9d9c3b22b9248e117b231d4f06dd"
-  version = "v0.9.7"
 
 [[projects]]
   digest = "1:f8e4c0b959174a1fa5946b12f1f2ac7ea5651bef20a9e4a8dac55dbffcaa6cd6"
