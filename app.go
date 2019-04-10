@@ -57,7 +57,7 @@ type randApp struct {
 	randKeeper          rand.Keeper
 }
 
-// default home directories for expected binaries
+// 설치 디렉토리
 var (
 	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
@@ -74,18 +74,18 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		BaseApp: bApp,
 		cdc:     cdc,
 
-		keyMain:          sdk.NewKVStoreKey("main"),
-		keyAccount:       sdk.NewKVStoreKey("acc"),
+		keyMain:          sdk.NewKVStoreKey(bam.MainStoreKey),
+		keyAccount:       sdk.NewKVStoreKey(auth.StoreKey),
 		keyRounds:        sdk.NewKVStoreKey("rounds"),
-		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
-		keyParams:        sdk.NewKVStoreKey("params"),
-		keyStaking:       sdk.NewKVStoreKey("staking"),
-		keySlashing:      sdk.NewKVStoreKey("slashsing"),
-		tkeyStaking:      sdk.NewTransientStoreKey("transient_stake"),
+		keyFeeCollection: sdk.NewKVStoreKey(auth.FeeStoreKey),
+		keyParams:        sdk.NewKVStoreKey(params.StoreKey),
+		keyStaking:       sdk.NewKVStoreKey(staking.StoreKey),
+		keySlashing:      sdk.NewKVStoreKey(slashing.StoreKey),
+		tkeyStaking:      sdk.NewTransientStoreKey(staking.TStoreKey),
 		keyDistr:         sdk.NewKVStoreKey(distr.StoreKey),
 		tkeyDistr:        sdk.NewTransientStoreKey(distr.TStoreKey),
 
-		tkeyParams: sdk.NewTransientStoreKey("transient_params"),
+		tkeyParams: sdk.NewTransientStoreKey(params.TStoreKey),
 	}
 
 	app.paramsKeeper = params.NewKeeper(app.cdc, app.keyParams, app.tkeyParams)
@@ -113,6 +113,8 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	)
 
 	app.stakingKeeper = *stakingKeeper.SetHooks(NewStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
+
+	app.distrKeeper = distr.NewKeeper(app.cdc, app.keyDistr, app.paramsKeeper.Subspace(distr.DefaultParamspace), app.bankKeeper, &stakingKeeper, app.feeCollectionKeeper, distr.DefaultCodespace)
 
 	app.slashingKeeper = slashing.NewKeeper(
 		app.cdc,
