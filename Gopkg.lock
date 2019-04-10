@@ -144,8 +144,8 @@
   name = "github.com/ethereum/go-ethereum"
   packages = ["crypto/secp256k1"]
   pruneopts = "UT"
-  revision = "14ae1246b789dd2a0a2bd22f0c7d3256daa26759"
-  version = "v1.8.25"
+  revision = "cdae1c59abc32f85debfa29577fbf1ed036ebf73"
+  version = "v1.8.26"
 
 [[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
@@ -368,8 +368,8 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "cfeb6f9992ffa54aaa4f2170ade4067ee478b250"
-  version = "v0.2.0"
+  revision = "a82f4c12f983cc2649298185f296632953e50d3e"
+  version = "v0.3.0"
 
 [[projects]]
   branch = "master"
@@ -647,14 +647,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d78755393cc6ee9bd63b4debeed9be209517adc3296e61ecdf97590b15260f45"
+  digest = "1:1f696668ea83150c166b55ed47d2d963db248ed820889e95ae183a85e7ec4384"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
     "unix",
   ]
   pruneopts = "UT"
-  revision = "4b34438f7a67ee5f45cc6132e2bad873a20324e9"
+  revision = "cc4d4f50624c67f0af3a3fa307f4be9ab9030144"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
