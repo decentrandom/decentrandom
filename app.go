@@ -27,6 +27,8 @@ import (
 
 const (
 	appName = "rand"
+	// DefaultKeyPass -
+	DefaultKeyPass = "12345678"
 )
 
 type randApp struct {
