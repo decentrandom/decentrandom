@@ -4,17 +4,17 @@
   fetch: "src=/home/ec2-user/.randd/config/genesis.json dest={{GENESISFILE}} flat=yes"
   run_once: yes
   become: yes
-  become_user: randd
+  become_user: ec2-user
 
 - name: Fetch config.toml
   fetch: "src=/home/ec2-user/.randd/config/config.toml dest={{CONFIGFILE}} flat=yes"
   run_once: yes
   become: yes
-  become_user: randd
+  become_user: ec2-user
 
 - name: Fetch priv_validator_state.json
   fetch: "src=/home/ec2-user/.randd/data/priv_validator_state.json dest={{CONFIGFILE}} flat=yes"
   run_once: yes
   become: yes
-  become_user: randd
+  become_user: ec2-user
 
