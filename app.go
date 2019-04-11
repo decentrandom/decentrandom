@@ -70,8 +70,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.BaseAp
 
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc), baseAppOptions...)
 
-	bam.SetMinGasPrices(sdk.DecCoin{Denom: "mrand", Amount: 1000})
-
 	var app = &randApp{
 		BaseApp: bApp,
 		cdc:     cdc,
