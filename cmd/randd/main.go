@@ -71,7 +71,7 @@ func main() {
 }
 
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
-	return app.NewRandApp(logger, db,
+	return app.NewRandApp(logger, db, true,
 		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
 		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)))
 }
@@ -81,13 +81,13 @@ func exportAppStateAndTMValidators(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
 	if height != -1 {
-		rApp := app.NewRandApp(logger, db)
+		rApp := app.NewRandApp(logger, db, false)
 		err := rApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
 		}
 		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-	rApp := app.NewRandApp(logger, db)
+	rApp := app.NewRandApp(logger, db, true)
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }
