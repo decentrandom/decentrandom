@@ -236,8 +236,8 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			return err
 		}
 
-		terraConfigFilePath := filepath.Join(nodeDir, "config/randd.toml")
-		srvconfig.WriteConfigFile(terraConfigFilePath, terraConfig)
+		randConfigFilePath := filepath.Join(nodeDir, "config/randd.toml")
+		srvconfig.WriteConfigFile(randConfigFilePath, randConfig)
 	}
 
 	if err := initGenFiles(cdc, chainID, accs, genFiles, numValidators); err != nil {
