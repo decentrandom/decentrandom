@@ -7,9 +7,9 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	banksim "github.com/cosmos/cosmos-sdk/x/bank/simulation"
-	distrsim "github.com/cosmos/cosmos-sdk/x/distribution/simulation"
-	stakingsim "github.com/cosmos/cosmos-sdk/x/staking/simulation"
+	banksim "github.com/cosmos/cosmos-sdk/x/bank"
+	distrsim "github.com/cosmos/cosmos-sdk/x/distribution"
+	stakingsim "github.com/cosmos/cosmos-sdk/x/staking"
 )
 
 func (app *randApp) runtimeInvariants() []sdk.Invariant {
