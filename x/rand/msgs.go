@@ -40,7 +40,7 @@ func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash
 
 // Route - 라운드 신규 생성 Route
 func (msg MsgNewRound) Route() string {
-	return "rand"
+	return RouterKey
 }
 
 // Type - 라운드 신규 생성 Type
