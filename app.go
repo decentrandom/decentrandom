@@ -64,11 +64,11 @@ var (
 )
 
 // NewRandApp - 앱 생성
-func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
+func NewRandApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.BaseApp)) *randApp {
 
 	cdc := MakeCodec()
 
-	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
+	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc), baseAppOptions...)
 
 	var app = &randApp{
 		BaseApp: bApp,
