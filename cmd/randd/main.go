@@ -86,6 +86,6 @@ func exportAppStateAndTMValidators(
 		}
 		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-	rApp := app.NewRandApp(logger, db)
+	rApp := app.NewRandApp(logger, db, true)
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }
