@@ -4,7 +4,7 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 - [https://decentrandom.com](https://decentrandom.com)
 - Cosmos SDK v0.33.2 기준
-- Tendermint v0.31.3
+- Tendermint v0.31.0-dev0-fix0
 - Go 1.12 이상
 
 ## Warnings
