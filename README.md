@@ -3,6 +3,8 @@
 P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 - [https://decentrandom.com](https://decentrandom.com)
+- Cosmos SDK 0.33.2 기준
+- Go 1.12 이상
 
 ## Warnings
 
@@ -16,8 +18,6 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
 - 블록 헤더 수정
 
 ## Building
-
-golang 1.12 이상을 필요로 합니다.
 
     make get_tools
     dep ensure -v
