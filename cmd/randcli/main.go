@@ -79,6 +79,7 @@ func main() {
 		keys.Commands(),
 		client.LineBreak,
 		version.VersionCmd,
+		client.NewCompletionCmd(rootCmd, true),
 	)
 
 	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
