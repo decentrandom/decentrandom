@@ -12,7 +12,7 @@ import (
 	stakingsim "github.com/cosmos/cosmos-sdk/x/staking"
 )
 
-func (app *randApp) runtimeInvariants() []sdk.Invariant {
+func (app *RandApp) runtimeInvariants() []sdk.Invariant {
 	return []sdk.Invariant{
 		banksim.NonnegativeBalanceInvariant(app.accountKeeper),
 		distrsim.NonNegativeOutstandingInvariant(app.distrKeeper),
@@ -21,12 +21,12 @@ func (app *randApp) runtimeInvariants() []sdk.Invariant {
 	}
 }
 
-func (app *randApp) assertRuntimeInvariants() {
+func (app *RandApp) assertRuntimeInvariants() {
 	ctx := app.NewContext(false, abci.Header{Height: app.LastBlockHeight() + 1})
 	app.assertRuntimeInvariantsOnContext(ctx)
 }
 
-func (app *randApp) assertRuntimeInvariantsOnContext(ctx sdk.Context) {
+func (app *RandApp) assertRuntimeInvariantsOnContext(ctx sdk.Context) {
 	start := time.Now()
 	invariants := app.runtimeInvariants()
 	for _, inv := range invariants {
