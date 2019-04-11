@@ -135,7 +135,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, loadLatest bool, baseAppOptions ..
 		AddRoute(staking.RouterKey, staking.NewHandler(app.stakingKeeper)).
 		AddRoute(distr.RouterKey, distr.NewHandler(app.distrKeeper)).
 		AddRoute(slashing.RouterKey, slashing.NewHandler(app.slashingKeeper)).
-		AddRoute("rand", rand.NewHandler(app.randKeeper))
+		AddRoute(rand.RouterKey, rand.NewHandler(app.randKeeper))
 
 	app.QueryRouter().
 		AddRoute(auth.QuerierRoute, auth.NewQuerier(app.accountKeeper)).
