@@ -142,7 +142,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, loadLatest bool, baseAppOptions ..
 		AddRoute(distr.QuerierRoute, distr.NewQuerier(app.distrKeeper)).
 		AddRoute(slashing.QuerierRoute, slashing.NewQuerier(app.slashingKeeper, app.cdc)).
 		AddRoute(staking.QuerierRoute, staking.NewQuerier(app.stakingKeeper, app.cdc)).
-		AddRoute("rand", rand.NewQuerier(app.randKeeper))
+		AddRoute(rand.QuerierRoute, rand.NewQuerier(app.randKeeper))
 
 	app.MountStores(
 		app.keyMain,
@@ -250,7 +250,9 @@ func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 
 	app.assertRuntimeInvariants()
 
-	return abci.ResponseInitChain{}
+	return abci.ResponseInitChain{
+		Validators: validators,
+	}
 }
 
 // MakeCodec - Amino를 사용하기 위한 codec 생성
@@ -284,6 +286,8 @@ func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) ab
 // EndBlocker -
 func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	validatorUpdates, tags := staking.EndBlocker(ctx, app.stakingKeeper)
+
+	app.assertRuntimeInvariants()
 
 	return abci.ResponseEndBlock{
 		ValidatorUpdates: validatorUpdates,
