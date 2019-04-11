@@ -9,14 +9,16 @@ import (
 	//"path/filepath"
 	// "strings"
 
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/store"
 	//"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	//"github.com/cosmos/cosmos-sdk/x/auth"
 	//"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
-	//"github.com/spf13/viper"
+	"github.com/spf13/viper"
 	//"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/cli"
 	//"github.com/tendermint/tendermint/libs/common"
@@ -69,7 +71,7 @@ func main() {
 }
 
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
-	return app.NewRandApp(logger, db, true,
+	return app.NewRandApp(logger, db,
 		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
 		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)))
 }
@@ -79,13 +81,13 @@ func exportAppStateAndTMValidators(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
 	if height != -1 {
-		rApp := app.NewRandApp(logger, db, false)
+		rApp := app.NewRandApp(logger, db)
 		err := rApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
 		}
 		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-	rApp := app.NewRandApp(logger, db, true)
+	rApp := app.NewRandApp(logger, db)
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }
