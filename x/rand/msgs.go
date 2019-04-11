@@ -7,8 +7,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const RouterKey = "rand"
-
 /*
 NewRound
 : 라운드 신규 생성
