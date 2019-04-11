@@ -106,8 +106,8 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 	nodeIDs := make([]string, numValidators)
 	valPubKeys := make([]crypto.PubKey, numValidators)
 
-	terraConfig := srvconfig.DefaultConfig()
-	terraConfig.MinGasPrices = viper.GetString(server.FlagMinGasPrices)
+	randConfig := srvconfig.DefaultConfig()
+	randConfig.MinGasPrices = viper.GetString(server.FlagMinGasPrices)
 
 	var (
 		accs     []app.GenesisAccount
