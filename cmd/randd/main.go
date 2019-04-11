@@ -32,10 +32,6 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
-const (
-	flagOverwrite = "overwrite"
-)
-
 func main() {
 	cobra.EnableCommandSorting = false
 
