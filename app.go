@@ -26,12 +26,12 @@ import (
 )
 
 const (
-	appName = "rand"
+	appName = "RandApp"
 	// DefaultKeyPass - 노드 기본 암호
-	DefaultKeyPass = "12345678"
+	DefaultKeyPass = "misskiwi"
 )
 
-type randApp struct {
+type RandApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
@@ -64,13 +64,13 @@ var (
 )
 
 // NewRandApp - 앱 생성
-func NewRandApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.BaseApp)) *randApp {
+func NewRandApp(logger log.Logger, db dbm.DB, loadLatest bool, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
 
 	cdc := MakeCodec()
 
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc), baseAppOptions...)
 
-	var app = &randApp{
+	var app = &RandApp{
 		BaseApp: bApp,
 		cdc:     cdc,
 
@@ -172,7 +172,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.BaseAp
 }
 
 // initFromGenesisState -
-func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
+func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
 	genesisState.Sanitize()
 
 	// load the accounts
@@ -222,7 +222,7 @@ func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 }
 
 // initChainer -
-func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 
 	var genesisState GenesisState
@@ -268,7 +268,7 @@ func MakeCodec() *codec.Codec {
 }
 
 // BeginBlocker -
-func (app *randApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 
 	// distribute rewards for the previous block
 	distr.BeginBlocker(ctx, req, app.distrKeeper)
@@ -282,7 +282,7 @@ func (app *randApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) ab
 }
 
 // EndBlocker -
-func (app *randApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	validatorUpdates, tags := staking.EndBlocker(ctx, app.stakingKeeper)
 
 	return abci.ResponseEndBlock{
@@ -292,12 +292,12 @@ func (app *randApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 }
 
 // LoadHeight loads a particular height
-func (app *randApp) LoadHeight(height int64) error {
+func (app *RandApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height, app.keyMain)
 }
 
 // ExportAppStateAndValidators -
-func (app *randApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string) (
+func (app *RandApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string) (
 	appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 
 	// as if they could withdraw from the start of the next block
@@ -333,7 +333,7 @@ func (app *randApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteLis
 }
 
 // prepare for fresh start at zero height
-func (app *randApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []string) {
+func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []string) {
 	applyWhiteList := false
 
 	//Check if there is a whitelist
