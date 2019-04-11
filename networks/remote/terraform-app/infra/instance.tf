@@ -5,6 +5,7 @@ resource "aws_key_pair" "key" {
 
 data "aws_ami" "linux" {
   most_recent = true
+  owner = ["self"]
   filter {
     name   = "name"
     values = ["${var.image_name}"]
