@@ -11,7 +11,7 @@
     src: 91-nofiles.conf
     dest: /etc/security/limits.d
 
-- name: Set terra filehandle Limits
+- name: Set rand filehandle Limits
   copy:
     src: limits.conf
     dest: "/lib/systemd/system/{{item}}.service.d"
