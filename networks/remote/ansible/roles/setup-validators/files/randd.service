@@ -5,8 +5,8 @@ After=network-online.target
 
 [Service]
 Restart=on-failure
-User=ec2-user
-Group=ec2-user
+User=randd
+Group=randd
 PermissionsStartOnly=true
 ExecStart=/usr/bin/randd start
 ExecReload=/bin/kill -HUP $MAINPID
