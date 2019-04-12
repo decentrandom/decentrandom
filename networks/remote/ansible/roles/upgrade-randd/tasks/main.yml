@@ -11,14 +11,14 @@
   when: "GENESISFILE is defined and GENESISFILE != ''" 
   copy:
     src: "{{GENESISFILE}}"
-    dest: /home/ec2-user/.randd/config/genesis.json
+    dest: /home/randd/.randd/config/genesis.json
   notify: restart randd
 
 - name: Download genesis.json URL, if available
   when: "GENESISURL is defined and GENESISURL != ''"
   get_url:
     url: "{{GENESISURL}}"
-    dest: /home/ec2-user/.randd/config/genesis.json
+    dest: /home/randd/.randd/config/genesis.json
     force: yes
   notify: restart randd
 
