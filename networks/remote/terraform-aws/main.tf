@@ -11,7 +11,7 @@ variable "REGIONS" {
 
 variable "TESTNET_NAME" {
   description = "Name of the testnet"
-  default = "remotenet"
+  default = "mssp-0001"
 }
 
 variable "REGION_LIMIT" {
