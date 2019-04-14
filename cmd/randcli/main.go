@@ -43,6 +43,8 @@ const (
 	storeDR  = "random"
 )
 
+var defaultCLIHome = os.ExpandEnv("$HOME/.nscli")
+
 func main() {
 	cobra.EnableCommandSorting = false
 
@@ -56,9 +58,6 @@ func main() {
 
 	mc := []sdk.ModuleClients{
 		randClient.NewModuleClient(storeDR, cdc),
-		distClient.NewModuleClient(distcmd.StoreKey, cdc),
-		stakingClient.NewModuleClient(st.StoreKey, cdc),
-		slashingClient.NewModuleClient(sl.StoreKey, cdc),
 	}
 
 	rootCmd := &cobra.Command{
@@ -73,7 +72,7 @@ func main() {
 
 	rootCmd.AddCommand(
 		rpc.StatusCommand(),
-		client.ConfigCmd(app.DefaultCLIHome),
+		client.ConfigCmd(DefaultCLIHome),
 		queryCmd(cdc, mc),
 		txCmd(cdc, mc),
 		client.LineBreak,
@@ -85,40 +84,20 @@ func main() {
 		client.NewCompletionCmd(rootCmd, true),
 	)
 
-	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
+	executor := cli.PrepareMainCmd(rootCmd, "DR", DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func registerSwaggerUI(rs *lcd.RestServer) {
-	statikFS, err := fs.New()
-	if err != nil {
-		panic(err)
-	}
-	staticServer := http.FileServer(statikFS)
-	rs.Mux.PathPrefix("/swagger-ui/").Handler(http.StripPrefix("/swagger-ui/", staticServer))
-}
-
-// CLIVersionRequestHandler -
-func CLIVersionRequestHandler(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	_, _ = w.Write([]byte(fmt.Sprintf("{\"version\": \"test\"}")))
-}
-
 func registerRoutes(rs *lcd.RestServer) {
 	rs.Mux.HandleFunc("/version", CLIVersionRequestHandler).Methods("GET")
-	registerSwaggerUI(rs)
 	rpc.RegisterRoutes(rs.CliCtx, rs.Mux)
 	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
 	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
 	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
 	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeDR)
-	dist.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, distcmd.StoreKey)
-	staking.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	slashing.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-
 }
 
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
@@ -154,9 +133,7 @@ func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 		bankcmd.SendTxCmd(cdc),
 		client.LineBreak,
 		authcmd.GetSignCommand(cdc),
-		authcmd.GetMultiSignCommand(cdc),
 		tx.GetBroadcastCommand(cdc),
-		tx.GetEncodeCommand(cdc),
 		client.LineBreak,
 	)
 
