@@ -44,7 +44,7 @@ const (
 )
 
 // DefaultCLIHome -
-var DefaultCLIHome = os.ExpandEnv("$HOME/.nscli")
+var DefaultCLIHome = os.ExpandEnv("$HOME/.randcli")
 
 func main() {
 	cobra.EnableCommandSorting = false
