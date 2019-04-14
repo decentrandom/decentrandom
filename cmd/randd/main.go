@@ -34,6 +34,13 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
+// DefaultNodeHome -
+var DefaultNodeHome = os.ExpandEnv("$HOME/.nsd")
+
+const (
+	flagOverwrite = "overwrite"
+)
+
 func main() {
 	cobra.EnableCommandSorting = false
 
@@ -54,16 +61,11 @@ func main() {
 	}
 
 	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.CollectGenTxsCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.TestnetFilesCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc))
-	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 
-	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
+	server.AddCommands(ctx, cdc, rootCmd, newApp, appExporter())
 
-	executor := cli.PrepareBaseCmd(rootCmd, "DR", app.DefaultNodeHome)
+	executor := cli.PrepareBaseCmd(rootCmd, "DR", DefaultNodeHome)
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
