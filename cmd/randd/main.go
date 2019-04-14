@@ -32,7 +32,7 @@ import (
 )
 
 // DefaultNodeHome -
-var DefaultNodeHome = os.ExpandEnv("$HOME/.nsd")
+var DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 const (
 	flagOverwrite = "overwrite"
