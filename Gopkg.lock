@@ -15,7 +15,7 @@
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
   pruneopts = "UT"
-  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+  revision = "234731a4f01687625231ac651d6b2776e3f3142e"
 
 [[projects]]
   digest = "1:1343a2963481a305ca4d051e84bc2abd16b601ee22ed324f8d605de1adb291b0"
@@ -41,7 +41,7 @@
   revision = "3ac1210f4b38284536002486ef8a21ac54c14497"
 
 [[projects]]
-  digest = "1:9c7957e09c643ec2b7b3f432ce89848a133117549482f74b8c33caa1efd10096"
+  digest = "1:a74c5a36f61711ea11e095303f353e2c591e127dddfb424fd44a40edbb7eb76d"
   name = "github.com/cosmos/cosmos-sdk"
   packages = [
     "baseapp",
@@ -86,7 +86,6 @@
     "x/bank",
     "x/bank/client/cli",
     "x/bank/client/rest",
-    "x/bank/simulation",
     "x/crisis",
     "x/distribution",
     "x/distribution/client",
@@ -94,7 +93,6 @@
     "x/distribution/client/common",
     "x/distribution/client/rest",
     "x/distribution/keeper",
-    "x/distribution/simulation",
     "x/distribution/tags",
     "x/distribution/types",
     "x/gov",
@@ -106,7 +104,6 @@
     "x/mock",
     "x/params",
     "x/params/subspace",
-    "x/simulation",
     "x/slashing",
     "x/slashing/client",
     "x/slashing/client/cli",
@@ -118,7 +115,6 @@
     "x/staking/client/rest",
     "x/staking/keeper",
     "x/staking/querier",
-    "x/staking/simulation",
     "x/staking/tags",
     "x/staking/types",
   ]
@@ -384,11 +380,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f806b417865e83457c3659232926203f5b0d39aa741b71d9e3e4c0c774e71a5c"
+  digest = "1:5e412e2a03bd0cfdb102db97212be2e625df74fa8b2d4a8a51f107b1456e256b"
   name = "github.com/prometheus/procfs"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ea9eea63887261e4d8ed8315f4078e88d540c725"
+  revision = "e22ddced71425e65e388b17b7d0289c5ea77d06e"
 
 [[projects]]
   digest = "1:77b730fa4c2d98f3ddf492acbea351eb6b0560fa5eace4105a6fc33ff937bb1b"
@@ -522,7 +518,7 @@
   version = "v0.12.2"
 
 [[projects]]
-  digest = "1:356171a51a4ff1b172d9c01d18bd4edf8260b2766cd4bf66fc906fd043be8244"
+  digest = "1:f84240febebaf318464612405f896e245f9a4c181a6374990ba74f108dc46aad"
   name = "github.com/tendermint/tendermint"
   packages = [
     "abci/client",
@@ -589,8 +585,8 @@
     "version",
   ]
   pruneopts = "UT"
-  revision = "6cc3f4d87cae6589aef0ac2b4707f1ebc8a669b2"
-  version = "v0.31.3"
+  revision = "4695414393a3e0bc3836fb1cece7f1f3768d3311"
+  version = "v0.31.4"
 
 [[projects]]
   digest = "1:5a736f4722932d9a45d28852e85b83f68292d9af2ef0be29d4e5fe6fd89d5d96"
@@ -645,14 +641,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:13917c3d8b9b6c14a941d66af59444b7ce53a859a8b86e24891a713186f42c65"
+  digest = "1:e8668d5ed5c474915dfbeef0e32aebafb280803e4efe76950c1b71f60ef39088"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
     "unix",
   ]
   pruneopts = "UT"
-  revision = "0ad05ae3009d6413d3363aa09b350b2ec37daf09"
+  revision = "97732733099d6a942a73b889770774366de963ed"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -750,6 +746,7 @@
     "github.com/cosmos/cosmos-sdk/codec",
     "github.com/cosmos/cosmos-sdk/server",
     "github.com/cosmos/cosmos-sdk/server/config",
+    "github.com/cosmos/cosmos-sdk/store",
     "github.com/cosmos/cosmos-sdk/types",
     "github.com/cosmos/cosmos-sdk/types/rest",
     "github.com/cosmos/cosmos-sdk/version",
@@ -760,11 +757,9 @@
     "github.com/cosmos/cosmos-sdk/x/bank",
     "github.com/cosmos/cosmos-sdk/x/bank/client/cli",
     "github.com/cosmos/cosmos-sdk/x/bank/client/rest",
-    "github.com/cosmos/cosmos-sdk/x/bank/simulation",
     "github.com/cosmos/cosmos-sdk/x/distribution",
     "github.com/cosmos/cosmos-sdk/x/distribution/client",
     "github.com/cosmos/cosmos-sdk/x/distribution/client/rest",
-    "github.com/cosmos/cosmos-sdk/x/distribution/simulation",
     "github.com/cosmos/cosmos-sdk/x/params",
     "github.com/cosmos/cosmos-sdk/x/slashing",
     "github.com/cosmos/cosmos-sdk/x/slashing/client",
@@ -773,8 +768,8 @@
     "github.com/cosmos/cosmos-sdk/x/staking/client",
     "github.com/cosmos/cosmos-sdk/x/staking/client/cli",
     "github.com/cosmos/cosmos-sdk/x/staking/client/rest",
-    "github.com/cosmos/cosmos-sdk/x/staking/simulation",
     "github.com/gorilla/mux",
+    "github.com/rakyll/statik/fs",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
     "github.com/tendermint/go-amino",
