@@ -43,7 +43,8 @@ const (
 	storeDR  = "random"
 )
 
-var defaultCLIHome = os.ExpandEnv("$HOME/.nscli")
+// DefaultCLIHome -
+var DefaultCLIHome = os.ExpandEnv("$HOME/.nscli")
 
 func main() {
 	cobra.EnableCommandSorting = false
@@ -72,7 +73,7 @@ func main() {
 
 	rootCmd.AddCommand(
 		rpc.StatusCommand(),
-		client.ConfigCmd(defaultCLIHome),
+		client.ConfigCmd(DefaultCLIHome),
 		queryCmd(cdc, mc),
 		txCmd(cdc, mc),
 		client.LineBreak,
@@ -84,7 +85,7 @@ func main() {
 		client.NewCompletionCmd(rootCmd, true),
 	)
 
-	executor := cli.PrepareMainCmd(rootCmd, "DR", defaultCLIHome)
+	executor := cli.PrepareMainCmd(rootCmd, "DR", DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
