@@ -13,6 +13,7 @@ require (
 	github.com/cosmos/ledger-cosmos-go v0.9.8
 	github.com/cosmos/sdk-application-tutorial v0.0.0-20190401171757-ef9c78014e84
 	github.com/davecgh/go-spew v1.1.1
+	github.com/decentrandom/decentrandom v0.0.0-20190414060740-c4215dec1969
 	github.com/ethereum/go-ethereum v1.8.23
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-kit/kit v0.8.0
