@@ -7,7 +7,7 @@ const (
 	MicroUnit = int64(1e6)
 )
 
-// IsValidDenom returns the given denom is valid or not
+// IsValidDenom -
 func IsValidDenom(denom string) bool {
 	return denom == MicroRandDenom
 }
