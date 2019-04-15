@@ -58,6 +58,7 @@ func main() {
 	}
 
 	rootCmd.AddCommand(InitCmd(ctx, cdc))
+	rootCmd.AddCommand(gaiaInit.CollectGenTxsCmd(ctx, cdc))
 	rootCmd.AddCommand(gaiaInit.GenTxCmd(ctx, cdc))
 	rootCmd.AddCommand(AddGenesisAccountCmd(ctx, cdc))
 
