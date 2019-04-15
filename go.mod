@@ -1,4 +1,4 @@
-module github/com/decentrandom/decentrandom
+module github.com/decentrandom/decentrandom
 
 go 1.12
 
