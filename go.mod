@@ -1,4 +1,4 @@
-module sdk-application-tutorial
+module decentrandom
 
 go 1.12
 
