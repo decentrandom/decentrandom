@@ -2,4 +2,3 @@
 
 - name: reload systemd
   systemd: name=randd enabled=yes daemon_reload=yes
-
