@@ -32,9 +32,6 @@ github.com/cosmos/ledger-cosmos-go v0.9.8/go.mod h1:RWldjvUf4Hfi46ti/8etBH3eQ2rO
 github.com/davecgh/go-spew v0.0.0-20171005155431-ecdeabc65495/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/decentrandom/decentrandom v0.0.0-20190414060740-c4215dec1969 h1:Sg6S4FkP+cNDlcpi8MKhIAGH+s2Ccz6qXSoRKSAW3M8=
-github.com/decentrandom/decentrandom v0.0.0-20190414060740-c4215dec1969/go.mod h1:2quWBK/KR5uHYvq7GDCaf6of0oVvIbCrpshZevhHgSE=
-github.com/decentrandom/decentrandom v0.0.0-20190415182104-be39a4b809be h1:qp2XuOQyCruAkYRrZXlR2UfZSm4lfRUawNfABkaGN00=
 github.com/ethereum/go-ethereum v1.8.23 h1:xVKYpRpe3cbkaWN8gsRgStsyTvz3s82PcQsbEofjhEQ=
 github.com/ethereum/go-ethereum v1.8.23/go.mod h1:PwpWDrCLZrV+tfrhqqF6kPknbISMHaJv9Ln3kPCZLwY=
 github.com/fortytw2/leaktest v1.3.0 h1:u8491cBMTQ8ft8aeV+adlcytMZylmA5nnwwkRZjI8vw=
