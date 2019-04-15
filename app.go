@@ -45,7 +45,6 @@ type randApp struct {
 // NewRandApp -
 func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
-	// First define the top level codec that will be shared by the different modules
 	cdc := MakeCodec()
 
 	// BaseApp handles interactions with Tendermint through the ABCI protocol
