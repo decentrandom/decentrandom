@@ -3,7 +3,7 @@
 ### they might be useful for developers.
 
 # Name of the testnet. Used in chain-id.
-TESTNET_NAME?=remotenet
+TESTNET_NAME?=mssp-0001
 
 # Name of the servers grouped together for management purposes. Used in tagging the servers in the cloud.
 CLUSTER_NAME?=$(TESTNET_NAME)
@@ -13,7 +13,7 @@ CLUSTER_NAME?=$(TESTNET_NAME)
 SERVERS?=1
 
 # Path to gaiad for deployment. Must be a Linux binary.
-BINARY?=$(CURDIR)/../build/gaiad
+BINARY?=$(CURDIR)/../build/randd
 
 # Path to the genesis.json and config.toml files to deploy on full nodes.
 GENESISFILE?=$(CURDIR)/../build/genesis.json
@@ -74,7 +74,7 @@ fullnodes-status:
 ########################################
 ### Other calls
 
-upgrade-gaiad:
+upgrade-randd:
 	@if [ -z "$(DO_API_TOKEN)" ]; then echo "DO_API_TOKEN environment variable not set." ; false ; fi
 	@if ! [ -f $(HOME)/.ssh/id_rsa.pub ]; then ssh-keygen ; fi
 	@if [ -z "`file $(BINARY) | grep 'ELF 64-bit'`" ]; then echo "Please build a linux binary using 'make build-linux'." ; false ; fi
