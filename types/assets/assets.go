@@ -1,6 +1,6 @@
 package assets
 
-//nolint
+// nolint: golint
 const (
 	MicroRandDenom = "mrand"
 
