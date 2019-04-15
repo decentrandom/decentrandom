@@ -16,8 +16,8 @@ SERVERS?=1
 REGION_LIMIT?=1
 
 # Path to gaiad for deployment. Must be a Linux binary.
-BINARY?=$(CURDIR)/../build/gaiad
-GAIACLI_BINARY?=$(CURDIR)/../build/gaiacli
+BINARY?=$(CURDIR)/../build/randd
+GAIACLI_BINARY?=$(CURDIR)/../build/randcli
 
 # Path to the genesis.json and config.toml files to deploy on full nodes.
 GENESISFILE?=$(CURDIR)/../build/genesis.json
