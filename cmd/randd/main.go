@@ -6,7 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"
+	//"path/filepath"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -17,7 +17,7 @@ import (
 	randInit "github.com/decentrandom/decentrandom/cmd/init"
 	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	//"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/common"
@@ -27,7 +27,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	app "github.com/decentrandom/decentrandom"
 	abci "github.com/tendermint/tendermint/abci/types"
-	cfg "github.com/tendermint/tendermint/config"
+	//cfg "github.com/tendermint/tendermint/config"
 	dbm "github.com/tendermint/tendermint/libs/db"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
