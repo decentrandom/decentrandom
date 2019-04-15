@@ -1,8 +1,6 @@
 package main
 
 import (
-	//"fmt"
-	//"net/http"
 	"os"
 	"path"
 
@@ -13,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/decentrandom/decentrandom/types/util"
-	//"github.com/rakyll/statik/fs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/libs/cli"
@@ -23,15 +20,6 @@ import (
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
-	//distcmd "github.com/cosmos/cosmos-sdk/x/distribution"
-	//distClient "github.com/cosmos/cosmos-sdk/x/distribution/client"
-	//dist "github.com/cosmos/cosmos-sdk/x/distribution/client/rest"
-	//sl "github.com/cosmos/cosmos-sdk/x/slashing"
-	//slashingClient "github.com/cosmos/cosmos-sdk/x/slashing/client"
-	//slashing "github.com/cosmos/cosmos-sdk/x/slashing/client/rest"
-	//st "github.com/cosmos/cosmos-sdk/x/staking"
-	//stakingClient "github.com/cosmos/cosmos-sdk/x/staking/client"
-	//staking "github.com/cosmos/cosmos-sdk/x/staking/client/rest"
 	app "github.com/decentrandom/decentrandom"
 	randClient "github.com/decentrandom/decentrandom/x/rand/client"
 	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
