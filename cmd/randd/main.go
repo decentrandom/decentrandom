@@ -13,7 +13,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/bank"
+	//"github.com/cosmos/cosmos-sdk/x/bank"
+	randInit "github.com/decentrandom/decentrandom/cmd/init"
 	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -57,10 +58,10 @@ func main() {
 		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
-	rootCmd.AddCommand(InitCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
 	rootCmd.AddCommand(gaiaInit.CollectGenTxsCmd(ctx, cdc))
 	rootCmd.AddCommand(gaiaInit.TestnetFilesCmd(ctx, cdc))
-	rootCmd.AddCommand(gaiaInit.GenTxCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
 	rootCmd.AddCommand(gaiaInit.ValidateGenesisCmd(ctx, cdc))
 	rootCmd.AddCommand(AddGenesisAccountCmd(ctx, cdc))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
@@ -84,66 +85,6 @@ func appExporter() server.AppExporter {
 		dapp := app.NewRandApp(logger, db)
 		return dapp.ExportAppStateAndValidators()
 	}
-}
-
-// InitCmd initializes all files for tendermint and application
-func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "init",
-		Short: "Initialize genesis config, priv-validator file, and p2p-node file",
-		Args:  cobra.NoArgs,
-		RunE: func(_ *cobra.Command, _ []string) error {
-			config := ctx.Config
-			config.SetRoot(viper.GetString(cli.HomeFlag))
-
-			chainID := viper.GetString(client.FlagChainID)
-			if chainID == "" {
-				chainID = fmt.Sprintf("test-chain-%v", common.RandStr(6))
-			}
-
-			_, pk, err := gaiaInit.InitializeNodeValidatorFiles(config)
-			if err != nil {
-				return err
-			}
-
-			var appState json.RawMessage
-			genFile := config.GenesisFile()
-
-			if !viper.GetBool(flagOverwrite) && common.FileExists(genFile) {
-				return fmt.Errorf("genesis.json file already exists: %v", genFile)
-			}
-
-			genesis := app.GenesisState{
-				AuthData: auth.DefaultGenesisState(),
-				BankData: bank.DefaultGenesisState(),
-			}
-
-			appState, err = codec.MarshalJSONIndent(cdc, genesis)
-			if err != nil {
-				return err
-			}
-
-			_, _, validator, err := SimpleAppGenTx(cdc, pk)
-			if err != nil {
-				return err
-			}
-
-			if err = gaiaInit.ExportGenesisFile(genFile, chainID, []tmtypes.GenesisValidator{validator}, appState); err != nil {
-				return err
-			}
-
-			cfg.WriteConfigFile(filepath.Join(config.RootDir, "config", "config.toml"), config)
-
-			fmt.Printf("Initialized nsd configuration and bootstrapping files in %s...\n", viper.GetString(cli.HomeFlag))
-			return nil
-		},
-	}
-
-	cmd.Flags().String(cli.HomeFlag, DefaultNodeHome, "node's home directory")
-	cmd.Flags().String(client.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
-	cmd.Flags().BoolP(flagOverwrite, "o", false, "overwrite the genesis.json file")
-
-	return cmd
 }
 
 // AddGenesisAccountCmd allows users to add accounts to the genesis file
