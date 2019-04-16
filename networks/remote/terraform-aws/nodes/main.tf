@@ -9,7 +9,7 @@ resource "aws_key_pair" "testnets" {
   public_key = "${file(var.ssh_public_file)}"
 }
 
-data "aws_ami" "centos" {
+data "aws_ami" "linux" {
   most_recent = true
   owners = ["self"]
   filter {
