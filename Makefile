@@ -87,10 +87,10 @@ endif
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
-update_gaia_lite_docs:
+update_rand_lite_docs:
 	@statik -src=client/lcd/swagger-ui -dest=client/lcd -f
 
-install: go.sum check-ledger update_gaia_lite_docs
+install: go.sum check-ledger update_rand_lite_docs
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randd
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randcli
 
