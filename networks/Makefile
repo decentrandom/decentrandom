@@ -7,7 +7,7 @@
 TESTNET_NAME?=mssp-0001
 
 # Name of the servers grouped together for management purposes. Used in tagging the servers in the cloud.
-CLUSTER_NAME?=mssp-0001
+CLUSTER_NAME?=$(TESTNET_NAME)
 
 # Number of servers to put in one availability zone in AWS.
 SERVERS?=1
