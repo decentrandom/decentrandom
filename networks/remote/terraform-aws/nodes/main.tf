@@ -11,7 +11,7 @@ resource "aws_key_pair" "testnets" {
 
 data "aws_ami" "linux" {
   most_recent = true
-  owners=["self"]
+  owners=["520346364980"]
   filter {
     name   = "name"
     values = ["${var.image_name}"]
