@@ -84,7 +84,7 @@ resource "aws_instance" "node" {
   }
 
   connection {
-    user = "root"
+    user = "centos"
     private_key = "${file(var.ssh_private_file)}"
     timeout = "600s"
   }
