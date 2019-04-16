@@ -9,12 +9,22 @@ resource "aws_key_pair" "testnets" {
   public_key = "${file(var.ssh_public_file)}"
 }
 
-data "aws_ami" "linux" {
+data "aws_ami" "centos" {
   most_recent = true
-  owners = ["self"]
+  owners = ["520346364980"]
   filter {
     name   = "name"
-    values = ["${var.image_name}"]
+    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
   }
 }
 
@@ -62,7 +72,7 @@ resource "aws_security_group" "secgroup" {
 
 resource "aws_instance" "node" {
   count = "${var.execute?var.SERVERS*length(data.aws_availability_zones.zones.names):0}"
-  ami = "${data.aws_ami.linux.image_id}"
+  ami = "${data.aws_ami.centos.image_id}"
   instance_type = "${var.instance_type}"
   key_name = "${aws_key_pair.testnets.key_name}"
   associate_public_ip_address = true
