@@ -56,7 +56,7 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 
 			genFile := config.GenesisFile()
 			if !common.FileExists(genFile) {
-				return fmt.Errorf("%s does not exist, run `gaiad init` first", genFile)
+				return fmt.Errorf("%s does not exist, run `randd init` first", genFile)
 			}
 
 			genDoc, err := tmtypes.GenesisDocFromFile(genFile)
