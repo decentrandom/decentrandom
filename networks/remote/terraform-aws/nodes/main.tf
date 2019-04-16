@@ -11,20 +11,10 @@ resource "aws_key_pair" "testnets" {
 
 data "aws_ami" "centos" {
   most_recent = true
-  owners = ["520346364980"]
+  owners = ["self"]
   filter {
     name   = "name"
-    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
-  }
-
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
+    values = ["${var.image_name}"]
   }
 }
 
