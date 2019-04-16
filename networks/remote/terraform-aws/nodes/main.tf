@@ -62,7 +62,7 @@ resource "aws_security_group" "secgroup" {
 
 resource "aws_instance" "node" {
   count = "${var.execute?var.SERVERS*length(data.aws_availability_zones.zones.names):0}"
-  ami = "${data.aws_ami.centos.image_id}"
+  ami = "${data.aws_ami.linux.image_id}"
   instance_type = "${var.instance_type}"
   key_name = "${aws_key_pair.testnets.key_name}"
   associate_public_ip_address = true
