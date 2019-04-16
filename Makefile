@@ -101,18 +101,27 @@ dist:
 ########################################
 ### Tools & dependencies
 
+get_tools:
+	go get github.com/rakyll/statik
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint
+
+update_tools:
+	@echo "--> Updating tools to correct version"
+	$(MAKE) --always-make get_tools
+
 go-mod-cache: go.sum
 	@echo "--> Download go modules to local cache"
 	@go mod download
 
-go.sum: tools go.mod
+go.sum: get_tools
 	@echo "--> Ensure dependencies have not been modified"
 	@go mod verify
 
 clean:
 	rm -rf snapcraft-local.yaml build/
 
-
+distclean: clean
+	rm -rf vendor/
 
 ########################################
 ### Packaging
