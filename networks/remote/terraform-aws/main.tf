@@ -7,7 +7,6 @@ variable "REGIONS" {
   description = "AWS Regions"
   type = "list"
   default = ["us-east-2"]
-  
 }
 
 variable "TESTNET_NAME" {
