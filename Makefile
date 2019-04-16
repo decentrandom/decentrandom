@@ -60,15 +60,17 @@ ldflags := $(strip $(ldflags))
 
 BUILD_FLAGS := -tags "$(build_tags)" -ldflags '$(ldflags)'
 
-all: tools install lint test
+########################################
+### All
 
-# The below include contains the tools target.
-include contrib/devtools/Makefile
+all: clean go-mod-cache install
 
 ########################################
 ### CI
 
-ci: tools install test_cover lint test
+ci: get_tools install
+
+########################################
 
 ########################################
 ### Build/Install
