@@ -64,6 +64,6 @@ module "nodes-0" {
 output "public_ips" {
   value = "${concat(
 		module.nodes-0.public_ips
-		)}"
+		)}",
 }
 
