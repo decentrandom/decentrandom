@@ -18,7 +18,6 @@ data "aws_ami" "linux" {
     name   = "name"
     values = ["${var.image_name}"]
   }
-  owners=["self"]
 }
 
 data "aws_availability_zones" "zones" {
