@@ -38,7 +38,7 @@ variable "SSH_PUBLIC_FILE" {
 # ap-southeast-1 and ap-southeast-2 does not contain the newer CentOS 1704 image
 variable "image" {
   description = "AWS image name"
-  default = "CentOS Linux 7 x86_64 HVM EBS 1704_01"
+  default = "CentOS Linux 7 x86_64 HVM*"
 }
 
 variable "instance_type" {
