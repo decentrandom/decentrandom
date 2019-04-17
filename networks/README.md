@@ -2,9 +2,9 @@
 
 AWS 기준 풀노드 운영시 참조하시기 바랍니다.
 
-## 기본 설정
-
 - 현재 테스트넷 체인 ID는 mssp-0001 입니다.
+- Terraform과 Ansible을 필요로 합니다.
+- /networks 디렉토리의 Makefile을 참조하시기 바랍니다.
 
 ## Terraform Owners 문제
 
