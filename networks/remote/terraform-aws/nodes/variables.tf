@@ -4,7 +4,7 @@ variable "name" {
 
 variable "image_name" {
   description = "Image name"
-  default = "CentOS Linux 7 x86_64 HVM EBS 1704_01"
+  default = "CentOS Linux 7 x86_64 HVM*"
 }
 
 variable "instance_type" {
