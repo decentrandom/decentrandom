@@ -1,3 +1,6 @@
+terraform {
+  required_version = "0.11.8"
+}
 
 provider "aws" {
   region = "${var.region}"
@@ -11,7 +14,6 @@ resource "aws_key_pair" "testnets" {
 
 data "aws_ami" "linux" {
   most_recent = true
-  owners = ["self"]
   filter {
     name   = "name"
     values = ["${var.image_name}"]
