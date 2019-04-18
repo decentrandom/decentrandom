@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	randApp "github.com/decentrandom/decentrandom"
 	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
@@ -197,8 +198,8 @@ following delegation and commission default parameters:
 
 	ip, _ := server.ExternalIP()
 
-	cmd.Flags().String(tmcli.HomeFlag, app.DefaultNodeHome, "node's home directory")
-	cmd.Flags().String(flagClientHome, app.DefaultCLIHome, "client's home directory")
+	cmd.Flags().String(tmcli.HomeFlag, randApp.DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(flagClientHome, randApp.DefaultCLIHome, "client's home directory")
 	cmd.Flags().String(client.FlagName, "", "name of private key with which to sign the gentx")
 	cmd.Flags().String(client.FlagOutputDocument, "",
 		"write the genesis transaction JSON document to the given file instead of the default location")
