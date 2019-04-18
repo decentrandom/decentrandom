@@ -29,7 +29,7 @@
   register: nodeinfo
 
 - name: Create remote testnet configurations
-  command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --faucet={{FAUCET_ADDRESS}} --faucet-coins={{FAUCET_COINS}} --chain-id={{TESTNET_NAME}}"
+  command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --chain-id={{TESTNET_NAME}}"
   connection: local
   become: no
   run_once: true
