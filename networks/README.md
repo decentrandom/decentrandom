@@ -13,3 +13,13 @@ Terraform의 describe-image 요청 시 owners를 꼭 입력하도록 바뀌었�
     aws ec2 describe-images --filters "Name=name,Values=CentOS Linux 7 x86_64 HVM EBS 1703_01" --region=us-east-2
 
 CentOS Linux 7 x86_64 HVM EBS 1704_01를 지원하지 않는 지역이 있다고 하니, 1703_01로 그냥 통일했습니다.
+
+
+## Terraform 테스트넷 ID 문제
+
+이상하게도 Testnet ID를 mssp-0001 처럼 (-)를 사용하면 tag.Environment로 접근이 안됩니다.
+언더바를 사용하여 mssp_0001로 하면 실행 가능합니다.
+
+## Ansible SSH 접속 거부 문제
+
+ansible-playbook 실행 전에 ANSIBLE_HOST_KEY_CHECKING=False 와 옵션에 -vvvv를 추가하면 해결됩니다.
