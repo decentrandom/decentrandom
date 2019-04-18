@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"os"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -22,6 +23,11 @@ import (
 
 const (
 	appName = "decentrandom"
+)
+
+var (
+	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
+	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 )
 
 type randApp struct {
