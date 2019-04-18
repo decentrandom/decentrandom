@@ -25,7 +25,7 @@
   register: nodeid
 
 - name: Create initial transaction
-  command: "/usr/bin/randd gentx --amount=1000000mran --name=node{{nodeid.stdout_lines[0]}} --ip={{inventory_hostname}}"
+  command: "/usr/bin/randd gentx --amount=1000000mrand --name=node{{nodeid.stdout_lines[0]}} --ip={{inventory_hostname}}"
   register: gentxresult
   become: yes
   become_user: randd
