@@ -22,4 +22,4 @@ CentOS Linux 7 x86_64 HVM EBS 1704_01를 지원하지 않는 지역이 있다고
 
 ## Ansible SSH 접속 거부 문제
 
-ansible-playbook 실행 전에 ANSIBLE_HOST_KEY_CHECKING=False 와 옵션에 -vvvv를 추가하면 해결됩니다.
+ansible-playbook 실행 전에 ANSIBLE_HOST_KEY_CHECKING=False를 추가하면 해결됩니다.
