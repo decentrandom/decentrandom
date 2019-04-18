@@ -28,10 +28,6 @@
   command: "echo node{{nodeid.stdout}}@{{inventory_hostname}}"
   register: nodeinfo
 
-- name: debug dump of node informations
-  run_once: true
-  debug:
-    msg: "{{ groups[ansible_limit] |  map('extract', hostvars, ['nodeinfo', 'stdout']) | join(',') }}"
 
 - name: Create remote testnet configurations
   command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --faucet={{FAUCET_ADDRESS}} --faucet-coins={{FAUCET_COINS}} --chain-id={{TESTNET_NAME}} --predefined-nodes=\"{{ groups[ansible_limit] |  map('extract', hostvars, ['nodeinfo', 'stdout']) | join(',') }}\""
