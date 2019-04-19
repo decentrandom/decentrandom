@@ -70,6 +70,6 @@
     recurse: yes
 
     #- name: Update genesis.json to add faucet address
-    #  command: "/usr/bin/terrad add-genesis-account {{FAUCET_ADDRESS}} {{FAUCET_COINS}}"
+    #  command: "/usr/bin/randd add-genesis-account {{FAUCET_ADDRESS}} {{FAUCET_COINS}}"
     #  become: yes
-    #  become_user: terra
+    #  become_user: randd
