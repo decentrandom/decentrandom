@@ -68,7 +68,7 @@ Example:
 	cmd.Flags().StringP(flagOutputDir, "o", "./mytestnet",
 		"Directory to store initialization data for the testnet",
 	)
-	cmd.Flags().String(flagNodeDirPrefix, "node",
+	cmd.Flags().String(flagNodeDirPrefix, "node10",
 		"Prefix the directory name for each node with (node results in node0, node1, ...)",
 	)
 	cmd.Flags().String(flagNodeDaemonHome, "randd",
@@ -116,7 +116,7 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 
 	// generate private keys, node IDs, and initial transactions
 	for i := 0; i < numValidators; i++ {
-		nodeDirName := fmt.Sprintf("%s%d", viper.GetString(flagNodeDirPrefix), i)
+		nodeDirName := fmt.Sprintf("%s%d", viper.GetString(flagNodeDirPrefix), i+1)
 		nodeDaemonHomeName := viper.GetString(flagNodeDaemonHome)
 		nodeCliHomeName := viper.GetString(flagNodeCliHome)
 		nodeDir := filepath.Join(outDir, nodeDirName, nodeDaemonHomeName)
@@ -295,7 +295,7 @@ func collectGenFiles(
 	genTime := tmtime.Now()
 
 	for i := 0; i < numValidators; i++ {
-		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
+		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i+1)
 		nodeDir := filepath.Join(outDir, nodeDirName, nodeDaemonHomeName)
 		gentxsDir := filepath.Join(outDir, "gentxs")
 		moniker := monikers[i]
