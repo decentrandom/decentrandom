@@ -59,10 +59,10 @@ func main() {
 	}
 
 	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
-	rootCmd.AddCommand(gaiaInit.CollectGenTxsCmd(ctx, cdc))
-	rootCmd.AddCommand(gaiaInit.TestnetFilesCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.CollectGenTxsCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.TestnetFilesCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
-	rootCmd.AddCommand(gaiaInit.ValidateGenesisCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc))
 	rootCmd.AddCommand(AddGenesisAccountCmd(ctx, cdc))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 
