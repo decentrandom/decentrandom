@@ -32,7 +32,7 @@
   command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --chain-id={{TESTNET_NAME}}"
   connection: local
   become: no
-  run_once: true
+  run_once: false
   args:
     creates: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}"
 
