@@ -67,7 +67,7 @@ validators-stop: disclaimer
 	rm -rf remote/ansible/keys/ remote/ansible/files/
 
 validators-status: disclaimer
-	cd remote/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -vvv -i inventory/ec2.py -l "tag_Environment_$(CLUSTER_NAME)" status.yml
+	cd remote/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory/ec2.py -l "tag_Environment_$(CLUSTER_NAME)" status.yml
 
 #validators-clear:
 #	cd remote/ansible && ansible-playbook -i inventory/ec2.py -l "tag_Environment_$(CLUSTER_NAME)" -u centos -b clear-config.yml
