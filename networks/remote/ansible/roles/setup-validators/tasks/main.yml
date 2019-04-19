@@ -30,6 +30,11 @@
 
 - name: Create remote testnet configurations
   command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --chain-id={{TESTNET_NAME}}"
+  responses:
+    "Password for account 'node0' (default 12345678):" : ""
+    "Password for account 'node1' (default 12345678):" : ""
+    "Password for account 'node2' (default 12345678):" : ""
+    "Password for account 'node3' (default 12345678):" : ""
   connection: local
   become: no
   run_once: true
