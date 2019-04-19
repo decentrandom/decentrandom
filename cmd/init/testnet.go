@@ -19,6 +19,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+	// randApp "github.com/decentrandom/decentrandom"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -48,12 +49,12 @@ func TestnetFilesCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "testnet",
-		Short: "Initialize files for a Gaiad testnet",
+		Short: "Initialize files for a Randd testnet",
 		Long: `testnet will create "v" number of directories and populate each with
 necessary files (private validator, genesis, config, etc.).
 Note, strict routability for addresses is turned off in the config file.
 Example:
-	gaiad testnet --v 4 --output-dir ./output --starting-ip-address 192.168.10.2
+	randd testnet --v 4 --output-dir ./output --starting-ip-address 192.168.10.2
 	`,
 		RunE: func(_ *cobra.Command, _ []string) error {
 			config := ctx.Config
@@ -105,8 +106,8 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 	nodeIDs := make([]string, numValidators)
 	valPubKeys := make([]crypto.PubKey, numValidators)
 
-	gaiaConfig := srvconfig.DefaultConfig()
-	gaiaConfig.MinGasPrices = viper.GetString(server.FlagMinGasPrices)
+	randConfig := srvconfig.DefaultConfig()
+	randConfig.MinGasPrices = viper.GetString(server.FlagMinGasPrices)
 
 	var (
 		accs     []app.GenesisAccount
@@ -235,8 +236,8 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			return err
 		}
 
-		gaiaConfigFilePath := filepath.Join(nodeDir, "config/randd.toml")
-		srvconfig.WriteConfigFile(gaiaConfigFilePath, gaiaConfig)
+		randConfigFilePath := filepath.Join(nodeDir, "config/randd.toml")
+		srvconfig.WriteConfigFile(randConfigFilePath, randConfig)
 	}
 
 	if err := initGenFiles(cdc, chainID, accs, genFiles, numValidators); err != nil {
