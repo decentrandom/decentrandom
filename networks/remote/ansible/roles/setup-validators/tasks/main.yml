@@ -33,6 +33,8 @@
   responses:
         "Password for account 'node101' \(default misskiwi\):": ""
         "Password for account 'node102' \(default misskiwi\):": ""
+        "Password for account 'node103' \(default misskiwi\):": ""
+        "Password for account 'node104' \(default misskiwi\):": ""
   connection: local
   become: no
   run_once: false
