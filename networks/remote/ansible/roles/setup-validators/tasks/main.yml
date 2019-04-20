@@ -32,9 +32,9 @@
   command: "{{BINARY}} testnet --output-dir={{playbook_dir}}/testnets/{{TESTNET_NAME}} --chain-id={{TESTNET_NAME}}"
   connection: local
   become: no
-  run_once: false
+  run_once: true
   args:
-    creates: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}"
+    creates: "{{playbook_dir}}/testnets/{{TESTNET_NAME}}/node101/randcli/keys/keys.db"
 
 - name: Copy testnet node configurations
   copy:
