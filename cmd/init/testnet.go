@@ -155,11 +155,12 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
 		genFiles = append(genFiles, config.GenesisFile())
 
-		buf := client.BufferStdin()
-		prompt := fmt.Sprintf(
-			"Password for account '%s' (default %s):", nodeDirName, defaultKeyPass,
-		)
-
+		/*
+			buf := client.BufferStdin()
+			prompt := fmt.Sprintf(
+				"Password for account '%s' (default %s):", nodeDirName, defaultKeyPass,
+			)
+		*/
 		keyPass := defaultKeyPass
 
 		addr, secret, err := server.GenerateSaveCoinKey(clientDir, nodeDirName, keyPass, true)
