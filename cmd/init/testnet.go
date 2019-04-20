@@ -69,7 +69,7 @@ Example:
 		"Directory to store initialization data for the testnet",
 	)
 	cmd.Flags().String(flagNodeDirPrefix, "node10",
-		"Prefix the directory name for each node with (node results in node0, node1, ...)",
+		"Prefix the directory name for each node with (node results in node101, node102, ...)",
 	)
 	cmd.Flags().String(flagNodeDaemonHome, "randd",
 		"Home directory of the node's daemon configuration",
@@ -160,17 +160,7 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			"Password for account '%s' (default %s):", nodeDirName, defaultKeyPass,
 		)
 
-		keyPass, err := client.GetPassword(prompt, buf)
-		if err != nil && keyPass != "" {
-			// An error was returned that either failed to read the password from
-			// STDIN or the given password is not empty but failed to meet minimum
-			// length requirements.
-			return err
-		}
-
-		if keyPass == "" {
-			keyPass = defaultKeyPass
-		}
+		keyPass := defaultKeyPass
 
 		addr, secret, err := server.GenerateSaveCoinKey(clientDir, nodeDirName, keyPass, true)
 		if err != nil {
