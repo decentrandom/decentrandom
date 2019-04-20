@@ -1,5 +1,8 @@
 .DS_Store
-.vscode/settings.json
+.vscode
 vendor
-mytestnet
 build
+
+
+client/lcd/keys/*
+client/lcd/statik/statik.go
