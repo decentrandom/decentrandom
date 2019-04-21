@@ -10,10 +10,15 @@ AWS 기준 풀노드 운영시 참조하시기 바랍니다.
 
     sudo yum install jq
 
-## docker 설치
+## Docker 설치
 
     sudo yum install docker
-    
+
+## Docker Compose 설치
+
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+
 ## Terraform Owners 문제
 
 Terraform의 describe-image 요청 시 owners를 꼭 입력하도록 바뀌었습니다. aws cli에서 미리 검색 후 입력하는 형태로 해결 했습니다.
