@@ -102,6 +102,7 @@ update_tools:
 
 go-mod-cache: go-sum
 	@echo "--> Download go modules to local cache"
+	@go mod tidy
 	@go mod download
 
 go-sum: get_tools
