@@ -147,11 +147,31 @@ ci-lint:
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" | xargs gofmt -d -s
 	go mod verify
 
+########################################
+### Local validator nodes using docker and docker-compose
+
+build-docker-randdnode:
+	$(MAKE) -C networks/local
+
+# Run a 4-node testnet locally
+localnet-start: localnet-stop
+	@if ! [ -f build/node0/randd/config/genesis.json ]; then docker run --rm -v $(CURDIR)/build:/randd:Z tendermint/randdnode testnet --v 5 -o . --starting-ip-address 192.168.10.2; fi
+	# replace docker ip to local port, mapped
+	sed -i -e 's/192.168.10.2:26656/localhost:26656/g; s/192.168.10.3:26656/localhost:26659/g; s/192.168.10.4:26656/localhost:26661/g; s/192.168.10.5:26656/localhost:26663/g' $(CURDIR)/build/node4/randd/config/config.toml
+	# change allow duplicated ip option to prevent the error : cant not route ~
+	sed -i -e 's/allow_duplicate_ip \= false/allow_duplicate_ip \= true/g' `find $(CURDIR)/build -name "config.toml"`
+	docker-compose up -d
+
+# Stop testnet
+localnet-stop:
+	docker-compose down
+
 # To avoid unintended conflicts with file names, always add to .PHONY
 # unless there is a reason not to.
 # https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html
 .PHONY: build install clean distclean update_randd_lite_docs \
 get_tools update_tools \
 test test_cli test_unit benchmark \
+build-linux build-docker-randdnode localnet-start localnet-stop \
 format update_dev_tools lint ci ci-lint\
 go-mod-cache go-sum
