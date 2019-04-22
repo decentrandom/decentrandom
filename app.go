@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
+	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	"github.com/decentrandom/decentrandom/x/rand"
 
@@ -42,12 +43,14 @@ type randApp struct {
 	tkeyParams       *sdk.TransientStoreKey
 	keyStaking       *sdk.KVStoreKey
 	tkeyStaking      *sdk.TransientStoreKey
+	keySlashing      *sdk.KVStoreKey
 
 	accountKeeper       auth.AccountKeeper
 	bankKeeper          bank.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
 	stakingKeeper       staking.Keeper
+	slashingKeeper      slashing.Keeper
 	randKeeper          rand.Keeper
 }
 
@@ -72,6 +75,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
 		keyStaking:       sdk.NewKVStoreKey("staking"),
 		tkeyStaking:      sdk.NewTransientStoreKey("transient_staking"),
+		keySlashing:      sdk.NewKVStoreKey("slashing"),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
@@ -103,6 +107,13 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.cdc,
 	)
 
+	app.slashingKeeper = slashing.NewKeeper(
+		app.cdc,
+		app.keySlashing,
+		&app.stakingKeeper, app.paramsKeeper.Subspace(slashing.DefaultParamspace),
+		slashing.DefaultCodespace,
+	)
+
 	app.stakingKeeper = staking.NewKeeper(
 		app.cdc,
 		app.keyStaking, app.tkeyStaking,
@@ -118,11 +129,13 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.Router().
 		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
 		AddRoute("staking", staking.NewHandler(app.stakingKeeper)).
+		AddRoute("slashing", slashing.NewHandler(app.slashingKeeper)).
 		AddRoute("rand", rand.NewHandler(app.randKeeper))
 
 	// The app.QueryRouter is the main query router where each module registers its routes
 	app.QueryRouter().
 		AddRoute("rand", rand.NewQuerier(app.randKeeper)).
+		AddRoute("slashing", slashing.NewQuerier(app.slashingKeeper, app.cdc)).
 		AddRoute("staking", staking.NewQuerier(app.stakingKeeper, app.cdc)).
 		AddRoute("acc", auth.NewQuerier(app.accountKeeper))
 
@@ -136,6 +149,9 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.keyFeeCollection,
 		app.keyParams,
 		app.tkeyParams,
+		app.keySlashing,
+		app.keyStaking,
+		app.tkeyStaking,
 	)
 
 	err := app.LoadLatestVersion(app.keyMain)
@@ -204,6 +220,21 @@ func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, val
 	}
 
 	return appState, validators, err
+}
+
+func RandValidateGenesisState(genesisState GenesisState) error {
+
+	if err := auth.ValidateGenesis(genesisState.AuthData); err != nil {
+		return err
+	}
+	if err := bank.ValidateGenesis(genesisState.BankData); err != nil {
+		return err
+	}
+	if err := staking.ValidateGenesis(genesisState.StakingData); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // MakeCodec generates the necessary codecs for Amino
