@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"err"
 	"fmt"
 	"os"
 	"sort"
@@ -251,6 +250,71 @@ func (gs GenesisState) Sanitize() {
 	}
 }
 
+func validateGenesisStateAccounts(accs []GenesisAccount) error {
+	addrMap := make(map[string]bool, len(accs))
+	for _, acc := range accs {
+		addrStr := acc.Address.String()
+
+		// disallow any duplicate accounts
+		if _, ok := addrMap[addrStr]; ok {
+			return fmt.Errorf("duplicate account found in genesis state; address: %s", addrStr)
+		}
+
+		// validate any vesting fields
+		if !acc.OriginalVesting.IsZero() {
+
+			if acc.VestingSchedules != nil && len(acc.VestingSchedules) > 0 {
+				for _, vestingSchedule := range acc.VestingSchedules {
+					if !vestingSchedule.IsValid() {
+						return fmt.Errorf("schedule is invalid for vesting account; address: %s, denom: %s", addrStr, vestingSchedule.GetDenom())
+					}
+				}
+			} else {
+				if acc.EndTime == 0 {
+					return fmt.Errorf("missing end time for vesting account; address: %s", addrStr)
+				}
+
+				if acc.StartTime >= acc.EndTime {
+					return fmt.Errorf(
+						"vesting start time must before end time; address: %s, start: %s, end: %s",
+						addrStr,
+						time.Unix(acc.StartTime, 0).UTC().Format(time.RFC3339),
+						time.Unix(acc.EndTime, 0).UTC().Format(time.RFC3339),
+					)
+				}
+			}
+
+		}
+
+		addrMap[addrStr] = true
+	}
+
+	return nil
+}
+
+func RandValidateGenesisState(genesisState GenesisState) error {
+	if err := validateGenesisStateAccounts(genesisState.Accounts); err != nil {
+		return err
+	}
+
+	// skip stakingData validation as genesis is created from txs
+	if len(genesisState.GenTxs) > 0 {
+		return nil
+	}
+
+	if err := auth.ValidateGenesis(genesisState.AuthData); err != nil {
+		return err
+	}
+	if err := bank.ValidateGenesis(genesisState.BankData); err != nil {
+		return err
+	}
+	if err := staking.ValidateGenesis(genesisState.StakingData); err != nil {
+		return err
+	}
+
+	return slashing.ValidateGenesis(genesisState.SlashingData)
+}
+
 func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
 
 	genesisState.Sanitize()
@@ -264,6 +328,11 @@ func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 	auth.InitGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper, genesisState.AuthData)
 	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
 	slashing.InitGenesis(ctx, app.slashingKeeper, genesisState.SlashingData, genesisState.StakingData.Validators.ToSDKValidators())
+
+	// validate genesis state
+	if err := RadnValidateGenesisState(genesisState); err != nil {
+		panic(err) // TODO find a way to do this w/o panics
+	}
 
 	if len(genesisState.GenTxs) > 0 {
 		for _, genTx := range genesisState.GenTxs {
