@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/decentrandom/decentrandom/types"
+	//"github.com/decentrandom/decentrandom/types"
 	"github.com/decentrandom/decentrandom/types/assets"
 
 	tmtypes "github.com/tendermint/tendermint/types"
