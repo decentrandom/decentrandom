@@ -89,7 +89,7 @@ following delegation and commission default parameters:
 				return err
 			}
 
-			if err = app.GaiaValidateGenesisState(genesisState); err != nil {
+			if err = randApp.RandValidateGenesisState(genesisState); err != nil {
 				return err
 			}
 
