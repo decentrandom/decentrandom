@@ -28,6 +28,7 @@ const (
 	appName = "randApp"
 )
 
+// nolint
 var (
 	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
@@ -226,11 +227,13 @@ type GenesisAccount struct {
 	VestingSchedules []VestingSchedule `json:"vesting_schedules"` // vesting end time (UNIX Epoch time)
 }
 
+// VestingSchedule -
 type VestingSchedule struct {
 	Denom     string     `json:"denom"`
 	Schedules []Schedule `json:"schedules"` // maps blocktime to percentage vested. Should sum to 1.
 }
 
+// Schedule -
 type Schedule struct {
 	Cliff int64   `json:"cliff"`
 	Ratio sdk.Dec `json:"ratio"`
@@ -331,6 +334,7 @@ func NewGenesisAccountI(acc auth.Account) GenesisAccount {
 	return gacc
 }
 
+// GradedVestingAccount -
 type GradedVestingAccount struct {
 	*auth.BaseVestingAccount
 
