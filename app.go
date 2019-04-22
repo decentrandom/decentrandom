@@ -237,7 +237,7 @@ func RandValidateGenesisState(genesisState GenesisState) error {
 		return err
 	}
 
-	return nil
+	return slashing.ValidateGenesis(genesisState.SlashingData)
 }
 
 // MakeCodec generates the necessary codecs for Amino
