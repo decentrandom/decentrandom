@@ -187,6 +187,7 @@ func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 
 	auth.InitGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper, genesisState.AuthData)
 	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
+	slashing.InitGenesis(ctx, app.slashingKeeper, genesisState.SlashingData, genesisState.StakingData.Validators.ToSDKValidators())
 
 	return abci.ResponseInitChain{}
 }
