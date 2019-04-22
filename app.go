@@ -67,15 +67,15 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		BaseApp: bApp,
 		cdc:     cdc,
 
-		keyMain:          sdk.NewKVStoreKey("main"),
-		keyAccount:       sdk.NewKVStoreKey("acc"),
+		keyMain:          sdk.NewKVStoreKey(bam.MainStoreKey),
+		keyAccount:       sdk.NewKVStoreKey(auth.StoreKey),
 		keyRand:          sdk.NewKVStoreKey("rand"),
-		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
-		keyParams:        sdk.NewKVStoreKey("params"),
-		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
-		keyStaking:       sdk.NewKVStoreKey("staking"),
-		tkeyStaking:      sdk.NewTransientStoreKey("transient_staking"),
-		keySlashing:      sdk.NewKVStoreKey("slashing"),
+		keyFeeCollection: sdk.NewKVStoreKey(auth.FeeStoreKey),
+		keyParams:        sdk.NewKVStoreKey(params.StoreKey),
+		tkeyParams:       sdk.NewTransientStoreKey(params.TStoreKey),
+		keyStaking:       sdk.NewKVStoreKey(staking.StoreKey),
+		tkeyStaking:      sdk.NewTransientStoreKey(staking.TStoreKey),
+		keySlashing:      sdk.NewKVStoreKey(slashing.StoreKey),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
@@ -127,20 +127,17 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	// The app.Router is the main transaction router where each module registers its routes
 	// Register the bank and nameservice routes here
 	app.Router().
-		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
-		AddRoute("staking", staking.NewHandler(app.stakingKeeper)).
-		AddRoute("slashing", slashing.NewHandler(app.slashingKeeper)).
+		AddRoute(bank.RouterKey, bank.NewHandler(app.bankKeeper)).
+		AddRoute(staking.RouterKey, staking.NewHandler(app.stakingKeeper)).
+		AddRoute(slashing.RouterKey, slashing.NewHandler(app.slashingKeeper)).
 		AddRoute("rand", rand.NewHandler(app.randKeeper))
 
 	// The app.QueryRouter is the main query router where each module registers its routes
 	app.QueryRouter().
 		AddRoute("rand", rand.NewQuerier(app.randKeeper)).
-		AddRoute("slashing", slashing.NewQuerier(app.slashingKeeper, app.cdc)).
-		AddRoute("staking", staking.NewQuerier(app.stakingKeeper, app.cdc)).
-		AddRoute("acc", auth.NewQuerier(app.accountKeeper))
-
-	// The initChainer handles translating the genesis.json file into initial state for the network
-	app.SetInitChainer(app.initChainer)
+		AddRoute(slashing.QuerierRoute, slashing.NewQuerier(app.slashingKeeper, app.cdc)).
+		AddRoute(staking.QuerierRoute, staking.NewQuerier(app.stakingKeeper, app.cdc)).
+		AddRoute(auth.QuerierRoute, auth.NewQuerier(app.accountKeeper))
 
 	app.MountStores(
 		app.keyMain,
@@ -153,6 +150,9 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.keyStaking,
 		app.tkeyStaking,
 	)
+
+	// The initChainer handles translating the genesis.json file into initial state for the network
+	app.SetInitChainer(app.initChainer)
 
 	err := app.LoadLatestVersion(app.keyMain)
 	if err != nil {
