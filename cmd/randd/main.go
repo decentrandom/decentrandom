@@ -63,7 +63,7 @@ func main() {
 	rootCmd.AddCommand(randInit.TestnetFilesCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
 	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc))
-	rootCmd.AddCommand(AddGenesisAccountCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 
 	server.AddCommands(ctx, cdc, rootCmd, newApp, appExporter())
