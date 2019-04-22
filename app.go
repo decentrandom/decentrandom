@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	appName = "decentrandom"
+	appName = "randApp"
 )
 
 var (
