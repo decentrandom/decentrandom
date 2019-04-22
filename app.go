@@ -2,7 +2,9 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"sort"
 
 	"github.com/tendermint/tendermint/libs/log"
 
@@ -162,26 +164,96 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	return app
 }
 
+func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+	stateJSON := req.AppStateBytes
+	// TODO is this now the whole genesis file?
+
+	var genesisState GenesisState
+	err := app.cdc.UnmarshalJSON(stateJSON, &genesisState)
+	if err != nil {
+		panic(err) // TODO https://github.com/cosmos/cosmos-sdk/issues/468
+		// return sdk.ErrGenesisParse("").TraceCause(err, "")
+	}
+
+	validators := app.initFromGenesisState(ctx, genesisState)
+
+	// sanity check
+	if len(req.Validators) > 0 {
+		if len(req.Validators) != len(validators) {
+			panic(fmt.Errorf("len(RequestInitChain.Validators) != len(validators) (%d != %d)",
+				len(req.Validators), len(validators)))
+		}
+		sort.Sort(abci.ValidatorUpdates(req.Validators))
+		sort.Sort(abci.ValidatorUpdates(validators))
+		for i, val := range validators {
+			if !val.Equal(req.Validators[i]) {
+				panic(fmt.Errorf("validators[%d] != req.Validators[%d] ", i, i))
+			}
+		}
+	}
+
+	// assert runtime invariants
+	//app.assertRuntimeInvariants()
+
+	return abci.ResponseInitChain{
+		Validators: validators,
+	}
+}
+
 // GenesisState represents chain state at the start of the chain. Any initial state (account balances) are stored here.
 type GenesisState struct {
+	Accounts     []GenesisAccount      `json:"accounts"`
 	AuthData     auth.GenesisState     `json:"auth"`
 	BankData     bank.GenesisState     `json:"bank"`
 	StakingData  staking.GenesisState  `json:"staking"`
 	SlashingData slashing.GenesisState `json:"slashing"`
-	Accounts     []*auth.BaseAccount   `json:"accounts"`
+	GenTxs       []json.RawMessage     `json:"gentxs"`
 }
 
-func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
-	stateJSON := req.AppStateBytes
+// GenesisAccount defines an account initialized at genesis.
+type GenesisAccount struct {
+	Address       sdk.AccAddress `json:"address"`
+	Coins         sdk.Coins      `json:"coins"`
+	Sequence      uint64         `json:"sequence_number"`
+	AccountNumber uint64         `json:"account_number"`
 
-	genesisState := new(GenesisState)
-	err := app.cdc.UnmarshalJSON(stateJSON, genesisState)
-	if err != nil {
-		panic(err)
+	// vesting account fields
+	OriginalVesting  sdk.Coins         `json:"original_vesting"`  // total vesting coins upon initialization
+	DelegatedFree    sdk.Coins         `json:"delegated_free"`    // delegated vested coins at time of delegation
+	DelegatedVesting sdk.Coins         `json:"delegated_vesting"` // delegated vesting coins at time of delegation
+	StartTime        int64             `json:"start_time"`        // vesting start time (UNIX Epoch time)
+	EndTime          int64             `json:"end_time"`          // vesting end time (UNIX Epoch time)
+	VestingSchedules []VestingSchedule `json:"vesting_schedules"` // vesting end time (UNIX Epoch time)
+}
+
+type VestingSchedule struct {
+	Denom     string     `json:"denom"`
+	Schedules []Schedule `json:"schedules"` // maps blocktime to percentage vested. Should sum to 1.
+}
+
+type Schedule struct {
+	Cliff int64   `json:"cliff"`
+	Ratio sdk.Dec `json:"ratio"`
+}
+
+// Sanitize sorts accounts and coin sets.
+func (gs GenesisState) Sanitize() {
+	sort.Slice(gs.Accounts, func(i, j int) bool {
+		return gs.Accounts[i].AccountNumber < gs.Accounts[j].AccountNumber
+	})
+
+	for _, acc := range gs.Accounts {
+		acc.Coins = acc.Coins.Sort()
 	}
+}
 
-	for _, acc := range genesisState.Accounts {
-		acc.AccountNumber = app.accountKeeper.GetNextAccountNumber(ctx)
+func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
+
+	genesisState.Sanitize()
+
+	for _, gacc := range genesisState.Accounts {
+		acc := gacc.ToAccount()
+		acc.AccountNumber = app.accountKeeper.NewAccount(ctx, acc)
 		app.accountKeeper.SetAccount(ctx, acc)
 	}
 
@@ -192,22 +264,91 @@ func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 	return abci.ResponseInitChain{}
 }
 
+// ToAccount converts GenesisAccount to auth.BaseAccount
+func (ga *GenesisAccount) ToAccount() auth.Account {
+	bacc := &auth.BaseAccount{
+		Address:       ga.Address,
+		Coins:         ga.Coins.Sort(),
+		AccountNumber: ga.AccountNumber,
+		Sequence:      ga.Sequence,
+	}
+
+	if !ga.OriginalVesting.IsZero() {
+		baseVestingAcc := &auth.BaseVestingAccount{
+			BaseAccount:      bacc,
+			OriginalVesting:  ga.OriginalVesting,
+			DelegatedFree:    ga.DelegatedFree,
+			DelegatedVesting: ga.DelegatedVesting,
+			EndTime:          ga.EndTime,
+		}
+
+		if ga.StartTime != 0 && ga.EndTime != 0 {
+			return &auth.ContinuousVestingAccount{
+				BaseVestingAccount: baseVestingAcc,
+				StartTime:          ga.StartTime,
+			}
+		} else if ga.EndTime != 0 {
+			return &auth.DelayedVestingAccount{
+				BaseVestingAccount: baseVestingAcc,
+			}
+		} else {
+			return &GradedVestingAccount{
+				BaseVestingAccount: baseVestingAcc,
+				VestingSchedules:   ga.VestingSchedules,
+			}
+		}
+	}
+
+	return bacc
+}
+
+// NewGenesisAccount returns new genesis account
+func NewGenesisAccount(acc *auth.BaseAccount) GenesisAccount {
+	return GenesisAccount{
+		Address:       acc.Address,
+		Coins:         acc.Coins,
+		AccountNumber: acc.AccountNumber,
+		Sequence:      acc.Sequence,
+	}
+}
+
+// NewGenesisAccountI no-lint
+func NewGenesisAccountI(acc auth.Account) GenesisAccount {
+	gacc := GenesisAccount{
+		Address:       acc.GetAddress(),
+		Coins:         acc.GetCoins(),
+		AccountNumber: acc.GetAccountNumber(),
+		Sequence:      acc.GetSequence(),
+	}
+
+	vacc, ok := acc.(GradedVestingAccount)
+	if ok {
+		gacc.OriginalVesting = vacc.GetOriginalVesting()
+		gacc.DelegatedFree = vacc.GetDelegatedFree()
+		gacc.DelegatedVesting = vacc.GetDelegatedVesting()
+	}
+
+	return gacc
+}
+
+type GradedVestingAccount struct {
+	*auth.BaseVestingAccount
+
+	VestingSchedules []VestingSchedule `json:"vesting_schedules"`
+}
+
 // ExportAppStateAndValidators does the things
 func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 	ctx := app.NewContext(true, abci.Header{})
-	accounts := []*auth.BaseAccount{}
+	accounts := []GenesisAccount{}
 
-	appendAccountsFn := func(acc auth.Account) bool {
-		account := &auth.BaseAccount{
-			Address: acc.GetAddress(),
-			Coins:   acc.GetCoins(),
-		}
-
+	appendAccount := func(acc auth.Account) (stop bool) {
+		account := NewGenesisAccountI(acc)
 		accounts = append(accounts, account)
 		return false
 	}
 
-	app.accountKeeper.IterateAccounts(ctx, appendAccountsFn)
+	app.accountKeeper.IterateAccounts(ctx, appendAccount)
 
 	genState := GenesisState{
 		Accounts:     accounts,
