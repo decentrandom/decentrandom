@@ -40,11 +40,14 @@ type randApp struct {
 	keyFeeCollection *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
+	keyStaking       *sdk.KVStoreKey
+	tkeyStaking      *sdk.TransientStoreKey
 
 	accountKeeper       auth.AccountKeeper
 	bankKeeper          bank.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
+	stakingKeeper       staking.Keeper
 	randKeeper          rand.Keeper
 }
 
@@ -67,6 +70,8 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
 		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
+		keyStaking:       sdk.NewKVStoreKey("staking"),
+		tkeyStaking:      sdk.NewTransientStoreKey("transient_staking"),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
@@ -98,6 +103,13 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.cdc,
 	)
 
+	app.stakingKeeper = staking.NewKeeper(
+		app.cdc,
+		app.keyStaking, app.tkeyStaking,
+		app.bankKeeper, app.paramsKeeper.Subspace(stakging.DefaultParamspace),
+		staking.DefaultCodespace,
+	)
+
 	// The AnteHandler handles signature verification and transaction pre-processing
 	app.SetAnteHandler(auth.NewAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
 
@@ -105,11 +117,13 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	// Register the bank and nameservice routes here
 	app.Router().
 		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
+		AddRoute("staking", staking.NewHanldler(app.stakingKeeper)).
 		AddRoute("rand", rand.NewHandler(app.randKeeper))
 
 	// The app.QueryRouter is the main query router where each module registers its routes
 	app.QueryRouter().
 		AddRoute("rand", rand.NewQuerier(app.randKeeper)).
+		AddRoute("staking", staking.NewQuerier(app.stakingKeeper)).
 		AddRoute("acc", auth.NewQuerier(app.accountKeeper))
 
 	// The initChainer handles translating the genesis.json file into initial state for the network
@@ -134,9 +148,10 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 // GenesisState represents chain state at the start of the chain. Any initial state (account balances) are stored here.
 type GenesisState struct {
-	AuthData auth.GenesisState   `json:"auth"`
-	BankData bank.GenesisState   `json:"bank"`
-	Accounts []*auth.BaseAccount `json:"accounts"`
+	AuthData    auth.GenesisState    `json:"auth"`
+	BankData    bank.GenesisState    `json:"bank"`
+	StakingData staking.GenesisState `json:"staking"`
+	Accounts    []*auth.BaseAccount  `json:"accounts"`
 }
 
 func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
