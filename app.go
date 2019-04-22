@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"err"
 	"fmt"
 	"os"
 	"sort"
@@ -264,7 +265,24 @@ func (app *randApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
 	slashing.InitGenesis(ctx, app.slashingKeeper, genesisState.SlashingData, genesisState.StakingData.Validators.ToSDKValidators())
 
-	return abci.ResponseInitChain{}
+	if len(genesisState.GenTxs) > 0 {
+		for _, genTx := range genesisState.GenTxs {
+			var tx auth.StdTx
+			err = app.cdc.UnmarshalJSON(genTx, &tx)
+			if err != nil {
+				panic(err)
+			}
+
+			bz := app.cdc.MustMarshalBinaryLengthPrefixed(tx)
+			res := app.BaseApp.DeliverTx(bz)
+			if !res.IsOK() {
+				panic(res.Log)
+			}
+		}
+
+		validators = app.stakingKeeper.ApplyAndReturnValidatorSetUpdates(ctx)
+	}
+	return validators
 }
 
 // ToAccount converts GenesisAccount to auth.BaseAccount
