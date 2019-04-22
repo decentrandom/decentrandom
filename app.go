@@ -164,10 +164,11 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 
 // GenesisState represents chain state at the start of the chain. Any initial state (account balances) are stored here.
 type GenesisState struct {
-	AuthData    auth.GenesisState    `json:"auth"`
-	BankData    bank.GenesisState    `json:"bank"`
-	StakingData staking.GenesisState `json:"staking"`
-	Accounts    []*auth.BaseAccount  `json:"accounts"`
+	AuthData     auth.GenesisState     `json:"auth"`
+	BankData     bank.GenesisState     `json:"bank"`
+	StakingData  staking.GenesisState  `json:"staking"`
+	SlashingData slashing.GenesisState `json:"slashing"`
+	Accounts     []*auth.BaseAccount   `json:"accounts"`
 }
 
 func (app *randApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
@@ -208,10 +209,11 @@ func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, val
 	app.accountKeeper.IterateAccounts(ctx, appendAccountsFn)
 
 	genState := GenesisState{
-		Accounts:    accounts,
-		AuthData:    auth.DefaultGenesisState(),
-		BankData:    bank.DefaultGenesisState(),
-		StakingData: staking.DefaultGenesisState(),
+		Accounts:     accounts,
+		AuthData:     auth.DefaultGenesisState(),
+		BankData:     bank.DefaultGenesisState(),
+		StakingData:  staking.DefaultGenesisState(),
+		SlashingData: slashing.DefaultGenesisState(),
 	}
 
 	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
@@ -222,6 +224,7 @@ func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, val
 	return appState, validators, err
 }
 
+// RandValidateGenesisState -
 func RandValidateGenesisState(genesisState GenesisState) error {
 
 	if err := auth.ValidateGenesis(genesisState.AuthData); err != nil {
@@ -244,6 +247,7 @@ func MakeCodec() *codec.Codec {
 	bank.RegisterCodec(cdc)
 	rand.RegisterCodec(cdc)
 	staking.RegisterCodec(cdc)
+	slashing.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 	return cdc
