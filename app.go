@@ -106,7 +106,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.stakingKeeper = staking.NewKeeper(
 		app.cdc,
 		app.keyStaking, app.tkeyStaking,
-		app.bankKeeper, app.paramsKeeper.Subspace(stakging.DefaultParamspace),
+		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
 		staking.DefaultCodespace,
 	)
 
@@ -117,13 +117,13 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	// Register the bank and nameservice routes here
 	app.Router().
 		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
-		AddRoute("staking", staking.NewHanldler(app.stakingKeeper)).
+		AddRoute("staking", staking.NewHandler(app.stakingKeeper)).
 		AddRoute("rand", rand.NewHandler(app.randKeeper))
 
 	// The app.QueryRouter is the main query router where each module registers its routes
 	app.QueryRouter().
 		AddRoute("rand", rand.NewQuerier(app.randKeeper)).
-		AddRoute("staking", staking.NewQuerier(app.stakingKeeper)).
+		AddRoute("staking", staking.NewQuerier(app.stakingKeeper, app.cdc)).
 		AddRoute("acc", auth.NewQuerier(app.accountKeeper))
 
 	// The initChainer handles translating the genesis.json file into initial state for the network
@@ -192,9 +192,10 @@ func (app *randApp) ExportAppStateAndValidators() (appState json.RawMessage, val
 	app.accountKeeper.IterateAccounts(ctx, appendAccountsFn)
 
 	genState := GenesisState{
-		Accounts: accounts,
-		AuthData: auth.DefaultGenesisState(),
-		BankData: bank.DefaultGenesisState(),
+		Accounts:    accounts,
+		AuthData:    auth.DefaultGenesisState(),
+		BankData:    bank.DefaultGenesisState(),
+		StakingData: staking.DefaultGenesisState(),
 	}
 
 	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
