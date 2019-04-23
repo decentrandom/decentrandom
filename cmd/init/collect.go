@@ -14,11 +14,11 @@ import (
 	"github.com/tendermint/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
+	//"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	randApp "github.com/decentrandom/decentrandom/app"
+	app "github.com/decentrandom/decentrandom/app"
 )
 
 const (
@@ -72,7 +72,7 @@ func CollectGenTxsCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(cli.HomeFlag, randApp.DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "node's home directory")
 	cmd.Flags().String(flagGenTxDir, "",
 		"override default \"gentx\" directory from which collect and execute "+
 			"genesis transactions; default [--home]/config/gentx/")
@@ -111,12 +111,11 @@ func genAppStateFromConfig(
 
 	cfg.WriteConfigFile(filepath.Join(config.RootDir, "config", "config.toml"), config)
 
-	appState, err = app.GaiaAppGenStateJSON(cdc, genDoc, genTxs)
+	appState, err = app.RandAppGenStateJSON(cdc, genDoc, genTxs)
 	if err != nil {
 		return
 	}
 
-	genDoc.AppState = appState
 	err = ExportGenesisFile(&genDoc, config.GenesisFile())
 	return
 }
