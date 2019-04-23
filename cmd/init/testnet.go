@@ -5,6 +5,7 @@ package init
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/decentrandom/decentrandom/types/assets"
 	"net"
 	"os"
 	"path/filepath"
@@ -39,7 +40,6 @@ var (
 	flagNodeDaemonHome    = "node-daemon-home"
 	flagNodeCliHome       = "node-cli-home"
 	flagStartingIPAddress = "starting-ip-address"
-	defaultKeyPass        = "misskiwi"
 )
 
 const nodeDirPerm = 0755
@@ -68,8 +68,8 @@ Example:
 	cmd.Flags().StringP(flagOutputDir, "o", "./mytestnet",
 		"Directory to store initialization data for the testnet",
 	)
-	cmd.Flags().String(flagNodeDirPrefix, "node10",
-		"Prefix the directory name for each node with (node results in node101, node102, ...)",
+	cmd.Flags().String(flagNodeDirPrefix, "node",
+		"Prefix the directory name for each node with (node results in node0, node1, ...)",
 	)
 	cmd.Flags().String(flagNodeDaemonHome, "randd",
 		"Home directory of the node's daemon configuration",
@@ -84,8 +84,8 @@ Example:
 		client.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created",
 	)
 	cmd.Flags().String(
-		server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
-		"Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)",
+		server.FlagMinGasPrices, fmt.Sprintf("0.015%s", assets.MicroRandDenom),
+		"Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01mrand)",
 	)
 
 	return cmd
@@ -116,7 +116,7 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 
 	// generate private keys, node IDs, and initial transactions
 	for i := 0; i < numValidators; i++ {
-		nodeDirName := fmt.Sprintf("%s%d", viper.GetString(flagNodeDirPrefix), i+1)
+		nodeDirName := fmt.Sprintf("%s%d", viper.GetString(flagNodeDirPrefix), i)
 		nodeDaemonHomeName := viper.GetString(flagNodeDaemonHome)
 		nodeCliHomeName := viper.GetString(flagNodeCliHome)
 		nodeDir := filepath.Join(outDir, nodeDirName, nodeDaemonHomeName)
@@ -155,13 +155,23 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
 		genFiles = append(genFiles, config.GenesisFile())
 
-		/*
-			buf := client.BufferStdin()
-			prompt := fmt.Sprintf(
-				"Password for account '%s' (default %s):", nodeDirName, defaultKeyPass,
-			)
-		*/
-		keyPass := defaultKeyPass
+		buf := client.BufferStdin()
+		prompt := fmt.Sprintf(
+			"Password for account '%s' (default %s):", nodeDirName, app.DefaultKeyPass,
+		)
+
+		keyPass, err := client.GetPassword(prompt, buf)
+
+		if err != nil && keyPass != "" {
+			// An error was returned that either failed to read the password from
+			// STDIN or the given password is not empty but failed to meet minimum
+			// length requirements.
+			return err
+		}
+
+		if keyPass == "" {
+			keyPass = app.DefaultKeyPass
+		}
 
 		addr, secret, err := server.GenerateSaveCoinKey(clientDir, nodeDirName, keyPass, true)
 		if err != nil {
@@ -188,15 +198,15 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			Address: addr,
 			Coins: sdk.Coins{
 				sdk.NewCoin(fmt.Sprintf("%stoken", nodeDirName), accTokens),
-				sdk.NewCoin(sdk.DefaultBondDenom, accStakingTokens),
+				sdk.NewCoin(assets.MicroRandDenom, accStakingTokens),
 			},
 		})
 
-		valTokens := sdk.TokensFromTendermintPower(100)
+		valTokens := sdk.TokensFromTendermintPower(sdk.NewInt(100).MulRaw(assets.MicroUnit).Int64())
 		msg := staking.NewMsgCreateValidator(
 			sdk.ValAddress(addr),
 			valPubKeys[i],
-			sdk.NewCoin(sdk.DefaultBondDenom, valTokens),
+			sdk.NewCoin(assets.MicroRandDenom, valTokens),
 			staking.NewDescription(nodeDirName, "", "", ""),
 			staking.NewCommissionMsg(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec()),
 			sdk.OneInt(),
@@ -208,7 +218,7 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 		tx := auth.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)
 		txBldr := authtx.NewTxBuilderFromCLI().WithChainID(chainID).WithMemo(memo).WithKeybase(kb)
 
-		signedTx, err := txBldr.SignStdTx(nodeDirName, defaultKeyPass, tx, false)
+		signedTx, err := txBldr.SignStdTx(nodeDirName, app.DefaultKeyPass, tx, false)
 		if err != nil {
 			_ = os.RemoveAll(outDir)
 			return err
@@ -286,7 +296,7 @@ func collectGenFiles(
 	genTime := tmtime.Now()
 
 	for i := 0; i < numValidators; i++ {
-		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i+1)
+		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
 		nodeDir := filepath.Join(outDir, nodeDirName, nodeDaemonHomeName)
 		gentxsDir := filepath.Join(outDir, "gentxs")
 		moniker := monikers[i]
@@ -297,12 +307,12 @@ func collectGenFiles(
 		nodeID, valPubKey := nodeIDs[i], valPubKeys[i]
 		initCfg := newInitConfig(chainID, gentxsDir, moniker, nodeID, valPubKey)
 
-		genDoc, err := types.GenesisDocFromFile(config.GenesisFile())
+		genDoc, err := LoadGenesisDoc(cdc, config.GenesisFile())
 		if err != nil {
 			return err
 		}
 
-		nodeAppState, err := genAppStateFromConfig(cdc, config, initCfg, *genDoc)
+		nodeAppState, err := genAppStateFromConfig(cdc, config, initCfg, genDoc)
 		if err != nil {
 			return err
 		}
