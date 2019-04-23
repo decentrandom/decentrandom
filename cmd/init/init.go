@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	randApp "github.com/decentrandom/decentrandom/app"
+	"github.com/decentrandom/decentrandom/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	cfg "github.com/tendermint/tendermint/config"
@@ -77,22 +77,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command { // nolint: 
 				return err
 			}
 
-			genDoc := &types.GenesisDoc{}
-			if _, err := os.Stat(genFile); err != nil {
-				if !os.IsNotExist(err) {
-					return err
-				}
-			} else {
-				genDoc, err = types.GenesisDocFromFile(genFile)
-				if err != nil {
-					return err
-				}
-			}
-
-			genDoc.ChainID = chainID
-			genDoc.Validators = nil
-			genDoc.AppState = appState
-			if err = ExportGenesisFile(genDoc, genFile); err != nil {
+			if err = ExportGenesisFile(genFile, chainID, nil, appState); err != nil {
 				return err
 			}
 
@@ -103,7 +88,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command { // nolint: 
 		},
 	}
 
-	cmd.Flags().String(cli.HomeFlag, randApp.DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "node's home directory")
 	cmd.Flags().BoolP(flagOverwrite, "o", false, "overwrite the genesis.json file")
 	cmd.Flags().String(client.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
 
