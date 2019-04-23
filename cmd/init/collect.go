@@ -18,7 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	randApp "github.com/decentrandom/decentrandom"
+	randApp "github.com/decentrandom/decentrandom/app"
 )
 
 const (
