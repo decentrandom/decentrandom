@@ -2,30 +2,27 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	//"fmt"
 	"io"
-	"io/ioutil"
-	"os"
+	//"io/ioutil"
+	//"os"
 	//"path/filepath"
-	"strings"
+	//"strings"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
+	//"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/store"
-	"github.com/cosmos/cosmos-sdk/x/auth"
+	//"github.com/cosmos/cosmos-sdk/x/auth"
 	//"github.com/cosmos/cosmos-sdk/x/bank"
 	randInit "github.com/decentrandom/decentrandom/cmd/init"
 	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/cli"
-	"github.com/tendermint/tendermint/libs/common"
 	"github.com/tendermint/tendermint/libs/log"
 
-	gaiaInit "github.com/cosmos/cosmos-sdk/cmd/gaia/init"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/decentrandom/decentrandom/app"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -56,7 +53,7 @@ func main() {
 	rootCmd := &cobra.Command{
 		Use:               "randd",
 		Short:             "DecentRandom Daemon (server)",
-		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
+		PersistentPreRunE: randServer.PersistentPreRunEFn(ctx),
 	}
 
 	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
