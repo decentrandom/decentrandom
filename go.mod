@@ -3,7 +3,11 @@ module github.com/decentrandom/decentrandom
 go 1.12
 
 require (
-	github.com/cosmos/cosmos-sdk v0.34.1
+	github.com/btcsuite/btcd v0.0.0-20190315201642-aa6e0f35703c // indirect
+	github.com/btcsuite/btcutil v0.0.0-20190316010144-3ac1210f4b38 // indirect
+	github.com/cosmos/cosmos-sdk v0.34.0
+	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d // indirect
+	ithub.com/cosmos/ledger-cosmos-go v0.10.1 // indirect
 	github.com/google/gofuzz v1.0.0 // indirect
 	github.com/gorilla/mux v1.7.0
 	github.com/kr/pretty v0.1.0 // indirect
