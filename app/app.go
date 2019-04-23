@@ -38,7 +38,7 @@ var (
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 )
 
-// TerraApp contains ABCI application
+// RandApp -
 type RandApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
