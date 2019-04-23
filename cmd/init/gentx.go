@@ -13,7 +13,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	randApp "github.com/decentrandom/decentrandom/app"
+	"github.com/decentrandom/decentrandom/app"
+	"github.com/decentrandom/decentrandom/types/assets"
+
 	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
@@ -36,15 +38,14 @@ import (
 
 var (
 	defaultTokens                  = sdk.TokensFromTendermintPower(100)
-	defaultAmount                  = defaultTokens.String() + sdk.DefaultBondDenom
+	defaultAmount                  = defaultTokens.String() + assets.MicroRandDenom
 	defaultCommissionRate          = "0.1"
 	defaultCommissionMaxRate       = "0.2"
 	defaultCommissionMaxChangeRate = "0.01"
 	defaultMinSelfDelegation       = "1"
 )
 
-// GenTxCmd builds the gaiad gentx command.
-// nolint: errcheck
+// GenTxCmd -
 func GenTxCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "gentx",
@@ -84,12 +85,12 @@ following delegation and commission default parameters:
 				return err
 			}
 
-			genesisState := randApp.GenesisState{}
+			genesisState := app.GenesisState{}
 			if err = cdc.UnmarshalJSON(genDoc.AppState, &genesisState); err != nil {
 				return err
 			}
 
-			if err = randApp.RandValidateGenesisState(genesisState); err != nil {
+			if err = app.RandValidateGenesisState(genesisState); err != nil {
 				return err
 			}
 
@@ -198,8 +199,8 @@ following delegation and commission default parameters:
 
 	ip, _ := server.ExternalIP()
 
-	cmd.Flags().String(tmcli.HomeFlag, randApp.DefaultNodeHome, "node's home directory")
-	cmd.Flags().String(flagClientHome, randApp.DefaultCLIHome, "client's home directory")
+	cmd.Flags().String(tmcli.HomeFlag, app.DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(flagClientHome, app.DefaultCLIHome, "client's home directory")
 	cmd.Flags().String(client.FlagName, "", "name of private key with which to sign the gentx")
 	cmd.Flags().String(client.FlagOutputDocument, "",
 		"write the genesis transaction JSON document to the given file instead of the default location")
@@ -216,7 +217,7 @@ following delegation and commission default parameters:
 	return cmd
 }
 
-func accountInGenesis(genesisState randApp.GenesisState, key sdk.AccAddress, coins sdk.Coins) error {
+func accountInGenesis(genesisState app.GenesisState, key sdk.AccAddress, coins sdk.Coins) error {
 	accountIsInGenesis := false
 	bondDenom := genesisState.StakingData.Params.BondDenom
 
