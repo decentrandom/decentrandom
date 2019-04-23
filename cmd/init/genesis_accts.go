@@ -4,20 +4,20 @@ import (
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client/keys"
-	"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
+	//"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	randApp "github.com/decentrandom/decentrandom/app"
+	"github.com/decentrandom/decentrandom/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/common"
-	tmtypes "github.com/tendermint/tendermint/types"
+	//tmtypes "github.com/tendermint/tendermint/types"
 )
 
-// AddGenesisAccountCmd returns add-genesis-account cobra Command.
+// AddGenesisAccountCmd -
 func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add-genesis-account [address_or_key_name] [coin][,[coin]]",
@@ -59,7 +59,7 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 				return fmt.Errorf("%s does not exist, run `randd init` first", genFile)
 			}
 
-			genDoc, err := tmtypes.GenesisDocFromFile(genFile)
+			genDoc, err := LoadGenesisDoc(cdc, genFile)
 			if err != nil {
 				return err
 			}
@@ -79,13 +79,12 @@ func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command 
 				return err
 			}
 
-			genDoc.AppState = appStateJSON
-			return ExportGenesisFile(genDoc, genFile)
+			return ExportGenesisFile(genFile, genDoc.ChainID, nil, appStateJSON)
 		},
 	}
 
-	cmd.Flags().String(cli.HomeFlag, randApp.DefaultNodeHome, "node's home directory")
-	cmd.Flags().String(flagClientHome, randApp.DefaultCLIHome, "client's home directory")
+	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(flagClientHome, app.DefaultCLIHome, "client's home directory")
 	cmd.Flags().String(flagVestingAmt, "", "amount of coins for vesting accounts")
 	cmd.Flags().Uint64(flagVestingStart, 0, "schedule start time (unix epoch) for vesting accounts")
 	cmd.Flags().Uint64(flagVestingEnd, 0, "schedule end time (unix epoch) for vesting accounts")
