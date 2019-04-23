@@ -151,6 +151,13 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		app.cdc,
 	)
 
+	stakingKeeper := staking.NewKeeper(
+		app.cdc,
+		app.keyStaking, app.tkeyStaking,
+		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
+		staking.DefaultCodespace,
+	)
+
 	app.stakingKeeper = *stakingKeeper.SetHooks(
 		NewStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
 
