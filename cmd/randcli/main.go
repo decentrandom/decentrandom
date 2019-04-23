@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"net/http"
 	"os"
 	"path"
+
+	"github.com/rakyll/statik/fs"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/keys"
@@ -20,19 +24,13 @@ import (
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
-	app "github.com/decentrandom/decentrandom"
+	"github.com/decentrandom/decentrandom/app"
 	randClient "github.com/decentrandom/decentrandom/x/rand/client"
 	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
 	amino "github.com/tendermint/go-amino"
-)
 
-const (
-	storeAcc = "acc"
-	storeDR  = "random"
+	distClient "github.com/cosmos/cosmos-sdk/x/distribution/client"
 )
-
-// DefaultCLIHome -
-var DefaultCLIHome = os.ExpandEnv("$HOME/.randcli")
 
 func main() {
 	cobra.EnableCommandSorting = false
@@ -46,7 +44,11 @@ func main() {
 	config.Seal()
 
 	mc := []sdk.ModuleClients{
+		distClient.NewModuleClient(distcmd.StoreKey, cdc),
+		stakingClient.NewModuleClient(st.StoreKey, cdc),
+		slashingClient.NewModuleClient(sl.StoreKey, cdc),
 		randClient.NewModuleClient(storeDR, cdc),
+		crisisclient.NewModuleClient(sl.StoreKey, cdc),
 	}
 
 	rootCmd := &cobra.Command{
@@ -73,20 +75,12 @@ func main() {
 		client.NewCompletionCmd(rootCmd, true),
 	)
 
-	executor := cli.PrepareMainCmd(rootCmd, "DR", DefaultCLIHome)
+	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
-		panic(err)
+		fmt.Printf("Failed executing CLI command: %s, exiting...\n", err)
+		os.Exit(1)
 	}
-}
-
-func registerRoutes(rs *lcd.RestServer) {
-	rs.CliCtx = rs.CliCtx.WithAccountDecoder(rs.Cdc)
-	rpc.RegisterRoutes(rs.CliCtx, rs.Mux)
-	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
-	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
-	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeDR)
 }
 
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
@@ -122,7 +116,9 @@ func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 		bankcmd.SendTxCmd(cdc),
 		client.LineBreak,
 		authcmd.GetSignCommand(cdc),
+		authcmd.GetMultiSignCommand(cdc),
 		tx.GetBroadcastCommand(cdc),
+		tx.GetEncodeCommand(cdc),
 		client.LineBreak,
 	)
 
@@ -131,6 +127,36 @@ func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	}
 
 	return txCmd
+}
+
+// CLIVersionRequestHandler cli version REST handler endpoint
+func CLIVersionRequestHandler(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write([]byte(fmt.Sprintf("{\"version\": \"%s\"}", version.Version)))
+}
+
+func registerRoutes(rs *lcd.RestServer) {
+
+	rs.Mux.HandleFunc("/version", CLIVersionRequestHandler).Methods("GET")
+	registerSwaggerUI(rs)
+
+	rpc.RegisterRoutes(rs.CliCtx, rs.Mux)
+	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
+	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
+	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
+	dist.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, distcmd.StoreKey)
+	staking.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
+	slashing.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
+	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeDR)
+}
+
+func registerSwaggerUI(rs *lcd.RestServer) {
+	statikFS, err := fs.New()
+	if err != nil {
+		panic(err)
+	}
+	staticServer := http.FileServer(statikFS)
+	rs.Mux.PathPrefix("/swagger-ui/").Handler(http.StripPrefix("/swagger-ui/", staticServer))
 }
 
 func initConfig(cmd *cobra.Command) error {
