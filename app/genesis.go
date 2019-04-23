@@ -210,7 +210,7 @@ func NewDefaultGenesisState() GenesisState {
 	distrGenState.CommunityTax = sdk.ZeroDec()
 
 	stakingGenState := staking.DefaultGenesisState()
-	stakingGenState.Params.BondDenom = assets.MicroLunaDenom
+	stakingGenState.Params.BondDenom = assets.MicroRandDenom
 	stakingGenState.Params.MaxValidators = 100
 
 	return GenesisState{
