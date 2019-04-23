@@ -13,7 +13,7 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/prometheus/procfs v0.0.0-20190328153300-af7bedc223fb // indirect
-	github.com/rakyll/statik v0.1.6 // indirect
+	github.com/rakyll/statik v0.1.6
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.0.3
