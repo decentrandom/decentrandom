@@ -13,23 +13,37 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/lcd"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/version"
+	crisisclient "github.com/cosmos/cosmos-sdk/x/crisis/client"
+
+	"github.com/decentrandom/decentrandom/app"
 	"github.com/decentrandom/decentrandom/types/util"
+	"github.com/decentrandom/decentrandom/version"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/libs/cli"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	at "github.com/cosmos/cosmos-sdk/x/auth"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
-	"github.com/decentrandom/decentrandom/app"
+	distcmd "github.com/cosmos/cosmos-sdk/x/distribution"
+	distClient "github.com/cosmos/cosmos-sdk/x/distribution/client"
+	dist "github.com/cosmos/cosmos-sdk/x/distribution/client/rest"
+	sl "github.com/cosmos/cosmos-sdk/x/slashing"
+	slashingClient "github.com/cosmos/cosmos-sdk/x/slashing/client"
+	slashing "github.com/cosmos/cosmos-sdk/x/slashing/client/rest"
+	st "github.com/cosmos/cosmos-sdk/x/staking"
+	stakingClient "github.com/cosmos/cosmos-sdk/x/staking/client"
+	staking "github.com/cosmos/cosmos-sdk/x/staking/client/rest"
 	randClient "github.com/decentrandom/decentrandom/x/rand/client"
 	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
+
 	amino "github.com/tendermint/go-amino"
 
-	distClient "github.com/cosmos/cosmos-sdk/x/distribution/client"
+	_ "github.com/decentrandom/decentrandom/client/lcd/statik"
 )
 
 func main() {
@@ -47,7 +61,7 @@ func main() {
 		distClient.NewModuleClient(distcmd.StoreKey, cdc),
 		stakingClient.NewModuleClient(st.StoreKey, cdc),
 		slashingClient.NewModuleClient(sl.StoreKey, cdc),
-		randClient.NewModuleClient(storeDR, cdc),
+		randClient.NewModuleClient("rand", cdc),
 		crisisclient.NewModuleClient(sl.StoreKey, cdc),
 	}
 
@@ -63,7 +77,7 @@ func main() {
 
 	rootCmd.AddCommand(
 		rpc.StatusCommand(),
-		client.ConfigCmd(DefaultCLIHome),
+		client.ConfigCmd(app.DefaultCLIHome),
 		queryCmd(cdc, mc),
 		txCmd(cdc, mc),
 		client.LineBreak,
@@ -96,7 +110,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 		tx.SearchTxCmd(cdc),
 		tx.QueryTxCmd(cdc),
 		client.LineBreak,
-		authcmd.GetAccountCmd(storeAcc, cdc),
+		authcmd.GetAccountCmd(at.StoreKey, cdc),
 	)
 
 	for _, m := range mc {
@@ -142,12 +156,12 @@ func registerRoutes(rs *lcd.RestServer) {
 
 	rpc.RegisterRoutes(rs.CliCtx, rs.Mux)
 	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
-	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
+	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, at.StoreKey)
 	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
 	dist.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, distcmd.StoreKey)
 	staking.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
 	slashing.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeDR)
+	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, "rand")
 }
 
 func registerSwaggerUI(rs *lcd.RestServer) {
