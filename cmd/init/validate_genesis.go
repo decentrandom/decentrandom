@@ -7,7 +7,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tendermint/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
+	"github.com/decentrandom/decentrandom/app"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 )
@@ -31,8 +32,8 @@ func ValidateGenesisCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 			//nolint
 			fmt.Fprintf(os.Stderr, "validating genesis file at %s\n", genesis)
 
-			var genDoc *types.GenesisDoc
-			if genDoc, err = types.GenesisDocFromFile(genesis); err != nil {
+			var genDoc types.GenesisDoc
+			if genDoc, err = LoadGenesisDoc(cdc, genesis); err != nil {
 				return fmt.Errorf("Error loading genesis doc from %s: %s", genesis, err.Error())
 			}
 
@@ -41,7 +42,7 @@ func ValidateGenesisCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 				return fmt.Errorf("Error unmarshaling genesis doc %s: %s", genesis, err.Error())
 			}
 
-			if err = app.GaiaValidateGenesisState(genstate); err != nil {
+			if err = app.RandValidateGenesisState(genstate); err != nil {
 				return fmt.Errorf("Error validating genesis file %s: %s", genesis, err.Error())
 			}
 
