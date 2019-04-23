@@ -213,13 +213,16 @@ func NewDefaultGenesisState() GenesisState {
 	stakingGenState.Params.BondDenom = assets.MicroRandDenom
 	stakingGenState.Params.MaxValidators = 100
 
+	crisisGenstate := crisis.DefaultGenesisState()
+	crisisGenstate.ConstantFee.Denom = assets.MicroRandDenom
+
 	return GenesisState{
 		Accounts:     nil,
 		AuthData:     auth.DefaultGenesisState(),
 		StakingData:  stakingGenState,
 		DistrData:    distrGenState,
 		BankData:     bank.DefaultGenesisState(),
-		CrisisData:   crisis.DefaultGenesisState(),
+		CrisisData:   crisisGenstate,
 		SlashingData: slashing.DefaultGenesisState(),
 		GenTxs:       nil,
 	}
