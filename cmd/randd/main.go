@@ -64,9 +64,11 @@ func main() {
 	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 
-	server.AddCommands(ctx, cdc, rootCmd, newApp, appExporter())
+	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
 
 	executor := cli.PrepareBaseCmd(rootCmd, "DR", app.DefaultNodeHome)
+	rootCmd.PersistentFlags().BoolVar(&assertInvariantsBlockly, flagAssertInvariantsBlockly,
+		false, "Assert registered invariants on a blockly basis")
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
