@@ -3,6 +3,6 @@
 vendor
 build
 
-
+go.sum
 client/lcd/keys/*
 client/lcd/statik/statik.go
