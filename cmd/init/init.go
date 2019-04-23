@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	randApp "github.com/decentrandom/decentrandom"
+	randApp "github.com/decentrandom/decentrandom/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	cfg "github.com/tendermint/tendermint/config"
