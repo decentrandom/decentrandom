@@ -42,8 +42,8 @@ func (app *RandApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteLis
 		bank.ExportGenesis(ctx, app.bankKeeper),
 		staking.ExportGenesis(ctx, app.stakingKeeper),
 		distr.ExportGenesis(ctx, app.distrKeeper),
-		slashing.ExportGenesis(ctx, app.slashingKeeper),
 		crisis.ExportGenesis(ctx, app.crisisKeeper),
+		slashing.ExportGenesis(ctx, app.slashingKeeper),
 	)
 	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
 	if err != nil {
