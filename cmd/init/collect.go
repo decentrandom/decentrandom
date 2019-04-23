@@ -83,6 +83,7 @@ func genAppStateFromConfig(
 	cdc *codec.Codec, config *cfg.Config, initCfg initConfig, genDoc types.GenesisDoc,
 ) (appState json.RawMessage, err error) {
 
+	genFile := config.GenesisFile()
 	var (
 		appGenTxs       []auth.StdTx
 		persistentPeers string
@@ -116,7 +117,7 @@ func genAppStateFromConfig(
 		return
 	}
 
-	err = ExportGenesisFile(&genDoc, config.GenesisFile())
+	err = ExportGenesisFile(genFile, initCfg.ChainID, nil, appState)
 	return
 }
 
