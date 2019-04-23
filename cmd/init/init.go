@@ -46,7 +46,7 @@ func displayInfo(cdc *codec.Codec, info printInfo) error {
 	return nil
 }
 
-// nolint: golint
+// InitCmd -
 func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command { // nolint: golint
 	cmd := &cobra.Command{
 		Use:   "init [moniker]",
