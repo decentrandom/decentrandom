@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	randApp "github.com/decentrandom/decentrandom"
+	randApp "github.com/decentrandom/decentrandom/app"
 	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
