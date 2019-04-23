@@ -12,7 +12,7 @@ import (
 	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/types"
+	//"github.com/tendermint/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	//"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
