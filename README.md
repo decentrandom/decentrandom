@@ -30,4 +30,5 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
     randd add-genesis-account $(randcli keys show validator -a) 1000000000000mrand
     randd gentx --name validator
     randd collect-gentxs
+    ulimit -n 4096
     randd start
