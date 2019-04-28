@@ -38,14 +38,14 @@ var (
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 )
 
-// RandApp -
+// RandApp 구조체
 type RandApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
 	assertInvariantsBlockly bool
 
-	// keys to access the substores
+	// substore access용 키
 	keyMain          *sdk.KVStoreKey
 	keyAccount       *sdk.KVStoreKey
 	keyStaking       *sdk.KVStoreKey
@@ -58,7 +58,7 @@ type RandApp struct {
 	tkeyParams       *sdk.TransientStoreKey
 	keyRand          *sdk.KVStoreKey
 
-	// Manage getting and setting accounts
+	// 키퍼
 	accountKeeper       auth.AccountKeeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	bankKeeper          bank.Keeper
@@ -70,8 +70,9 @@ type RandApp struct {
 	randKeeper          rand.Keeper
 }
 
-// NewRandApp -
+// NewRandApp - RandApp 생성
 func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, assertInvariantsBlockly bool, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
+
 	cdc := MakeCodec()
 
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc), baseAppOptions...)
@@ -101,9 +102,9 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 
 	app.accountKeeper = auth.NewAccountKeeper(
 		app.cdc,
-		app.keyAccount, // target store
+		app.keyAccount,
 		app.paramsKeeper.Subspace(auth.DefaultParamspace),
-		auth.ProtoBaseAccount, // prototype
+		auth.ProtoBaseAccount,
 	)
 
 	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(
