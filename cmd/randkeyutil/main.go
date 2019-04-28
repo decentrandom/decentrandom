@@ -12,6 +12,7 @@ import (
 
 var bech32Prefixes = []string{util.Bech32PrefixAccAddr, util.Bech32PrefixAccPub, util.Bech32PrefixValAddr, util.Bech32PrefixValPub, util.Bech32PrefixConsAddr, util.Bech32PrefixConsPub}
 
+// main -
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Must specify an input string")
@@ -21,7 +22,7 @@ func main() {
 	runFromHex(arg)
 }
 
-// Print info from bech32.
+// runFromBech32 -
 func runFromBech32(bech32str string) {
 	hrp, bz, err := bech32.DecodeAndConvert(bech32str)
 	if err != nil {
@@ -35,6 +36,7 @@ func runFromBech32(bech32str string) {
 	)
 }
 
+// runFromHex -
 func runFromHex(hexaddr string) {
 	bz, err := hex.DecodeString(hexaddr)
 	if err != nil {
