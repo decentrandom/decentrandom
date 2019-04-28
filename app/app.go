@@ -213,7 +213,7 @@ func (app *RandApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 	return app.BaseApp.Query(req)
 }
 
-// MakeCodec - 커스텀 TC 코덱
+// MakeCodec - 커스텀 TX 코덱
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
 	bank.RegisterCodec(cdc)
@@ -229,7 +229,7 @@ func MakeCodec() *codec.Codec {
 	return cdc
 }
 
-// BeginBlocker application updates every end block
+// BeginBlocker -
 func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 
 	distr.BeginBlocker(ctx, req, app.distrKeeper)
@@ -246,7 +246,7 @@ func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) ab
 	}
 }
 
-// EndBlocker application updates every end block
+// EndBlocker -
 func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	validatorUpdates, tags := staking.EndBlocker(ctx, app.stakingKeeper)
 
@@ -260,7 +260,7 @@ func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 	}
 }
 
-// initialize store from a genesis state
+// initFromGenesisState - 제네시스 상태 기준으로 store 초기화
 func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
 	genesisState.Sanitize()
 
@@ -311,7 +311,7 @@ func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 	return validators
 }
 
-// custom logic for Rand initialization
+// initChainer - RandApp 초기화
 func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 	// TODO is this now the whole genesis file?
