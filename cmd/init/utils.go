@@ -7,13 +7,14 @@ import (
 	"path/filepath"
 	"time"
 
-	amino "github.com/tendermint/go-amino"
-	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/common"
 	"github.com/tendermint/tendermint/p2p"
 	"github.com/tendermint/tendermint/privval"
 	"github.com/tendermint/tendermint/types"
+
+	amino "github.com/tendermint/go-amino"
+	cfg "github.com/tendermint/tendermint/config"
 
 	"github.com/decentrandom/decentrandom/app"
 
@@ -21,8 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server"
 )
 
-// ExportGenesisFile creates and writes the genesis configuration to disk. An
-// error is returned if building or writing the configuration to file fails.
+// ExportGenesisFile -
 func ExportGenesisFile(
 	genFile, chainID string, validators []types.GenesisValidator, appState json.RawMessage,
 ) error {
@@ -40,8 +40,7 @@ func ExportGenesisFile(
 	return genDoc.SaveAs(genFile)
 }
 
-// ExportGenesisFileWithTime creates and writes the genesis configuration to disk.
-// An error is returned if building or writing the configuration to file fails.
+// ExportGenesisFileWithTime -
 func ExportGenesisFileWithTime(
 	genFile, chainID string, validators []types.GenesisValidator,
 	appState json.RawMessage, genTime time.Time,
@@ -61,7 +60,7 @@ func ExportGenesisFileWithTime(
 	return genDoc.SaveAs(genFile)
 }
 
-// InitializeNodeValidatorFiles creates private validator and p2p configuration files.
+// InitializeNodeValidatorFiles -
 func InitializeNodeValidatorFiles(
 	config *cfg.Config) (nodeID string, valPubKey crypto.PubKey, err error,
 ) {
@@ -89,7 +88,7 @@ func InitializeNodeValidatorFiles(
 	return nodeID, valPubKey, nil
 }
 
-// LoadGenesisDoc reads and unmarshals GenesisDoc from the given file.
+// LoadGenesisDoc -
 func LoadGenesisDoc(cdc *amino.Codec, genFile string) (genDoc types.GenesisDoc, err error) {
 	genContents, err := ioutil.ReadFile(genFile)
 	if err != nil {
@@ -103,6 +102,7 @@ func LoadGenesisDoc(cdc *amino.Codec, genFile string) (genDoc types.GenesisDoc, 
 	return genDoc, err
 }
 
+// initializeEmptyGenesis -
 func initializeEmptyGenesis(
 	cdc *codec.Codec, genFile, chainID string, overwrite bool,
 ) (appState json.RawMessage, err error) {
