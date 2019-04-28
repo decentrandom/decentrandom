@@ -2,20 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	//"fmt"
 	"io"
-	//"io/ioutil"
-	//"os"
-	//"path/filepath"
-	//"strings"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
-	//"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/store"
-	//"github.com/cosmos/cosmos-sdk/x/auth"
-	//"github.com/cosmos/cosmos-sdk/x/bank"
 	randInit "github.com/decentrandom/decentrandom/cmd/init"
 	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/spf13/cobra"
@@ -26,7 +18,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/decentrandom/decentrandom/app"
 	abci "github.com/tendermint/tendermint/abci/types"
-	//cfg "github.com/tendermint/tendermint/config"
 	dbm "github.com/tendermint/tendermint/libs/db"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -37,6 +28,7 @@ const flagAssertInvariantsBlockly = "assert-invariants-blockly"
 
 var assertInvariantsBlockly bool
 
+// main -
 func main() {
 	cobra.EnableCommandSorting = false
 
@@ -75,6 +67,7 @@ func main() {
 	}
 }
 
+// newApp -
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
 	return app.NewRandApp(
 		logger, db, traceStore, true, assertInvariantsBlockly,
@@ -83,6 +76,7 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application
 	)
 }
 
+// exportAppStateAndTMValidators -
 func exportAppStateAndTMValidators(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
