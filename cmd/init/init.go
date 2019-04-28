@@ -7,15 +7,15 @@ import (
 	"path/filepath"
 
 	"github.com/decentrandom/decentrandom/app"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
 	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/common"
-	//"github.com/tendermint/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	//"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 )
@@ -36,18 +36,19 @@ type printInfo struct {
 	AppMessage json.RawMessage `json:"app_message"`
 }
 
+// displayInfo -
 func displayInfo(cdc *codec.Codec, info printInfo) error {
 	out, err := codec.MarshalJSONIndent(cdc, info)
 	if err != nil {
 		return err
 	}
 
-	fmt.Fprintf(os.Stderr, "%s\n", string(out)) // nolint: errcheck
+	fmt.Fprintf(os.Stderr, "%s\n", string(out))
 	return nil
 }
 
 // InitCmd -
-func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command { // nolint: golint
+func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "init [moniker]",
 		Short: "Initialize private validator, p2p, genesis, and application configuration files",
