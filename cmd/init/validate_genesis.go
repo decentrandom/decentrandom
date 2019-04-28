@@ -21,7 +21,6 @@ func ValidateGenesisCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 		Short: "validates the genesis file at the default location or at the location passed as an arg",
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 
-			// Load default if passed no args, otherwise load passed file
 			var genesis string
 			if len(args) == 0 {
 				genesis = ctx.Config.GenesisFile()
@@ -29,7 +28,6 @@ func ValidateGenesisCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 				genesis = args[0]
 			}
 
-			//nolint
 			fmt.Fprintf(os.Stderr, "validating genesis file at %s\n", genesis)
 
 			var genDoc types.GenesisDoc
