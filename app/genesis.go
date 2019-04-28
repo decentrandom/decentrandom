@@ -26,7 +26,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
 
-// GenesisState is a state to Unmarshal
+// GenesisState -
 type GenesisState struct {
 	Accounts     []GenesisAccount      `json:"accounts"`
 	AuthData     auth.GenesisState     `json:"auth"`
@@ -38,7 +38,7 @@ type GenesisState struct {
 	GenTxs       []json.RawMessage     `json:"gentxs"`
 }
 
-// NewGenesisState returns new genesis state
+// NewGenesisState -
 func NewGenesisState(accounts []GenesisAccount,
 	authData auth.GenesisState,
 	bankData bank.GenesisState,
@@ -58,7 +58,7 @@ func NewGenesisState(accounts []GenesisAccount,
 	}
 }
 
-// Sanitize sorts accounts and coin sets.
+// Sanitize - 계정과 코인 정보 정렬
 func (gs GenesisState) Sanitize() {
 	sort.Slice(gs.Accounts, func(i, j int) bool {
 		return gs.Accounts[i].AccountNumber < gs.Accounts[j].AccountNumber
@@ -69,7 +69,7 @@ func (gs GenesisState) Sanitize() {
 	}
 }
 
-// GenesisAccount defines an account initialized at genesis.
+// GenesisAccount - 제네시스 계정 구조체
 type GenesisAccount struct {
 	Address       sdk.AccAddress `json:"address"`
 	Coins         sdk.Coins      `json:"coins"`
@@ -77,15 +77,15 @@ type GenesisAccount struct {
 	AccountNumber uint64         `json:"account_number"`
 
 	// vesting account fields
-	OriginalVesting  sdk.Coins               `json:"original_vesting"`  // total vesting coins upon initialization
-	DelegatedFree    sdk.Coins               `json:"delegated_free"`    // delegated vested coins at time of delegation
-	DelegatedVesting sdk.Coins               `json:"delegated_vesting"` // delegated vesting coins at time of delegation
-	StartTime        int64                   `json:"start_time"`        // vesting start time (UNIX Epoch time)
-	EndTime          int64                   `json:"end_time"`          // vesting end time (UNIX Epoch time)
-	VestingSchedules []types.VestingSchedule `json:"vesting_schedules"` // vesting end time (UNIX Epoch time)
+	OriginalVesting  sdk.Coins               `json:"original_vesting"`
+	DelegatedFree    sdk.Coins               `json:"delegated_free"`
+	DelegatedVesting sdk.Coins               `json:"delegated_vesting"`
+	StartTime        int64                   `json:"start_time"`        // UNIX Epoch time
+	EndTime          int64                   `json:"end_time"`          // UNIX Epoch time
+	VestingSchedules []types.VestingSchedule `json:"vesting_schedules"` // UNIX Epoch time
 }
 
-// NewGenesisAccount returns new genesis account
+// NewGenesisAccount -
 func NewGenesisAccount(acc *auth.BaseAccount) GenesisAccount {
 	return GenesisAccount{
 		Address:       acc.Address,
@@ -95,7 +95,7 @@ func NewGenesisAccount(acc *auth.BaseAccount) GenesisAccount {
 	}
 }
 
-// NewGenesisAccountI no-lint
+// NewGenesisAccountI -
 func NewGenesisAccountI(acc auth.Account) GenesisAccount {
 	gacc := GenesisAccount{
 		Address:       acc.GetAddress(),
@@ -117,7 +117,7 @@ func NewGenesisAccountI(acc auth.Account) GenesisAccount {
 	return gacc
 }
 
-// ToAccount converts GenesisAccount to auth.BaseAccount
+// ToAccount - 제네시스 계정은 baseAccount로 변환
 func (ga *GenesisAccount) ToAccount() auth.Account {
 	bacc := &auth.BaseAccount{
 		Address:       ga.Address,
@@ -163,7 +163,7 @@ func RandAppGenState(cdc *codec.Codec, genDoc tmtypes.GenesisDoc, appGenTxs []js
 		return genesisState, err
 	}
 
-	// if there are no gen txs to be processed, return the default empty state
+	// GenTX가 없는 경우
 	if len(appGenTxs) == 0 {
 		return genesisState, errors.New("there must be at least one genesis tx")
 	}
@@ -202,7 +202,7 @@ func RandAppGenState(cdc *codec.Codec, genDoc tmtypes.GenesisDoc, appGenTxs []js
 	return genesisState, nil
 }
 
-// NewDefaultGenesisState generates the default state for Terra.
+// NewDefaultGenesisState -
 func NewDefaultGenesisState() GenesisState {
 
 	// remove community tax
@@ -234,7 +234,6 @@ func RandValidateGenesisState(genesisState GenesisState) error {
 		return err
 	}
 
-	// skip stakingData validation as genesis is created from txs
 	if len(genesisState.GenTxs) > 0 {
 		return nil
 	}
@@ -264,12 +263,10 @@ func validateGenesisStateAccounts(accs []GenesisAccount) error {
 	for _, acc := range accs {
 		addrStr := acc.Address.String()
 
-		// disallow any duplicate accounts
 		if _, ok := addrMap[addrStr]; ok {
 			return fmt.Errorf("duplicate account found in genesis state; address: %s", addrStr)
 		}
 
-		// validate any vesting fields
 		if !acc.OriginalVesting.IsZero() {
 
 			if acc.VestingSchedules != nil && len(acc.VestingSchedules) > 0 {
@@ -304,7 +301,7 @@ func validateGenesisStateAccounts(accs []GenesisAccount) error {
 // RandAppGenStateJSON -
 func RandAppGenStateJSON(cdc *codec.Codec, genDoc tmtypes.GenesisDoc, appGenTxs []json.RawMessage) (
 	appState json.RawMessage, err error) {
-	// create the final app state
+
 	genesisState, err := RandAppGenState(cdc, genDoc, appGenTxs)
 	if err != nil {
 		return nil, err
@@ -312,8 +309,7 @@ func RandAppGenStateJSON(cdc *codec.Codec, genDoc tmtypes.GenesisDoc, appGenTxs 
 	return codec.MarshalJSONIndent(cdc, genesisState)
 }
 
-// CollectStdTxs processes and validates application's genesis StdTxs and returns
-// the list of appGenTxs, and persistent peers required to generate genesis.json.
+// CollectStdTxs -
 func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tmtypes.GenesisDoc) (
 	appGenTxs []auth.StdTx, persistentPeers string, err error) {
 
@@ -323,8 +319,6 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 		return appGenTxs, persistentPeers, err
 	}
 
-	// prepare a map of all accounts in genesis state to then validate
-	// against the validators addresses
 	var appState GenesisState
 	if err := cdc.UnmarshalJSON(genDoc.AppState, &appState); err != nil {
 		return appGenTxs, persistentPeers, err
@@ -336,7 +330,6 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 		addrMap[acc.Address.String()] = acc
 	}
 
-	// addresses and IPs (and port) validator server info
 	var addressesIPs []string
 
 	for _, fo := range fos {
@@ -345,7 +338,6 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 			continue
 		}
 
-		// get the genStdTx
 		var jsonRawTx []byte
 		if jsonRawTx, err = ioutil.ReadFile(filename); err != nil {
 			return appGenTxs, persistentPeers, err
@@ -356,16 +348,13 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 		}
 		appGenTxs = append(appGenTxs, genStdTx)
 
-		// the memo flag is used to store
-		// the ip and node-id, for example this may be:
-		// "528fd3df22b31f4969b05652bfe8f0fe921321d5@192.168.2.37:26656"
+		// memo flag에 노드 정보 저장
 		nodeAddrIP := genStdTx.GetMemo()
 		if len(nodeAddrIP) == 0 {
 			return appGenTxs, persistentPeers, fmt.Errorf(
 				"couldn't find node's address and IP in %s", fo.Name())
 		}
 
-		// genesis transactions must be single-message
 		msgs := genStdTx.GetMsgs()
 		if len(msgs) != 1 {
 
@@ -374,7 +363,7 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 		}
 
 		msg := msgs[0].(staking.MsgCreateValidator)
-		// validate delegator and validator addresses and funds against the accounts in the state
+
 		delAddr := msg.DelegatorAddress.String()
 		valAddr := sdk.AccAddress(msg.ValidatorAddress).String()
 
@@ -400,7 +389,6 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 			)
 		}
 
-		// exclude itself from persistent peers
 		if msg.Description.Moniker != moniker {
 			addressesIPs = append(addressesIPs, nodeAddrIP)
 		}
@@ -412,7 +400,7 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 	return appGenTxs, persistentPeers, nil
 }
 
-// NewDefaultGenesisAccount returns default genesis account
+// NewDefaultGenesisAccount -
 func NewDefaultGenesisAccount(addr sdk.AccAddress) GenesisAccount {
 	accAuth := auth.NewBaseAccountWithAddress(addr)
 	coins := sdk.Coins{
