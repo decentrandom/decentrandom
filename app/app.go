@@ -160,7 +160,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 	distr.RegisterInvariants(&app.crisisKeeper, app.distrKeeper, app.stakingKeeper)
 	staking.RegisterInvariants(&app.crisisKeeper, app.stakingKeeper, app.feeCollectionKeeper, app.distrKeeper, app.accountKeeper)
 
-	// register message routes
+	// 메시지 라우터 등록
 	app.Router().
 		AddRoute(bank.RouterKey, bank.NewHandler(app.bankKeeper)).
 		AddRoute(staking.RouterKey, staking.NewHandler(app.stakingKeeper)).
@@ -169,6 +169,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		AddRoute("rand", rand.NewHandler(app.randKeeper)).
 		AddRoute(crisis.RouterKey, crisis.NewHandler(app.crisisKeeper))
 
+	// 쿼리 라우터 등록
 	app.QueryRouter().
 		AddRoute(auth.QuerierRoute, auth.NewQuerier(app.accountKeeper)).
 		AddRoute(distr.QuerierRoute, distr.NewQuerier(app.distrKeeper)).
@@ -176,7 +177,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		AddRoute(staking.QuerierRoute, staking.NewQuerier(app.stakingKeeper, app.cdc)).
 		AddRoute(rand.QuerierRoute, rand.NewQuerier(app.randKeeper))
 
-	// initialize BaseApp
+	// BaseApp 초기화
 	app.MountStores(
 		app.keyMain, app.keyAccount, app.keyStaking, app.keyDistr,
 		app.keySlashing, app.keyFeeCollection, app.keyParams,
@@ -198,7 +199,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 	return app
 }
 
-// Query overides query function in baseapp to change result of "/app/version" query.
+// Query - baseapp의 query 오버라이드
 func (app *RandApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 
 	if req.Path == "/app/version" {
@@ -212,7 +213,7 @@ func (app *RandApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 	return app.BaseApp.Query(req)
 }
 
-// MakeCodec builds a custom tx codec
+// MakeCodec - 커스텀 TC 코덱
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
 	bank.RegisterCodec(cdc)
