@@ -1,24 +1,23 @@
 package init
 
-// DONTCOVER
-
 import (
 	"encoding/json"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	cfg "github.com/tendermint/tendermint/config"
+
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	//"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+
 	app "github.com/decentrandom/decentrandom/app"
+	cfg "github.com/tendermint/tendermint/config"
 )
 
 const (
@@ -67,7 +66,6 @@ func CollectGenTxsCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 
 			toPrint.AppMessage = appMessage
 
-			// print out some key information
 			return displayInfo(cdc, toPrint)
 		},
 	}
@@ -91,7 +89,6 @@ func genAppStateFromConfig(
 		jsonRawTx       json.RawMessage
 	)
 
-	// process genesis transactions, else create default genesis.json
 	appGenTxs, persistentPeers, err = app.CollectStdTxs(
 		cdc, config.Moniker, initCfg.GenTxsDir, genDoc,
 	)
