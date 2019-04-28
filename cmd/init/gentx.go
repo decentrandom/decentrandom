@@ -1,7 +1,5 @@
 package init
 
-// DONTCOVER
-
 import (
 	"bytes"
 	"fmt"
@@ -16,7 +14,6 @@ import (
 	"github.com/decentrandom/decentrandom/app"
 	"github.com/decentrandom/decentrandom/types/assets"
 
-	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/common"
@@ -26,14 +23,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/client/utils"
-	//"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
-	kbkeys "github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/cosmos/cosmos-sdk/server"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 	"github.com/cosmos/cosmos-sdk/x/staking/client/cli"
+
+	kbkeys "github.com/cosmos/cosmos-sdk/crypto/keys"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
+	cfg "github.com/tendermint/tendermint/config"
 )
 
 var (
@@ -69,7 +67,6 @@ following delegation and commission default parameters:
 				return err
 			}
 
-			// Read --nodeID, if empty take it from priv_validator.json
 			if nodeIDString := viper.GetString(cli.FlagNodeID); nodeIDString != "" {
 				nodeID = nodeIDString
 			}
@@ -105,7 +102,6 @@ following delegation and commission default parameters:
 				return err
 			}
 
-			// Read --pubkey, if empty take it from priv_validator.json
 			if valPubKeyString := viper.GetString(cli.FlagPubKey); valPubKeyString != "" {
 				valPubKey, err = sdk.GetConsPubKeyBech32(valPubKeyString)
 				if err != nil {
@@ -117,10 +113,8 @@ following delegation and commission default parameters:
 			details := viper.GetString(cli.FlagDetails)
 			identity := viper.GetString(cli.FlagIdentity)
 
-			// Set flags for creating gentx
 			prepareFlagsForTxCreateValidator(config, nodeID, ip, genDoc.ChainID, valPubKey, website, details, identity)
 
-			// Fetch the amount of coins staked
 			amount := viper.GetString(cli.FlagAmount)
 			coins, err := sdk.ParseCoins(amount)
 			if err != nil {
@@ -135,14 +129,8 @@ following delegation and commission default parameters:
 			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			// XXX: Set the generate-only flag here after the CLI context has
-			// been created. This allows the from name/key to be correctly populated.
-			//
-			// TODO: Consider removing the manual setting of generate-only in
-			// favor of a 'gentx' flag in the create-validator command.
 			viper.Set(client.FlagGenerateOnly, true)
 
-			// create a 'create-validator' message
 			txBldr, msg, err := cli.BuildCreateValidatorMsg(cliCtx, txBldr)
 			if err != nil {
 				return err
@@ -158,7 +146,6 @@ following delegation and commission default parameters:
 				return utils.PrintUnsignedStdTx(txBldr, cliCtx, []sdk.Msg{msg}, true)
 			}
 
-			// write the unsigned transaction to the buffer
 			w := bytes.NewBuffer([]byte{})
 			cliCtx = cliCtx.WithOutput(w)
 
@@ -166,19 +153,16 @@ following delegation and commission default parameters:
 				return err
 			}
 
-			// read the transaction
 			stdTx, err := readUnsignedGenTxFile(cdc, w)
 			if err != nil {
 				return err
 			}
 
-			// sign the transaction and write it to the output file
 			signedTx, err := utils.SignStdTx(txBldr, cliCtx, name, stdTx, false, true)
 			if err != nil {
 				return err
 			}
 
-			// Fetch output file name
 			outputDocument := viper.GetString(client.FlagOutputDocument)
 			if outputDocument == "" {
 				outputDocument, err = makeOutputFilepath(config.RootDir, nodeID)
@@ -217,16 +201,15 @@ following delegation and commission default parameters:
 	return cmd
 }
 
+// accountInGenesis -
 func accountInGenesis(genesisState app.GenesisState, key sdk.AccAddress, coins sdk.Coins) error {
 	accountIsInGenesis := false
 	bondDenom := genesisState.StakingData.Params.BondDenom
 
-	// Check if the account is in genesis
 	for _, acc := range genesisState.Accounts {
-		// Ensure that account is in genesis
+
 		if acc.Address.Equals(key) {
 
-			// Ensure account contains enough funds of default bond denom
 			if coins.AmountOf(bondDenom).GT(acc.Coins.AmountOf(bondDenom)) {
 				return fmt.Errorf(
 					"account %v is in genesis, but it only has %v%v available to stake, not %v%v",
@@ -245,6 +228,7 @@ func accountInGenesis(genesisState app.GenesisState, key sdk.AccAddress, coins s
 	return fmt.Errorf("account %s in not in the app_state.accounts array of genesis.json", key)
 }
 
+// prepareFlagsForTxCreateValidator -
 func prepareFlagsForTxCreateValidator(
 	config *cfg.Config, nodeID, ip, chainID string, valPubKey crypto.PubKey, website, details, identity string,
 ) {
@@ -279,6 +263,7 @@ func prepareFlagsForTxCreateValidator(
 	}
 }
 
+// makeOutputFilepath -
 func makeOutputFilepath(rootDir, nodeID string) (string, error) {
 	writePath := filepath.Join(rootDir, "config", "gentx")
 	if err := common.EnsureDir(writePath, 0700); err != nil {
@@ -287,6 +272,7 @@ func makeOutputFilepath(rootDir, nodeID string) (string, error) {
 	return filepath.Join(writePath, fmt.Sprintf("gentx-%v.json", nodeID)), nil
 }
 
+// readUnsignedGenTxFile -
 func readUnsignedGenTxFile(cdc *codec.Codec, r io.Reader) (auth.StdTx, error) {
 	var stdTx auth.StdTx
 	bytes, err := ioutil.ReadAll(r)
@@ -297,7 +283,7 @@ func readUnsignedGenTxFile(cdc *codec.Codec, r io.Reader) (auth.StdTx, error) {
 	return stdTx, err
 }
 
-// nolint: errcheck
+// writeSignedGenTx -
 func writeSignedGenTx(cdc *codec.Codec, outputDocument string, tx auth.StdTx) error {
 	outputFile, err := os.OpenFile(outputDocument, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
 	if err != nil {
