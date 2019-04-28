@@ -21,7 +21,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tendermint/tendermint/libs/cli"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	at "github.com/cosmos/cosmos-sdk/x/auth"
@@ -42,10 +41,12 @@ import (
 	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
 
 	amino "github.com/tendermint/go-amino"
+	"github.com/tendermint/tendermint/libs/cli"
 
 	_ "github.com/decentrandom/decentrandom/client/lcd/statik"
 )
 
+// main -
 func main() {
 	cobra.EnableCommandSorting = false
 
@@ -97,6 +98,7 @@ func main() {
 	}
 }
 
+// queryCmd -
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	queryCmd := &cobra.Command{
 		Use:     "query",
@@ -123,6 +125,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	return queryCmd
 }
 
+// txCmd -
 func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:   "tx",
@@ -146,12 +149,13 @@ func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	return txCmd
 }
 
-// CLIVersionRequestHandler cli version REST handler endpoint
+// CLIVersionRequestHandler -
 func CLIVersionRequestHandler(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_, _ = w.Write([]byte(fmt.Sprintf("{\"version\": \"%s\"}", version.Version)))
 }
 
+// registerRoutes -
 func registerRoutes(rs *lcd.RestServer) {
 
 	rs.Mux.HandleFunc("/version", CLIVersionRequestHandler).Methods("GET")
@@ -167,6 +171,7 @@ func registerRoutes(rs *lcd.RestServer) {
 	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, "rand")
 }
 
+// registerSwaggerUI -
 func registerSwaggerUI(rs *lcd.RestServer) {
 	statikFS, err := fs.New()
 	if err != nil {
@@ -176,6 +181,7 @@ func registerSwaggerUI(rs *lcd.RestServer) {
 	rs.Mux.PathPrefix("/swagger-ui/").Handler(http.StripPrefix("/swagger-ui/", staticServer))
 }
 
+// initConfig -
 func initConfig(cmd *cobra.Command) error {
 	home, err := cmd.PersistentFlags().GetString(cli.HomeFlag)
 	if err != nil {
