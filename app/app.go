@@ -26,13 +26,13 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 )
 
+// appName과 초기 비밀번호 세팅
 const (
-	appName = "RandApp"
-	// DefaultKeyPass contains the default key password for genesis transactions
+	appName        = "RandApp"
 	DefaultKeyPass = "12345678"
 )
 
-// default home directories for expected binaries
+// 바이너리 경로
 var (
 	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
