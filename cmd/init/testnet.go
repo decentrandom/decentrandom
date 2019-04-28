@@ -1,7 +1,5 @@
 package init
 
-// DONTCOVER
-
 import (
 	"encoding/json"
 	"fmt"
@@ -10,27 +8,25 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cosmos/cosmos-sdk/client/keys"
-
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/cmd/gaia/app"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/server"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 	"github.com/cosmos/cosmos-sdk/x/staking"
-	// randApp "github.com/decentrandom/decentrandom"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
 	tmconfig "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	"github.com/tendermint/tendermint/types"
 	tmtime "github.com/tendermint/tendermint/types/time"
-
-	"github.com/cosmos/cosmos-sdk/server"
 )
 
 var (
@@ -91,6 +87,7 @@ Example:
 	return cmd
 }
 
+// initTestnet -
 func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 	var chainID string
 
@@ -114,7 +111,6 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 		genFiles []string
 	)
 
-	// generate private keys, node IDs, and initial transactions
 	for i := 0; i < numValidators; i++ {
 		nodeDirName := fmt.Sprintf("%s%d", viper.GetString(flagNodeDirPrefix), i)
 		nodeDaemonHomeName := viper.GetString(flagNodeDaemonHome)
@@ -163,9 +159,6 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 		keyPass, err := client.GetPassword(prompt, buf)
 
 		if err != nil && keyPass != "" {
-			// An error was returned that either failed to read the password from
-			// STDIN or the given password is not empty but failed to meet minimum
-			// length requirements.
 			return err
 		}
 
@@ -186,7 +179,6 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			return err
 		}
 
-		// save private key seed words
 		err = writeFile(fmt.Sprintf("%v.json", "key_seed"), clientDir, cliPrint)
 		if err != nil {
 			return err
@@ -230,7 +222,6 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 			return err
 		}
 
-		// gather gentxs folder
 		err = writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBytes)
 		if err != nil {
 			_ = os.RemoveAll(outDir)
@@ -257,6 +248,7 @@ func initTestnet(config *tmconfig.Config, cdc *codec.Codec) error {
 	return nil
 }
 
+// initGenFiles -
 func initGenFiles(
 	cdc *codec.Codec, chainID string, accs []app.GenesisAccount,
 	genFiles []string, numValidators int,
@@ -286,6 +278,7 @@ func initGenFiles(
 	return nil
 }
 
+// collectGenFiles -
 func collectGenFiles(
 	cdc *codec.Codec, config *tmconfig.Config, chainID string,
 	monikers, nodeIDs []string, valPubKeys []crypto.PubKey,
@@ -318,13 +311,11 @@ func collectGenFiles(
 		}
 
 		if appState == nil {
-			// set the canonical application state (they should not differ)
 			appState = nodeAppState
 		}
 
 		genFile := config.GenesisFile()
 
-		// overwrite each validator's genesis file to have a canonical genesis time
 		err = ExportGenesisFileWithTime(genFile, chainID, nil, appState, genTime)
 		if err != nil {
 			return err
@@ -334,6 +325,7 @@ func collectGenFiles(
 	return nil
 }
 
+// getIP -
 func getIP(i int, startingIPAddr string) (string, error) {
 	var (
 		ip  string
@@ -355,6 +347,7 @@ func getIP(i int, startingIPAddr string) (string, error) {
 	return ip, nil
 }
 
+// writeFile -
 func writeFile(name string, dir string, contents []byte) error {
 	writePath := filepath.Join(dir)
 	file := filepath.Join(writePath, name)
@@ -372,6 +365,7 @@ func writeFile(name string, dir string, contents []byte) error {
 	return nil
 }
 
+// calculateIP -
 func calculateIP(ip string, i int) (string, error) {
 	ipv4 := net.ParseIP(ip).To4()
 	if ipv4 == nil {
