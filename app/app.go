@@ -233,12 +233,6 @@ func MakeCodec() *codec.Codec {
 func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 
 	distr.BeginBlocker(ctx, req, app.distrKeeper)
-
-	// slash anyone who double signed.
-	// NOTE: This should happen after distr.BeginBlocker so that
-	// there is nothing left over in the validator fee pool,
-	// so as to keep the CanWithdrawInvariant invariant.
-	// TODO: This should really happen at EndBlocker.
 	tags := slashing.BeginBlocker(ctx, req, app.slashingKeeper)
 
 	return abci.ResponseBeginBlock{
@@ -264,31 +258,26 @@ func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
 	genesisState.Sanitize()
 
-	// load the accounts
 	for _, gacc := range genesisState.Accounts {
 		acc := gacc.ToAccount()
 		acc = app.accountKeeper.NewAccount(ctx, acc) // set account number
 		app.accountKeeper.SetAccount(ctx, acc)
 	}
 
-	// initialize distribution (must happen before staking)
 	distr.InitGenesis(ctx, app.distrKeeper, genesisState.DistrData)
 
-	// load the initial staking information
 	validators, err := staking.InitGenesis(ctx, app.stakingKeeper, genesisState.StakingData)
 	if err != nil {
-		panic(err) // TODO find a way to do this w/o panics
+		panic(err)
 	}
 
-	// initialize module-specific stores
 	auth.InitGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper, genesisState.AuthData)
 	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
 	slashing.InitGenesis(ctx, app.slashingKeeper, genesisState.SlashingData, genesisState.StakingData.Validators.ToSDKValidators())
 	crisis.InitGenesis(ctx, app.crisisKeeper, genesisState.CrisisData)
 
-	// validate genesis state
 	if err := RandValidateGenesisState(genesisState); err != nil {
-		panic(err) // TODO find a way to do this w/o panics
+		panic(err)
 	}
 
 	if len(genesisState.GenTxs) > 0 {
@@ -313,19 +302,17 @@ func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 
 // initChainer - RandApp 초기화
 func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+
 	stateJSON := req.AppStateBytes
-	// TODO is this now the whole genesis file?
 
 	var genesisState GenesisState
 	err := app.cdc.UnmarshalJSON(stateJSON, &genesisState)
 	if err != nil {
-		panic(err) // TODO https://github.com/cosmos/cosmos-sdk/issues/468
-		// return sdk.ErrGenesisParse("").TraceCause(err, "")
+		panic(err)
 	}
 
 	validators := app.initFromGenesisState(ctx, genesisState)
 
-	// sanity check
 	if len(req.Validators) > 0 {
 		if len(req.Validators) != len(validators) {
 			panic(fmt.Errorf("len(RequestInitChain.Validators) != len(validators) (%d != %d)",
@@ -340,7 +327,6 @@ func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 		}
 	}
 
-	// assert runtime invariants
 	app.assertRuntimeInvariants()
 
 	return abci.ResponseInitChain{
@@ -348,80 +334,79 @@ func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 	}
 }
 
-// LoadHeight loads a particular height
+// LoadHeight - 버전 관리를 위해
 func (app *RandApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height, app.keyMain)
 }
 
 var _ sdk.StakingHooks = StakingHooks{}
 
-// StakingHooks contains combined distribution and slashing hooks needed for the
-// staking module.
+// StakingHooks -
 type StakingHooks struct {
 	dh distr.Hooks
 	sh slashing.Hooks
 }
 
-// NewStakingHooks nolint
+// NewStakingHooks -
 func NewStakingHooks(dh distr.Hooks, sh slashing.Hooks) StakingHooks {
 	return StakingHooks{dh, sh}
 }
 
-// AfterValidatorCreated nolint
+// AfterValidatorCreated -
 func (h StakingHooks) AfterValidatorCreated(ctx sdk.Context, valAddr sdk.ValAddress) {
 	h.dh.AfterValidatorCreated(ctx, valAddr)
 	h.sh.AfterValidatorCreated(ctx, valAddr)
 }
 
-// BeforeValidatorModified nolint
+// BeforeValidatorModified -
 func (h StakingHooks) BeforeValidatorModified(ctx sdk.Context, valAddr sdk.ValAddress) {
 	h.dh.BeforeValidatorModified(ctx, valAddr)
 	h.sh.BeforeValidatorModified(ctx, valAddr)
 }
 
-// AfterValidatorRemoved nolint
+// AfterValidatorRemoved -
 func (h StakingHooks) AfterValidatorRemoved(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) {
 	h.dh.AfterValidatorRemoved(ctx, consAddr, valAddr)
 	h.sh.AfterValidatorRemoved(ctx, consAddr, valAddr)
 }
 
-// AfterValidatorBonded nolint
+// AfterValidatorBonded -
 func (h StakingHooks) AfterValidatorBonded(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) {
 	h.dh.AfterValidatorBonded(ctx, consAddr, valAddr)
 	h.sh.AfterValidatorBonded(ctx, consAddr, valAddr)
 }
 
-// AfterValidatorBeginUnbonding nolint
+// AfterValidatorBeginUnbonding -
 func (h StakingHooks) AfterValidatorBeginUnbonding(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) {
 	h.dh.AfterValidatorBeginUnbonding(ctx, consAddr, valAddr)
 	h.sh.AfterValidatorBeginUnbonding(ctx, consAddr, valAddr)
 }
 
-// BeforeDelegationCreated nolint
+// BeforeDelegationCreated -
 func (h StakingHooks) BeforeDelegationCreated(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
 	h.dh.BeforeDelegationCreated(ctx, delAddr, valAddr)
 	h.sh.BeforeDelegationCreated(ctx, delAddr, valAddr)
 }
 
-// BeforeDelegationSharesModified nolint
+// BeforeDelegationSharesModified -
 func (h StakingHooks) BeforeDelegationSharesModified(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
 	h.dh.BeforeDelegationSharesModified(ctx, delAddr, valAddr)
 	h.sh.BeforeDelegationSharesModified(ctx, delAddr, valAddr)
 }
 
-// BeforeDelegationRemoved nolint
+// BeforeDelegationRemoved -
 func (h StakingHooks) BeforeDelegationRemoved(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
 	h.dh.BeforeDelegationRemoved(ctx, delAddr, valAddr)
 	h.sh.BeforeDelegationRemoved(ctx, delAddr, valAddr)
 }
 
-// AfterDelegationModified nolint
+// AfterDelegationModified -
 func (h StakingHooks) AfterDelegationModified(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) {
 	h.dh.AfterDelegationModified(ctx, delAddr, valAddr)
 	h.sh.AfterDelegationModified(ctx, delAddr, valAddr)
 }
 
-// BeforeValidatorSlashed nolint
+// BeforeValidatorSlashed -
 func (h StakingHooks) BeforeValidatorSlashed(ctx sdk.Context, valAddr sdk.ValAddress, fraction sdk.Dec) {
 	h.dh.BeforeValidatorSlashed(ctx, valAddr, fraction)
 	h.sh.BeforeValidatorSlashed(ctx, valAddr, fraction)
