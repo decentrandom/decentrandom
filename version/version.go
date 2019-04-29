@@ -5,7 +5,6 @@ import (
 	"runtime"
 )
 
-// Variables set by build flags
 var (
 	Commit    = ""
 	Version   = ""
@@ -13,6 +12,7 @@ var (
 	BuildTags = ""
 )
 
+// versionInfo -
 type versionInfo struct {
 	DecentRandom string `json:"decent_random"`
 	GitCommit    string `json:"commit"`
@@ -21,6 +21,7 @@ type versionInfo struct {
 	GoVersion    string `json:"go"`
 }
 
+// String -
 func (v versionInfo) String() string {
 	return fmt.Sprintf(`decent-random: %s
 git commit: %s
@@ -29,6 +30,7 @@ build tags: %s
 %s`, v.DecentRandom, v.GitCommit, v.GoSumHash, v.BuildTags, v.GoVersion)
 }
 
+// newVersionInfo -
 func newVersionInfo() versionInfo {
 	return versionInfo{
 		Version,
