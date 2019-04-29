@@ -5,12 +5,13 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/tendermint/tendermint/types"
 
 	"github.com/decentrandom/decentrandom/app"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
+
+	"github.com/tendermint/tendermint/types"
 )
 
 // ValidateGenesisCmd -
