@@ -2,9 +2,10 @@ package rest
 
 import (
 	"fmt"
-	"time"
-	//"google.golang.org/grpc/balancer/base"
 	"net/http"
+	"time"
+
+	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	clientrest "github.com/cosmos/cosmos-sdk/client/rest"
@@ -12,15 +13,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/decentrandom/decentrandom/x/rand"
-
-	"github.com/gorilla/mux"
 )
 
 const (
 	restRound = "round"
 )
 
-// RegisterRoutes - Central function to define routes that get registered by the main application
+// RegisterRoutes -
 func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cdc, cliCtx, storeName)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
