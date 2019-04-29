@@ -7,19 +7,18 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/decentrandom/decentrandom/app"
+
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/server"
+
+	amino "github.com/tendermint/go-amino"
+	cfg "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/common"
 	"github.com/tendermint/tendermint/p2p"
 	"github.com/tendermint/tendermint/privval"
 	"github.com/tendermint/tendermint/types"
-
-	amino "github.com/tendermint/go-amino"
-	cfg "github.com/tendermint/tendermint/config"
-
-	"github.com/decentrandom/decentrandom/app"
-
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/server"
 )
 
 // ExportGenesisFile -
