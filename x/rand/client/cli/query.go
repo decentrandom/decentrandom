@@ -3,10 +3,12 @@ package cli
 import (
 	"fmt"
 
+	"github.com/spf13/cobra"
+
+	"github.com/decentrandom/decentrandom/x/rand"
+
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/decentrandom/decentrandom/x/rand"
-	"github.com/spf13/cobra"
 )
 
 // GetCmdRoundInfo - 라운드 정보
