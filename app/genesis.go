@@ -14,8 +14,6 @@ import (
 	"github.com/decentrandom/decentrandom/types"
 	"github.com/decentrandom/decentrandom/types/assets"
 
-	tmtypes "github.com/tendermint/tendermint/types"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -24,6 +22,8 @@ import (
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+
+	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 // GenesisState -
