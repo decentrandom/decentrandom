@@ -4,24 +4,25 @@ import (
 	"encoding/json"
 	"io"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/decentrandom/decentrandom/app"
+	randInit "github.com/decentrandom/decentrandom/cmd/init"
+	randServer "github.com/decentrandom/decentrandom/server"
+	"github.com/decentrandom/decentrandom/types/util"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/store"
-	randInit "github.com/decentrandom/decentrandom/cmd/init"
-	"github.com/decentrandom/decentrandom/types/util"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"github.com/tendermint/tendermint/libs/cli"
-	"github.com/tendermint/tendermint/libs/log"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/decentrandom/decentrandom/app"
-	abci "github.com/tendermint/tendermint/abci/types"
-	dbm "github.com/tendermint/tendermint/libs/db"
-	tmtypes "github.com/tendermint/tendermint/types"
 
-	randServer "github.com/decentrandom/decentrandom/server"
+	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/cli"
+	dbm "github.com/tendermint/tendermint/libs/db"
+	"github.com/tendermint/tendermint/libs/log"
+	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 const flagAssertInvariantsBlockly = "assert-invariants-blockly"
