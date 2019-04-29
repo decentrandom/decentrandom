@@ -8,15 +8,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 )
 
-//-----------------------------------------------------------------------------
-// Schedule
-
-// Schedule no-lint
+// Schedule -
 type Schedule struct {
 	Cliff int64   `json:"cliff"`
 	Ratio sdk.Dec `json:"ratio"`
 }
 
+// NewSchedule -
 func NewSchedule(cliff int64, ratio sdk.Dec) Schedule {
 	return Schedule{
 		Cliff: cliff,
@@ -24,17 +22,17 @@ func NewSchedule(cliff int64, ratio sdk.Dec) Schedule {
 	}
 }
 
-// GetRatio returns cliff
+// GetCliff -
 func (s Schedule) GetCliff() int64 {
 	return s.Cliff
 }
 
-// GetRatio returns ratio
+// GetRatio -
 func (s Schedule) GetRatio() sdk.Dec {
 	return s.Ratio
 }
 
-// String implements the fmt.Stringer interface
+// String -
 func (s Schedule) String() string {
 	return fmt.Sprintf(`Schedule:
 	Cliff: %v,
@@ -42,7 +40,7 @@ func (s Schedule) String() string {
 		s.Cliff, s.Ratio)
 }
 
-// IsValid checks that the schedule is valid.
+// IsValid -
 func (s Schedule) IsValid() bool {
 
 	cliff := s.GetCliff()
@@ -51,18 +49,13 @@ func (s Schedule) IsValid() bool {
 	return cliff >= 0 && ratio.GT(sdk.ZeroDec())
 }
 
-//-----------------------------------------------------------------------------
-// Vesting Schedule
-
-// VestingSchedule maps the ratio of tokens that becomes vested by blocktime (in nanoseconds) from genesis.
-// The sum of values in the Schedule should sum to 1.0.
-// CONTRACT: assumes that entries are
+// VestingSchedule -
 type VestingSchedule struct {
 	Denom     string     `json:"denom"`
-	Schedules []Schedule `json:"schedules"` // maps blocktime to percentage vested. Should sum to 1.
+	Schedules []Schedule `json:"schedules"`
 }
 
-// NewVestingSchedule creates a new vesting schedule instance.
+// NewVestingSchedule -
 func NewVestingSchedule(denom string, schedules []Schedule) VestingSchedule {
 	return VestingSchedule{
 		Denom:     denom,
@@ -70,7 +63,7 @@ func NewVestingSchedule(denom string, schedules []Schedule) VestingSchedule {
 	}
 }
 
-// GetVestedRatio returns the ratio of tokens that have vested by blockTime.
+// GetVestedRatio -
 func (vs VestingSchedule) GetVestedRatio(blockTime int64) sdk.Dec {
 	sumRatio := sdk.ZeroDec()
 	for _, schedule := range vs.Schedules {
@@ -84,12 +77,12 @@ func (vs VestingSchedule) GetVestedRatio(blockTime int64) sdk.Dec {
 	return sumRatio
 }
 
-// GetDenom returns the denom of vesting schedule
+// GetDenom -
 func (vs VestingSchedule) GetDenom() string {
 	return vs.Denom
 }
 
-// IsValid checks that the vestingschedule is valid.
+// IsValid -
 func (vs VestingSchedule) IsValid() bool {
 	sumRatio := sdk.ZeroDec()
 	for _, schedule := range vs.Schedules {
@@ -104,7 +97,7 @@ func (vs VestingSchedule) IsValid() bool {
 	return sumRatio.Equal(sdk.OneDec())
 }
 
-// String implements the fmt.Stringer interface
+// String -
 func (vs VestingSchedule) String() string {
 	return fmt.Sprintf(`VestingSchedule:
 	Denom: %v,
@@ -112,22 +105,14 @@ func (vs VestingSchedule) String() string {
 		vs.Denom, vs.Schedules)
 }
 
-//-----------------------------------------------------------------------------
-// Graded Vesting Account
-
-// GradedVestingAccount implements the VestingAccount interface. It vests all
-// coins according to a predefined schedule.
-var _ auth.VestingAccount = (*GradedVestingAccount)(nil)
-
-// GradedVestingAccount implements the VestingAccount interface. It vests tokens according to
-// a predefined set of vesting cliffs.
+// GradedVestingAccount -
 type GradedVestingAccount struct {
 	*auth.BaseVestingAccount
 
 	VestingSchedules []VestingSchedule `json:"vesting_schedules"`
 }
 
-// NewGradedVestingAccount returns a GradedVestingAccount
+// NewGradedVestingAccount -
 func NewGradedVestingAccount(baseAcc *auth.BaseAccount, vestingSchedules []VestingSchedule) *GradedVestingAccount {
 	baseVestingAcc := &auth.BaseVestingAccount{
 		BaseAccount:     baseAcc,
@@ -138,12 +123,12 @@ func NewGradedVestingAccount(baseAcc *auth.BaseAccount, vestingSchedules []Vesti
 	return &GradedVestingAccount{baseVestingAcc, vestingSchedules}
 }
 
-// GetSchedules returns the VestingSchedules of the graded vesting account
+// GetSchedules -
 func (gva GradedVestingAccount) GetVestingSchedules() []VestingSchedule {
 	return gva.VestingSchedules
 }
 
-// GetVestingSchedule returns the VestingSchedule of the given denom
+// GetVestingSchedule -
 func (gva GradedVestingAccount) GetVestingSchedule(denom string) (VestingSchedule, bool) {
 	for _, vs := range gva.VestingSchedules {
 		if vs.Denom == denom {
@@ -154,8 +139,7 @@ func (gva GradedVestingAccount) GetVestingSchedule(denom string) (VestingSchedul
 	return VestingSchedule{}, false
 }
 
-// GetVestedCoins returns the total amount of vested coins for a graded vesting
-// account. All coins are only vested once the schedule has elapsed.
+// GetVestedCoins -
 func (gva GradedVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coins {
 	var vestedCoins sdk.Coins
 	for _, ovc := range gva.OriginalVesting {
@@ -174,31 +158,27 @@ func (gva GradedVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coins {
 	return vestedCoins
 }
 
-// GetVestingCoins returns the total number of vesting coins for a graded
-// vesting account.
+// GetVestingCoins -
 func (gva GradedVestingAccount) GetVestingCoins(blockTime time.Time) sdk.Coins {
 	return gva.OriginalVesting.Sub(gva.GetVestedCoins(blockTime))
 }
 
-// SpendableCoins returns the total number of spendable coins for a graded
-// vesting account.
+// SpendableCoins -
 func (gva GradedVestingAccount) SpendableCoins(blockTime time.Time) sdk.Coins {
 	return gva.spendableCoins(gva.GetVestingCoins(blockTime))
 }
 
-// TrackDelegation tracks a desired delegation amount by setting the appropriate
-// values for the amount of delegated vesting, delegated free, and reducing the
-// overall amount of base coins.
+// TrackDelegation -
 func (gva *GradedVestingAccount) TrackDelegation(blockTime time.Time, amount sdk.Coins) {
 	gva.trackDelegation(gva.GetVestingCoins(blockTime), amount)
 }
 
-// GetStartTime returns zero since a graded vesting account has no start time.
+// GetStartTime -
 func (gva *GradedVestingAccount) GetStartTime() int64 {
 	return 0
 }
 
-// GetEndTime returns the time when vesting ends for a graded vesting account.
+// GetEndTime -
 func (gva *GradedVestingAccount) GetEndTime() int64 {
 	return 0
 }
@@ -226,11 +206,7 @@ func (gva GradedVestingAccount) String() string {
 	)
 }
 
-// spendableCoins returns all the spendable coins for a vesting account given a
-// set of vesting coins.
-//
-// CONTRACT: The account's coins, delegated vesting coins, vestingCoins must be
-// sorted.
+// spendableCoins -
 func (gva GradedVestingAccount) spendableCoins(vestingCoins sdk.Coins) sdk.Coins {
 	var spendableCoins sdk.Coins
 	bc := gva.GetCoins()
@@ -253,12 +229,7 @@ func (gva GradedVestingAccount) spendableCoins(vestingCoins sdk.Coins) sdk.Coins
 	return spendableCoins
 }
 
-// trackDelegation tracks a delegation amount for any given vesting account type
-// given the amount of coins currently vesting. It returns the resulting base
-// coins.
-//
-// CONTRACT: The account's coins, delegation coins, vesting coins, and delegated
-// vesting coins must be sorted.
+// trackDelegation -
 func (gva *GradedVestingAccount) trackDelegation(vestingCoins, amount sdk.Coins) {
 	bc := gva.GetCoins()
 
