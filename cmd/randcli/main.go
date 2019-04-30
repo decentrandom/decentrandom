@@ -15,6 +15,7 @@ import (
 	_ "github.com/decentrandom/decentrandom/client/lcd/statik"
 	"github.com/decentrandom/decentrandom/types/util"
 	"github.com/decentrandom/decentrandom/version"
+	"github.com/decentrandom/decentrandom/x/rand"
 	randClient "github.com/decentrandom/decentrandom/x/rand/client"
 	randrest "github.com/decentrandom/decentrandom/x/rand/client/rest"
 
@@ -60,7 +61,7 @@ func main() {
 		distClient.NewModuleClient(distcmd.StoreKey, cdc),
 		stakingClient.NewModuleClient(st.StoreKey, cdc),
 		slashingClient.NewModuleClient(sl.StoreKey, cdc),
-		randClient.NewModuleClient("rand", cdc),
+		randClient.NewModuleClient(rand.StoreKey, cdc),
 		crisisclient.NewModuleClient(sl.StoreKey, cdc),
 	}
 
