@@ -167,7 +167,7 @@ func registerRoutes(rs *lcd.RestServer) {
 	dist.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, distcmd.StoreKey)
 	staking.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
 	slashing.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, "rand")
+	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rand.StoreKey)
 }
 
 // registerSwaggerUI -
