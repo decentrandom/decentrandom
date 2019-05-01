@@ -93,7 +93,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		keyFeeCollection:        sdk.NewKVStoreKey(auth.FeeStoreKey),
 		keyParams:               sdk.NewKVStoreKey(params.StoreKey),
 		tkeyParams:              sdk.NewTransientStoreKey(params.TStoreKey),
-		keyRand:                 sdk.NewKVStoreKey("rand"),
+		keyRand:                 sdk.NewKVStoreKey(rand.StoreKey),
 	}
 
 	app.paramsKeeper = params.NewKeeper(
