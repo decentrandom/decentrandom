@@ -131,8 +131,6 @@ func AddCommands(
 	)
 }
 
-//___________________________________________________________________________________
-
 // InsertKeyJSON -
 func InsertKeyJSON(cdc *codec.Codec, baseJSON []byte, key string, value json.RawMessage) ([]byte, error) {
 	var jsonMap map[string]json.RawMessage
