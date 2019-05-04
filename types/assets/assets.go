@@ -2,7 +2,7 @@ package assets
 
 // nolint: golint
 const (
-	MicroRandDenom = "mrand"
+	MicroRandDenom = "urand"
 
 	MicroUnit = int64(1e6)
 )
