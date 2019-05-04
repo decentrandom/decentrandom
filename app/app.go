@@ -119,19 +119,26 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		bank.DefaultCodespace,
 	)
 
-	app.slashingKeeper = slashing.NewKeeper(
+	stakingKeeper := staking.NewKeeper(
 		app.cdc,
-		app.keySlashing,
-		&app.stakingKeeper, app.paramsKeeper.Subspace(slashing.DefaultParamspace),
-		slashing.DefaultCodespace,
+		app.keyStaking, app.tkeyStaking,
+		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
+		staking.DefaultCodespace,
 	)
 
 	app.distrKeeper = distr.NewKeeper(
 		app.cdc,
 		app.keyDistr,
 		app.paramsKeeper.Subspace(distr.DefaultParamspace),
-		app.bankKeeper, &app.stakingKeeper, app.feeCollectionKeeper,
+		app.bankKeeper, &stakingKeeper, app.feeCollectionKeeper,
 		distr.DefaultCodespace,
+	)
+
+	app.slashingKeeper = slashing.NewKeeper(
+		app.cdc,
+		app.keySlashing,
+		&stakingKeeper, app.paramsKeeper.Subspace(slashing.DefaultParamspace),
+		slashing.DefaultCodespace,
 	)
 
 	app.crisisKeeper = crisis.NewKeeper(
@@ -145,13 +152,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		app.bankKeeper,
 		app.keyRand,
 		app.cdc,
-	)
-
-	stakingKeeper := staking.NewKeeper(
-		app.cdc,
-		app.keyStaking, app.tkeyStaking,
-		app.bankKeeper, app.paramsKeeper.Subspace(staking.DefaultParamspace),
-		staking.DefaultCodespace,
 	)
 
 	app.stakingKeeper = *stakingKeeper.SetHooks(
@@ -182,7 +182,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 	app.MountStores(
 		app.keyMain, app.keyAccount, app.keyStaking, app.keyDistr,
 		app.keySlashing, app.keyFeeCollection, app.keyParams,
-		app.tkeyParams, app.tkeyStaking,
+		app.tkeyParams, app.tkeyStaking, app.tkeyDistr,
 		app.keyRand,
 	)
 
