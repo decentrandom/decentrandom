@@ -167,7 +167,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		AddRoute(staking.RouterKey, staking.NewHandler(app.stakingKeeper)).
 		AddRoute(distr.RouterKey, distr.NewHandler(app.distrKeeper)).
 		AddRoute(slashing.RouterKey, slashing.NewHandler(app.slashingKeeper)).
-		AddRoute("rand", rand.NewHandler(app.randKeeper)).
+		AddRoute(rand.RouterKey, rand.NewHandler(app.randKeeper)).
 		AddRoute(crisis.RouterKey, crisis.NewHandler(app.crisisKeeper))
 
 	// 쿼리 라우터 등록
