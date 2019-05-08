@@ -77,7 +77,7 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 
 	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val sdk.Validator) (stop bool) {
 
-		var error
+		var error sdk.Error
 
 		_, error = app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
 		return false
@@ -85,7 +85,7 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 
 	dels := app.stakingKeeper.GetAllDelegations(ctx)
 	for _, delegation := range dels {
-		var error
+		var error sdk.Error
 
 		_, error = app.distrKeeper.WithdrawDelegationRewards(ctx, delegation.DelegatorAddress, delegation.ValidatorAddress)
 	}
