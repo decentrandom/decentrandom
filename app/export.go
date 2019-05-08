@@ -77,17 +77,26 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 
 	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val sdk.Validator) (stop bool) {
 
-		var error sdk.Error
+		var err sdk.Error
 
-		_, error = app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+		_, err = app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		return false
 	})
 
 	dels := app.stakingKeeper.GetAllDelegations(ctx)
 	for _, delegation := range dels {
-		var error sdk.Error
+		var err sdk.Error
 
-		_, error = app.distrKeeper.WithdrawDelegationRewards(ctx, delegation.DelegatorAddress, delegation.ValidatorAddress)
+		_, err = app.distrKeeper.WithdrawDelegationRewards(ctx, delegation.DelegatorAddress, delegation.ValidatorAddress)
+
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	app.distrKeeper.DeleteAllValidatorSlashEvents(ctx)
