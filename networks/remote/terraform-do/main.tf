@@ -6,7 +6,7 @@ variable "DO_API_TOKEN" {
 
 variable "TESTNET_NAME" {
   description = "Name of the testnet"
-  default = "mssp_0001"
+  default = "mssp_0002"
 }
 
 variable "SSH_PRIVATE_FILE" {
