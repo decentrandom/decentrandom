@@ -21,7 +21,7 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 ## Building
 
-    make clean
+    make distclean
     make go-mod-cache
     make install
 
