@@ -45,7 +45,7 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:               "randd",
-		Short:             "DecentRandom Daemon (server)",
+		Short:             "DecentRandom 데몬",
 		PersistentPreRunE: randServer.PersistentPreRunEFn(ctx),
 	}
 
