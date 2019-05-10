@@ -67,7 +67,7 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:   "randcli",
-		Short: "Command line interface for interacting with randd",
+		Short: "DecentRandom 명령어 입력기",
 	}
 
 	rootCmd.PersistentFlags().String(client.FlagChainID, "", "Chain ID of tendermint node")
