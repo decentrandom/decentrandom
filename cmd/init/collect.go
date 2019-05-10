@@ -36,7 +36,7 @@ type initConfig struct {
 func CollectGenTxsCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "collect-gentxs",
-		Short: "Collect genesis txs and output a genesis.json file",
+		Short: "제네시스 트랜잭션을 모아 genesis.json 파일을 생성합니다",
 		RunE: func(_ *cobra.Command, _ []string) error {
 			config := ctx.Config
 			config.SetRoot(viper.GetString(cli.HomeFlag))
