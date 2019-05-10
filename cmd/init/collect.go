@@ -70,7 +70,7 @@ func CollectGenTxsCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "node's home directory")
+	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "노드의 홈 디렉토리")
 	cmd.Flags().String(flagGenTxDir, "",
 		"override default \"gentx\" directory from which collect and execute "+
 			"genesis transactions; default [--home]/config/gentx/")
