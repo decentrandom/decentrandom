@@ -70,6 +70,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				if err != nil {
 					panic(err)
 				}
+
 			} else {
 
 				scheduledTime = time.Now()
