@@ -64,8 +64,8 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			var scheduledTime time.Time
 			if args[3] != "" {
 				var err error
-				layout := "2014-09-12T11:45:26.371Z"
-				scheduledTime, err = time.Parse(layout, args[3])
+				// Sample : "2014-09-12T11:45:26.371Z"
+				scheduledTime, err = time.Parse(time.RFC3339, args[3])
 
 				if err != nil {
 					panic(err)
