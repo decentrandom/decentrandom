@@ -100,7 +100,7 @@ func main() {
 // queryCmd -
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	queryCmd := &cobra.Command{
-		Use:     "쿼리",
+		Use:     "query",
 		Aliases: []string{"q"},
 		Short:   "쿼리 하부 명령어",
 	}
