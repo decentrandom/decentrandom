@@ -73,9 +73,11 @@ build: update_randd_lite_docs
 ifeq ($(OS),Windows_NT)
 	go build $(BUILD_FLAGS) -o build/randd.exe ./cmd/randd
 	go build $(BUILD_FLAGS) -o build/randcli.exe ./cmd/randcli
+	go build $(BUILD_FLAGS) -o build/randkeyutil.exe ./cmd/randkeyutil
 else
 	go build $(BUILD_FLAGS) -o build/randd ./cmd/randd
 	go build $(BUILD_FLAGS) -o build/randcli ./cmd/randcli
+	go build $(BUILD_FLAGS) -o build/randkeyutil ./cmd/randkeyutil
 endif
 
 build-linux:
@@ -87,6 +89,7 @@ update_randd_lite_docs:
 install: update_randd_lite_docs
 	go install $(BUILD_FLAGS) ./cmd/randd
 	go install $(BUILD_FLAGS) ./cmd/randcli
+	go install $(BUILD_FLAGS) ./cmd/randkeyutil
 
 
 ########################################
