@@ -70,7 +70,7 @@ func main() {
 		client.NewCompletionCmd(rootCmd, true),
 	)
 
-	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultKeygenHome)
+	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
 		fmt.Printf("명령어 실행 실패 : %s, 종료합니다...\n", err)
