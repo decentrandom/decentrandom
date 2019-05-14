@@ -35,9 +35,8 @@ const (
 
 // 바이너리 경로
 var (
-	DefaultCLIHome    = os.ExpandEnv("$HOME/.randcli")
-	DefaultKeygenHome = os.ExpandEnv("$HOME/.randkeygen")
-	DefaultNodeHome   = os.ExpandEnv("$HOME/.randd")
+	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
+	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 )
 
 // RandApp 구조체
