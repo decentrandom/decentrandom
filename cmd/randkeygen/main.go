@@ -55,7 +55,7 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:   "randkeygen",
-		Short: "DecentRandom 주소 생성기",
+		Short: "DecentRandom Key Generator",
 	}
 
 	/*
