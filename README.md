@@ -1,5 +1,7 @@
 # DecentRandom
 
+**주의 : 테스트넷 베타로 이동하기 위해 현재 사용하지 않습니다.**
+
 P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 - [https://decentrandom.com](https://decentrandom.com)
