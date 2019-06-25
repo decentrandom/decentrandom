@@ -201,7 +201,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 	return app
 }
 
-// Query - 
+// Query -
 func (app *RandApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 
 	if req.Path == "/app/version" {
