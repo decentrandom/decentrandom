@@ -123,7 +123,7 @@ func NewGradedVestingAccount(baseAcc *auth.BaseAccount, vestingSchedules []Vesti
 	return &GradedVestingAccount{baseVestingAcc, vestingSchedules}
 }
 
-// GetSchedules -
+// GetVestingSchedules -
 func (gva GradedVestingAccount) GetVestingSchedules() []VestingSchedule {
 	return gva.VestingSchedules
 }
