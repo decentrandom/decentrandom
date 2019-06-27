@@ -115,14 +115,7 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// string 타입의 Nonce를 int16으로 변환
-			nonceInt64, errInt := strconv.ParseInt(args[1], 10, 64)
-			if errInt != nil {
-				return errInt
-			}
-			nonceInt16 := int16(nonceInt64)
-
-			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), nonceInt16)
+			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
