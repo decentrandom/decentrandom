@@ -50,7 +50,7 @@ func (r Round) String() string {
 	timeString := r.ScheduledTime.Local()
 	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
 Difficulty: %d
-Nonce: %d
+Nonce: %s
 NonceHash: %s
 Targets: %v
 ScheduledTime: %s
