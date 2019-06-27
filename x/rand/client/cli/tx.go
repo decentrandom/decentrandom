@@ -42,12 +42,12 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// string 타입의 난이도를 int16으로 변경
-			difficulty64, errConvert := strconv.ParseInt(args[0], 16, 16)
+			// string 타입의 난이도를 uint8으로 변경
+			difficulty64, errConvert := strconv.ParseInt(args[0], 8, 8)
 			if errConvert != nil {
 				panic(errConvert)
 			}
-			difficulty := int16(difficulty64)
+			difficulty := uint8(difficulty64)
 
 			// Nonce를 주소와 함께 SHA256으로 해시
 			hasher := tmhash.New()
