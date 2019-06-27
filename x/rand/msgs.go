@@ -17,7 +17,7 @@ type MsgNewRound struct {
 	ID            string
 	Difficulty    uint8
 	Owner         sdk.AccAddress
-	Nonce         int16
+	Nonce         string
 	NonceHash     string
 	Targets       []string
 	ScheduledTime time.Time
@@ -29,7 +29,7 @@ func NewMsgNewRound(id string, difficulty uint8, owner sdk.AccAddress, nonceHash
 		ID:            id,
 		Difficulty:    difficulty,
 		Owner:         owner,
-		Nonce:         0,
+		Nonce:         "",
 		NonceHash:     nonceHash,
 		Targets:       targets,
 		ScheduledTime: scheduledTime,
@@ -89,11 +89,11 @@ DeployNonce
 type MsgDeployNonce struct {
 	ID    string
 	Owner sdk.AccAddress
-	Nonce int16
+	Nonce string
 }
 
 // NewMsgDeployNonce - 라운드 논스 배포
-func NewMsgDeployNonce(id string, owner sdk.AccAddress, nonce int16) MsgDeployNonce {
+func NewMsgDeployNonce(id string, owner sdk.AccAddress, nonce string) MsgDeployNonce {
 	return MsgDeployNonce{
 		ID:    id,
 		Owner: owner,
