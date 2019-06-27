@@ -4,7 +4,6 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	cmn "github.com/tendermint/tendermint/libs/common"
 )
 
 // golint
@@ -20,8 +19,8 @@ const (
 type Round struct {
 	Difficulty    uint8          `json:"difficulty"`
 	Owner         sdk.AccAddress `json:"owner"`
-	Nonce         cmn.HexBytes   `json:"nonce"`
-	NonceHash     cmn.HexBytes   `json:"nonce_hash"`
+	Nonce         string         `json:"nonce"`
+	NonceHash     string         `json:"nonce_hash"`
 	Targets       []string       `json:"targets"`
 	ScheduledTime time.Time      `json:"scheduled_time"`
 }
