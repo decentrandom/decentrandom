@@ -15,7 +15,7 @@ NewRound
 // MsgNewRound - 신규 라운드 생성을 위한 msg 구조체
 type MsgNewRound struct {
 	ID            string
-	Difficulty    int16
+	Difficulty    uint8
 	Owner         sdk.AccAddress
 	Nonce         int16
 	NonceHash     string
@@ -24,7 +24,7 @@ type MsgNewRound struct {
 }
 
 // NewMsgNewRound - 초기이므로 Nonce는 0이고, SeedHeights는 빈 값
-func NewMsgNewRound(id string, difficulty int16, owner sdk.AccAddress, nonceHash string, targets []string, scheduledTime time.Time) MsgNewRound {
+func NewMsgNewRound(id string, difficulty uint8, owner sdk.AccAddress, nonceHash string, targets []string, scheduledTime time.Time) MsgNewRound {
 	return MsgNewRound{
 		ID:            id,
 		Difficulty:    difficulty,
