@@ -4,7 +4,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
-	cmn "github.com/tendermint/tendermint/libs/common"
 )
 
 // Keeper - struct 선언
@@ -67,7 +66,7 @@ func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 }
 
 // SetNonce - 라운드 Nonce setter
-func (k Keeper) SetNonce(ctx sdk.Context, id string, nonce cmn.HexBytes) {
+func (k Keeper) SetNonce(ctx sdk.Context, id string, nonce string) {
 	round := k.GetRound(ctx, id)
 	round.Nonce = nonce
 	k.SetRound(ctx, id, round)
