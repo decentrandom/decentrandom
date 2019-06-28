@@ -21,7 +21,9 @@ import (
 	"github.com/tendermint/tendermint/crypto/tmhash"
 )
 
+/*
 type hashItem []byte
+*/
 
 func (hI hashItem) Hash() []byte {
 	return []byte(hI)
@@ -52,7 +54,10 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			// Nonce를 해시
 			hasher := tmhash.New()
 			nonceVector := []byte(args[1])
-			hasher.Write(nonceVector)
+			_, hashError := hasher.Write(nonceVector)
+			if hashError != nil {
+				return hashError
+			}
 			bz := tmhash.Sum(nonceVector)
 			nonceHash := hex.EncodeToString(bz)
 
