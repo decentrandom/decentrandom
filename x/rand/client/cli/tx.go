@@ -25,9 +25,11 @@ import (
 type hashItem []byte
 */
 
+/*
 func (hI hashItem) Hash() []byte {
 	return []byte(hI)
 }
+*/
 
 // GetCmdNewRound - 신규 라운드 생성
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
