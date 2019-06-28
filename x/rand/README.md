@@ -11,3 +11,10 @@
 - SetTargets
 - SetNonce
 - GetIDsIterator
+
+## Msgs
+
+- NewMsgNewRound
+- NewMsgDeployNonce
+- NewMsgAddTargets
+- NewMsgRemoveTargets
