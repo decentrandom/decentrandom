@@ -50,7 +50,7 @@ func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string)
 // newRoundReq - 라운드 생성 요청 구조체
 type newRoundReq struct {
 	BaseReq       rest.BaseReq `json:"base_req"`
-	Difficulty    int16        `json:"difficulty"`
+	Difficulty    uint8        `json:"difficulty"`
 	NonceHash     string       `json:"nonce_hash"`
 	ID            string       `json:"id"`
 	Owner         string       `json:"owner"`
@@ -94,7 +94,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 // deployNonceReq - Nonce 배포 구조체
 type deployNonceReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
-	Nonce   int16        `json:"nonce"`
+	Nonce   string       `json:"nonce"`
 	ID      string       `json:"id"`
 	Owner   string       `json:"owner"`
 }
