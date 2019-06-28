@@ -18,3 +18,10 @@
 - NewMsgDeployNonce
 - NewMsgAddTargets
 - NewMsgRemoveTargets
+
+## Handler
+
+- handleMsgNewRound
+- handleMsgDeployNonce
+- handleMsgAddTargets
+- handleMsgRemoveTargets
