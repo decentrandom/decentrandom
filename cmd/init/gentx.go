@@ -196,7 +196,10 @@ following delegation and commission default parameters:
 	cmd.Flags().AddFlagSet(cli.FsMinSelfDelegation)
 	cmd.Flags().AddFlagSet(cli.FsAmount)
 	cmd.Flags().AddFlagSet(cli.FsPk)
-	cmd.MarkFlagRequired(client.FlagName)
+	err := cmd.MarkFlagRequired(client.FlagName)
+	if err != nil {
+		panic(err)
+	}
 	return cmd
 }
 
