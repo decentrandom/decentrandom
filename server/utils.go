@@ -77,7 +77,7 @@ func interceptLoadConfig() (conf *cfg.Config, err error) {
 	}
 
 	if conf == nil {
-		conf, err = tcmd.ParseConfig()
+		conf, _ = tcmd.ParseConfig()
 	}
 
 	randConfigFilePath := filepath.Join(rootDir, "config/randd.toml")
