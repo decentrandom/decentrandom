@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	//"github.com/decentrandom/decentrandom/types/assets"
 	"io"
 	"os"
 	"sort"
@@ -17,6 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
+	"github.com/cosmos/cosmos-sdk/x/mint"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
@@ -55,6 +57,7 @@ type RandApp struct {
 	keyDistr         *sdk.KVStoreKey
 	tkeyDistr        *sdk.TransientStoreKey
 	keyFeeCollection *sdk.KVStoreKey
+	keyMint          *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 	keyRand          *sdk.KVStoreKey
@@ -67,6 +70,7 @@ type RandApp struct {
 	stakingKeeper       staking.Keeper
 	slashingKeeper      slashing.Keeper
 	distrKeeper         distr.Keeper
+	mintKeeper          mint.Keeper
 	paramsKeeper        params.Keeper
 	randKeeper          rand.Keeper
 }
@@ -91,6 +95,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		keyDistr:                sdk.NewKVStoreKey(distr.StoreKey),
 		tkeyDistr:               sdk.NewTransientStoreKey(distr.TStoreKey),
 		keyFeeCollection:        sdk.NewKVStoreKey(auth.FeeStoreKey),
+		keyMint:                 sdk.NewKVStoreKey(mint.StoreKey),
 		keyParams:               sdk.NewKVStoreKey(params.StoreKey),
 		tkeyParams:              sdk.NewTransientStoreKey(params.TStoreKey),
 		keyRand:                 sdk.NewKVStoreKey(rand.StoreKey),
@@ -148,6 +153,14 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		app.feeCollectionKeeper,
 	)
 
+	app.mintKeeper = mint.NewKeeper(
+		app.cdc,
+		app.keyMint,
+		app.paramsKeeper.Subspace(mint.DefaultParamspace),
+		stakingKeeper,
+		app.feeCollectionKeeper,
+	)
+
 	app.randKeeper = rand.NewKeeper(
 		app.bankKeeper,
 		app.keyRand,
@@ -182,7 +195,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 	app.MountStores(
 		app.keyMain, app.keyAccount, app.keyStaking, app.keyDistr,
 		app.keySlashing, app.keyFeeCollection, app.keyParams,
-		app.tkeyParams, app.tkeyStaking, app.tkeyDistr,
+		app.tkeyParams, app.tkeyStaking, app.tkeyDistr, app.keyMint,
 		app.keyRand,
 	)
 
@@ -218,6 +231,7 @@ func (app *RandApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 // MakeCodec - 커스텀 TX 코덱
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
+
 	bank.RegisterCodec(cdc)
 	staking.RegisterCodec(cdc)
 	distr.RegisterCodec(cdc)
@@ -228,6 +242,7 @@ func MakeCodec() *codec.Codec {
 	crisis.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
+
 	return cdc
 }
 
