@@ -44,8 +44,6 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/decentrandom/cosmos-sdk v0.35.0 h1:4sIOYPwQFxz6qeaZ9F9bQuPyTB/49AeibqwRS3vox9k=
 github.com/decentrandom/cosmos-sdk v0.35.0/go.mod h1:ruF+G4D7hRf34uzZQvf/SIja9fsIThU5D7GirwTMQ9I=
-github.com/decentrandom/tendermint v0.31.7 h1:NmEzMr5DyB9lAjG9TqjIMXMGhdhcCHde6EoJomIfWog=
-github.com/decentrandom/tendermint v0.31.7/go.mod h1:cZitn3xrv5FGClwRvCJiIlUQDnSYujMPAgje8q8ukMk=
 github.com/etcd-io/bbolt v1.3.3 h1:gSJmxrs37LgTqR/oyJBWok6k6SvXEUerFTbltIhXkBM=
 github.com/etcd-io/bbolt v1.3.3/go.mod h1:ZF2nL25h33cCyBtcyWeZ2/I3HQOfTP+0PIEvHjkjCrw=
 github.com/fortytw2/leaktest v1.3.0 h1:u8491cBMTQ8ft8aeV+adlcytMZylmA5nnwwkRZjI8vw=
