@@ -4,7 +4,7 @@
 ### The shell scripts in this folder are example uses of the targets.
 
 # Name of the testnet. Used in chain-id.
-TESTNET_NAME?=mssp_0002
+TESTNET_NAME?=randtest_0001
 
 # Name of the servers grouped together for management purposes. Used in tagging the servers in the cloud.
 CLUSTER_NAME?=$(TESTNET_NAME)
