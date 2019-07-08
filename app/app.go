@@ -297,8 +297,6 @@ func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 		panic(err)
 	}
 
-	fmt.Errorf("yes")
-
 	if len(genesisState.GenTxs) > 0 {
 		for _, genTx := range genesisState.GenTxs {
 			var tx auth.StdTx
