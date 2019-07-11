@@ -36,8 +36,7 @@ var (
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 	// ModuleBasicManager is in charge of setting up basic module elemnets
-	ModuleBasics = module.NewBasicManager(
-		genaccounts.AppModuleBasic{},
+	ModuleBasics = sdk.ModuleBasicManager(genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		bank.AppModuleBasic{},
