@@ -13,7 +13,7 @@ import (
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 
 	app "github.com/decentrandom/decentrandom"
-	randtypes "github.com/decentrandom/decentrandom/type/util"
+	randtypes "github.com/decentrandom/decentrandom/types/util"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
