@@ -11,6 +11,7 @@
 - SetTargets
 - SetNonce
 - GetIDsIterator
+- GetHeightsIterator
 - SetSeeds
 
 ## Msgs
