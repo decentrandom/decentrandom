@@ -1,7 +1,7 @@
 package types
 
 const (
-	// module name
+	// ModuleName -
 	ModuleName = "rand"
 
 	// StoreKey to be used when creating the KVStore
