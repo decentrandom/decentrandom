@@ -13,6 +13,7 @@ import (
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
@@ -35,12 +36,13 @@ var (
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 	// ModuleBasicManager is in charge of setting up basic module elemnets
-	ModuleBasics = sdk.ModuleBasicManager(genaccounts.AppModuleBasic{},
+	ModuleBasics = module.NewBasicManager(
+		genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		bank.AppModuleBasic{},
 		params.AppModuleBasic{},
-		nameservice.AppModule{},
+		rand.AppModule{},
 		staking.AppModuleBasic{},
 		distr.AppModuleBasic{},
 		slashing.AppModuleBasic{},
@@ -81,10 +83,10 @@ type randApp struct {
 	distrKeeper         distr.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
-	nsKeeper            nameservice.Keeper
+	randKeeper          rand.Keeper
 
 	// Module Manager
-	mm *sdk.Manager
+	mm *module.Manager
 }
 
 // NewRandApp is a constructor function for randApp
