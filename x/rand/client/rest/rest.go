@@ -8,15 +8,16 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
-	clientrest "github.com/cosmos/cosmos-sdk/client/rest"
+	"github.com/decentrandom/decentrandom/x/rand/types"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/decentrandom/decentrandom/x/rand"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 )
 
 const (
-	restRound = "round"
+	restName = "round"
 )
 
 // RegisterRoutes -
@@ -86,7 +87,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
@@ -128,7 +129,7 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
 		//clientrest.CompleteAndBroadcastTxREST(w, cliCtx, baseReq, []sdk.Msg{msg}, cdc)
 
 	}
@@ -171,7 +172,7 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
@@ -213,7 +214,7 @@ func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
