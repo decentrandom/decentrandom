@@ -11,8 +11,11 @@ func init() {
 	RegisterCodec(ModuleCdc)
 }
 
-// RegisterCodec registers concrete types on the Amino codec
+// RegisterCodec - Amino를 위한 concrete codec 등록
 func RegisterCodec(cdc *codec.Codec) {
-	//cdc.RegisterConcrete(MsgSetName{}, "nameservice/SetName", nil)
-	//cdc.RegisterConcrete(MsgBuyName{}, "nameservice/BuyName", nil)
+
+	cdc.RegisterConcrete(MsgNewRound{}, "rand/NewRound", nil)
+	cdc.RegisterConcrete(MsgDeployNonce{}, "rand/DeployNonce", nil)
+	cdc.RegisterConcrete(MsgAddTargets{}, "rand/AddTargets", nil)
+	cdc.RegisterConcrete(MsgRemoveTargets{}, "rand/RemoveTargets", nil)
 }
