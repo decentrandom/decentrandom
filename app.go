@@ -22,6 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+	"github.com/cosmos/cosmos-sdk/x/supply"
 
 	"github.com/decentrandom/decentrandom/x/rand"
 )
@@ -46,6 +47,7 @@ var (
 		staking.AppModuleBasic{},
 		distr.AppModuleBasic{},
 		slashing.AppModuleBasic{},
+		supply.AppModuleBasic{},
 	)
 )
 
@@ -74,6 +76,7 @@ type randApp struct {
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 	keySlashing      *sdk.KVStoreKey
+	keySupply        *sdk.KVStoreKey
 
 	// Keepers
 	accountKeeper  auth.AccountKeeper
@@ -84,6 +87,7 @@ type randApp struct {
 	//feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper params.Keeper
 	randKeeper   rand.Keeper
+	supplyKeeper supply.Keeper
 
 	// Module Manager
 	mm *module.Manager
@@ -151,6 +155,15 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.bankKeeper,
 		stakingSubspace,
 		staking.DefaultCodespace,
+	)
+
+	app.supplyKeeper = supply.NewKeeper(
+		app.cdc,
+		app.keySupply,
+		// to-do : AccountKeeper,
+		app.bankKeeper,
+		supply.DefaultCodespace,
+		_,
 	)
 
 	// Changed
