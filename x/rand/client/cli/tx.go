@@ -9,8 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/decentrandom/decentrandom/x/rand"
+	"github.com/decentrandom/decentrandom/x/rand/types"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,6 +31,26 @@ func (hI hashItem) Hash() []byte {
 	return []byte(hI)
 }
 */
+
+// GetTxCmd -
+func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
+	randTxCmd := &cobra.Command{
+		Use:                        types.ModuleName,
+		Short:                      "Rand transaction subcommands",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	randTxCmd.AddCommand(client.PostCommands(
+		GetCmdNewRound(cdc),
+		GetCmdDeployNonce(cdc),
+		GetCmdAddTargets(cdc),
+		GetCmdRemoveTargets(cdc),
+	)...)
+
+	return randTxCmd
+}
 
 // GetCmdNewRound - 신규 라운드 생성
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
@@ -93,7 +114,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
-			msg := rand.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
+			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
 				return errValidate
@@ -122,7 +143,7 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
+			msg := types.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -158,7 +179,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := types.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -190,7 +211,7 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := types.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 
 			err := msg.ValidateBasic()
 			if err != nil {
