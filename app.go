@@ -76,14 +76,14 @@ type randApp struct {
 	keySlashing      *sdk.KVStoreKey
 
 	// Keepers
-	accountKeeper       auth.AccountKeeper
-	bankKeeper          bank.Keeper
-	stakingKeeper       staking.Keeper
-	slashingKeeper      slashing.Keeper
-	distrKeeper         distr.Keeper
-	feeCollectionKeeper auth.FeeCollectionKeeper
-	paramsKeeper        params.Keeper
-	randKeeper          rand.Keeper
+	accountKeeper  auth.AccountKeeper
+	bankKeeper     bank.Keeper
+	stakingKeeper  staking.Keeper
+	slashingKeeper slashing.Keeper
+	distrKeeper    distr.Keeper
+	//feeCollectionKeeper auth.FeeCollectionKeeper
+	paramsKeeper params.Keeper
+	randKeeper   rand.Keeper
 
 	// Module Manager
 	mm *module.Manager
@@ -103,17 +103,17 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		BaseApp: bApp,
 		cdc:     cdc,
 
-		keyMain:          sdk.NewKVStoreKey(bam.MainStoreKey),
-		keyAccount:       sdk.NewKVStoreKey(auth.StoreKey),
-		keyFeeCollection: sdk.NewKVStoreKey(auth.FeeStoreKey),
-		keyStaking:       sdk.NewKVStoreKey(staking.StoreKey),
-		tkeyStaking:      sdk.NewTransientStoreKey(staking.TStoreKey),
-		keyDistr:         sdk.NewKVStoreKey(distr.StoreKey),
-		tkeyDistr:        sdk.NewTransientStoreKey(distr.TStoreKey),
-		keyRand:          sdk.NewKVStoreKey(rand.StoreKey),
-		keyParams:        sdk.NewKVStoreKey(params.StoreKey),
-		tkeyParams:       sdk.NewTransientStoreKey(params.TStoreKey),
-		keySlashing:      sdk.NewKVStoreKey(slashing.StoreKey),
+		keyMain:    sdk.NewKVStoreKey(bam.MainStoreKey),
+		keyAccount: sdk.NewKVStoreKey(auth.StoreKey),
+		//keyFeeCollection: sdk.NewKVStoreKey(auth.FeeStoreKey),
+		keyStaking:  sdk.NewKVStoreKey(staking.StoreKey),
+		tkeyStaking: sdk.NewTransientStoreKey(staking.TStoreKey),
+		keyDistr:    sdk.NewKVStoreKey(distr.StoreKey),
+		tkeyDistr:   sdk.NewTransientStoreKey(distr.TStoreKey),
+		keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
+		keyParams:   sdk.NewKVStoreKey(params.StoreKey),
+		tkeyParams:  sdk.NewTransientStoreKey(params.TStoreKey),
+		keySlashing: sdk.NewKVStoreKey(slashing.StoreKey),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
@@ -141,7 +141,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	)
 
 	// The FeeCollectionKeeper collects transaction fees and renders them to the fee distribution module
-	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
+	//app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
 
 	// The staking keeper
 	stakingKeeper := staking.NewKeeper(
@@ -153,14 +153,15 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		staking.DefaultCodespace,
 	)
 
+	// Changed
 	app.distrKeeper = distr.NewKeeper(
 		app.cdc,
 		app.keyDistr,
 		distrSubspace,
-		app.bankKeeper,
 		&stakingKeeper,
-		app.feeCollectionKeeper,
+		// To-do : Supply Keeper
 		distr.DefaultCodespace,
+		keyFeeCollection,
 	)
 
 	app.slashingKeeper = slashing.NewKeeper(
