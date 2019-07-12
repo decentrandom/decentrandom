@@ -5,11 +5,28 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/decentrandom/decentrandom/x/rand"
+	"github.com/decentrandom/decentrandom/x/rand/types"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 )
+
+// GetQueryCmd -
+func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
+	randQueryCmd := &cobra.Command{
+		Use:                        types.ModuleName,
+		Short:                      "Querying commands for the rand module",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+	randQueryCmd.AddCommand(client.GetCommands(
+		GetCmdRoundInfo(storeKey, cdc),
+		GetCmdRoundIDs(storeKey, cdc),
+	)...)
+	return randQueryCmd
+}
 
 // GetCmdRoundInfo - 라운드 정보
 func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
@@ -21,13 +38,13 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			id := args[0]
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", queryRoute, id), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", queryRoute, id), nil)
 			if err != nil {
 				fmt.Printf("ID %s에 해당하는 라운드 정보를 받아오지 못했습니다. \n", string(id))
 				return nil
 			}
 
-			var out rand.Round
+			var out types.Round
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
@@ -42,13 +59,13 @@ func GetCmdRoundIDs(queryRoute string, cdc *codec.Codec) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", queryRoute), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", queryRoute), nil)
 			if err != nil {
 				fmt.Printf("라운드 ID 내역을 받아오지 못했습니다.\n")
 				return nil
 			}
 
-			var out rand.QueryResRoundIDs
+			var out types.QueryResRoundIDs
 			cdc.MustUnmarshalJSON(res, &out)
 
 			return cliCtx.PrintOutput(out)
