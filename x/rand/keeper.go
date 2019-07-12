@@ -9,13 +9,11 @@ import (
 // Keeper - struct 선언
 type Keeper struct {
 	coinKeeper bank.Keeper
-
-	storeKey sdk.StoreKey
-
-	cdc *codec.Codec
+	storeKey   sdk.StoreKey
+	cdc        *codec.Codec
 }
 
-// NewKeeper - keeper 생성
+// NewKeeper - cerates new instances of the rand Keeper
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		coinKeeper: coinKeeper,
@@ -24,7 +22,7 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 	}
 }
 
-// SetRound - 라운드 setter
+// SetRound - round setter
 func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	if len(id) == 0 || round.Owner.Empty() {
 		return
@@ -34,7 +32,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	store.Set([]byte(id), k.cdc.MustMarshalBinaryBare(round))
 }
 
-// GetRound - 라운드 getter
+// GetRound - round getter
 func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	store := ctx.KVStore(k.storeKey)
 	var round Round
@@ -48,32 +46,43 @@ func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	return round
 }
 
-// GetOwner - 라운드 소유자 getter
+// GetOwner - gets the owner
 func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
 	return k.GetRound(ctx, id).Owner
 }
 
-// GetTargets - 라운드 모집단 getter
+// GetTargets - gets targets
 func (k Keeper) GetTargets(ctx sdk.Context, id string) []string {
 	return k.GetRound(ctx, id).Targets
 }
 
-// SetTargets - 라운드 모집단 setter
+// SetTargets - sets targets
 func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	round := k.GetRound(ctx, id)
 	round.Targets = targets
 	k.SetRound(ctx, id, round)
 }
 
-// SetNonce - 라운드 Nonce setter
+// SetNonce - sets the nonce
 func (k Keeper) SetNonce(ctx sdk.Context, id string, nonce string) {
 	round := k.GetRound(ctx, id)
 	round.Nonce = nonce
 	k.SetRound(ctx, id, round)
 }
 
-// GetIDsIterator - 전체 라운드 ID getter
+// SetSeeds - sets seeds
+func (k Keeper) SetSeeds(ctx sdk.Context, height int64, seeds []string, sealedSeeds []string) {
+	// to-do
+}
+
+// GetIDsIterator - get an iterator over all rounds
 func (k Keeper) GetIDsIterator(ctx sdk.Context) sdk.Iterator {
+	store := ctx.KVStore(k.storeKey)
+	return sdk.KVStorePrefixIterator(store, []byte{})
+}
+
+// GetHeightsIterator - get an iterator over all heights
+func (k Keeper) GetHeightsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return sdk.KVStorePrefixIterator(store, []byte{})
 }
