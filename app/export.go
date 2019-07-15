@@ -54,7 +54,7 @@ func (app *RandApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteLis
 	return appState, validators, nil
 }
 
-// prepForZeroHeightGenesis - 높이 0의 제네시스
+// prepForZeroHeightGenesis -
 func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []string) {
 
 	applyWhiteList := false
