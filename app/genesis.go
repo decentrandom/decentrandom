@@ -58,7 +58,7 @@ func NewGenesisState(accounts []GenesisAccount,
 	}
 }
 
-// Sanitize - 계정과 코인 정보 정렬
+// Sanitize -
 func (gs GenesisState) Sanitize() {
 	sort.Slice(gs.Accounts, func(i, j int) bool {
 		return gs.Accounts[i].AccountNumber < gs.Accounts[j].AccountNumber
@@ -69,7 +69,7 @@ func (gs GenesisState) Sanitize() {
 	}
 }
 
-// GenesisAccount - 제네시스 계정 구조체
+// GenesisAccount -
 type GenesisAccount struct {
 	Address       sdk.AccAddress `json:"address"`
 	Coins         sdk.Coins      `json:"coins"`
@@ -117,7 +117,7 @@ func NewGenesisAccountI(acc auth.Account) GenesisAccount {
 	return gacc
 }
 
-// ToAccount - 제네시스 계정은 baseAccount로 변환
+// ToAccount -
 func (ga *GenesisAccount) ToAccount() auth.Account {
 	bacc := &auth.BaseAccount{
 		Address:       ga.Address,
@@ -163,7 +163,6 @@ func RandAppGenState(cdc *codec.Codec, genDoc tmtypes.GenesisDoc, appGenTxs []js
 		return genesisState, err
 	}
 
-	// GenTX가 없는 경우
 	if len(appGenTxs) == 0 {
 		return genesisState, errors.New("there must be at least one genesis tx")
 	}
@@ -348,7 +347,6 @@ func CollectStdTxs(cdc *codec.Codec, moniker string, genTxsDir string, genDoc tm
 		}
 		appGenTxs = append(appGenTxs, genStdTx)
 
-		// memo flag에 노드 정보 저장
 		nodeAddrIP := genStdTx.GetMemo()
 		if len(nodeAddrIP) == 0 {
 			return appGenTxs, persistentPeers, fmt.Errorf(
