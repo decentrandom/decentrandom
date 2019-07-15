@@ -4,82 +4,91 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/x/genaccounts"
-	genaccscli "github.com/cosmos/cosmos-sdk/x/genaccounts/client/cli"
-	"github.com/cosmos/cosmos-sdk/x/staking"
-
 	"github.com/spf13/cobra"
-	"github.com/tendermint/tendermint/libs/cli"
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/spf13/viper"
 
+	"github.com/decentrandom/decentrandom/app"
+	randInit "github.com/decentrandom/decentrandom/cmd/init"
+	randServer "github.com/decentrandom/decentrandom/server"
+	"github.com/decentrandom/decentrandom/types/util"
+
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/server"
+	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
-
-	app "github.com/decentrandom/decentrandom"
-	randtypes "github.com/decentrandom/decentrandom/types/util"
 
 	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/cli"
 	dbm "github.com/tendermint/tendermint/libs/db"
+	"github.com/tendermint/tendermint/libs/log"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
+const flagAssertInvariantsBlockly = "assert-invariants-blockly"
+
+var assertInvariantsBlockly bool
+
+// main -
 func main() {
 	cobra.EnableCommandSorting = false
 
 	cdc := app.MakeCodec()
 
 	config := sdk.GetConfig()
-	config.SetBech32PrefixForAccount(randtypes.Bech32PrefixAccAddr, randtypes.Bech32PrefixAccPub)
-	config.SetBech32PrefixForValidator(randtypes.Bech32PrefixValAddr, randtypes.Bech32PrefixValPub)
-	config.SetBech32PrefixForConsensusNode(randtypes.Bech32PrefixConsAddr, randtypes.Bech32PrefixConsPub)
+	config.SetBech32PrefixForAccount(util.Bech32PrefixAccAddr, util.Bech32PrefixAccPub)
+	config.SetBech32PrefixForValidator(util.Bech32PrefixValAddr, util.Bech32PrefixValPub)
+	config.SetBech32PrefixForConsensusNode(util.Bech32PrefixConsAddr, util.Bech32PrefixConsPub)
 	config.Seal()
 
 	ctx := server.NewDefaultContext()
 
 	rootCmd := &cobra.Command{
 		Use:               "randd",
-		Short:             "decentrandom App Daemon (server)",
-		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
+		Short:             "DecentRandom 데몬",
+		PersistentPreRunE: randServer.PersistentPreRunEFn(ctx),
 	}
-	// CLI commands to initialize the chain
-	rootCmd.AddCommand(
-		genutilcli.InitCmd(ctx, cdc, app.ModuleBasics, app.DefaultNodeHome),
-		genutilcli.CollectGenTxsCmd(ctx, cdc, genaccounts.AppModuleBasic{}, app.DefaultNodeHome),
-		genutilcli.GenTxCmd(ctx, cdc, app.ModuleBasics, staking.AppModuleBasic{}, genaccounts.AppModuleBasic{}, app.DefaultNodeHome, app.DefaultCLIHome),
-		genutilcli.ValidateGenesisCmd(ctx, cdc, app.ModuleBasics),
-		// AddGenesisAccountCmd allows users to add accounts to the genesis file
-		genaccscli.AddGenesisAccountCmd(ctx, cdc, app.DefaultNodeHome, app.DefaultCLIHome),
-	)
+
+	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.CollectGenTxsCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.TestnetFilesCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc))
+	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
+	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 
 	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
 
-	// prepare and add flags
-	executor := cli.PrepareBaseCmd(rootCmd, "Rand", app.DefaultNodeHome)
+	executor := cli.PrepareBaseCmd(rootCmd, "DR", app.DefaultNodeHome)
+	rootCmd.PersistentFlags().BoolVar(&assertInvariantsBlockly, flagAssertInvariantsBlockly,
+		false, "Assert registered invariants on a blockly basis")
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
 	}
 }
 
+// newApp -
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
-	return app.NewRandApp(logger, db)
+	return app.NewRandApp(
+		logger, db, traceStore, true, assertInvariantsBlockly,
+		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
+		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)),
+	)
 }
 
+// exportAppStateAndTMValidators -
 func exportAppStateAndTMValidators(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
-
 	if height != -1 {
-		randApp := app.NewRandApp(logger, db)
-		err := randApp.LoadHeight(height)
+		rApp := app.NewRandApp(logger, db, traceStore, false, false)
+		err := rApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
 		}
-		return randApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
+		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-
-	randApp := app.NewRandApp(logger, db)
-
-	return randApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
+	rApp := app.NewRandApp(logger, db, traceStore, true, false)
+	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }

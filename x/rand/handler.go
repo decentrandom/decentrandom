@@ -23,11 +23,8 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgRemoveTargets:
 			return handleMsgRemoveTargets(ctx, keeper, msg)
 
-		case MsgDeploySeeds:
-			return handleMsgDeploySeeds(ctx, keeper, msg)
-
 		default:
-			errMsg := fmt.Sprintf("unknown rand msg type: %v", msg.Type())
+			errMsg := fmt.Sprintf("알 수 없는 rand Msg 형식: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}
@@ -109,13 +106,5 @@ func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets
 	}
 
 	keeper.SetTargets(ctx, msg.ID, updateTargets)
-	return sdk.Result{}
-}
-
-// handleMsgDeploySeeds -
-func handleMsgDeploySeeds(ctx sdk.Context, keeper Keeper, msg MsgDeploySeeds) sdk.Result {
-
-	// To-do
-
 	return sdk.Result{}
 }

@@ -1,0 +1,9 @@
+---
+
+- name: systemctl
+  systemd: name=randcli enabled=yes daemon_reload=yes
+
+- name: restart randcli
+  service: name=randcli state=restarted
+
+

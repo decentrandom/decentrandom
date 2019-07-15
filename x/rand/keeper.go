@@ -9,11 +9,13 @@ import (
 // Keeper - struct 선언
 type Keeper struct {
 	coinKeeper bank.Keeper
-	storeKey   sdk.StoreKey
-	cdc        *codec.Codec
+
+	storeKey sdk.StoreKey
+
+	cdc *codec.Codec
 }
 
-// NewKeeper - cerates new instances of the rand Keeper
+// NewKeeper - keeper 생성
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		coinKeeper: coinKeeper,
@@ -22,7 +24,7 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 	}
 }
 
-// SetRound - round setter
+// SetRound - 라운드 setter
 func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	if len(id) == 0 || round.Owner.Empty() {
 		return
@@ -32,7 +34,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	store.Set([]byte(id), k.cdc.MustMarshalBinaryBare(round))
 }
 
-// GetRound - round getter
+// GetRound - 라운드 getter
 func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	store := ctx.KVStore(k.storeKey)
 	var round Round
@@ -46,43 +48,32 @@ func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	return round
 }
 
-// GetOwner - gets the owner
+// GetOwner - 라운드 소유자 getter
 func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
 	return k.GetRound(ctx, id).Owner
 }
 
-// GetTargets - gets targets
+// GetTargets - 라운드 모집단 getter
 func (k Keeper) GetTargets(ctx sdk.Context, id string) []string {
 	return k.GetRound(ctx, id).Targets
 }
 
-// SetTargets - sets targets
+// SetTargets - 라운드 모집단 setter
 func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	round := k.GetRound(ctx, id)
 	round.Targets = targets
 	k.SetRound(ctx, id, round)
 }
 
-// SetNonce - sets the nonce
+// SetNonce - 라운드 Nonce setter
 func (k Keeper) SetNonce(ctx sdk.Context, id string, nonce string) {
 	round := k.GetRound(ctx, id)
 	round.Nonce = nonce
 	k.SetRound(ctx, id, round)
 }
 
-// SetSeeds - sets seeds
-func (k Keeper) SetSeeds(ctx sdk.Context, height int64, seeds []string, sealedSeeds []string) {
-	// to-do
-}
-
-// GetIDsIterator - get an iterator over all rounds
+// GetIDsIterator - 전체 라운드 ID getter
 func (k Keeper) GetIDsIterator(ctx sdk.Context) sdk.Iterator {
-	store := ctx.KVStore(k.storeKey)
-	return sdk.KVStorePrefixIterator(store, []byte{})
-}
-
-// GetHeightsIterator - get an iterator over all heights
-func (k Keeper) GetHeightsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return sdk.KVStorePrefixIterator(store, []byte{})
 }

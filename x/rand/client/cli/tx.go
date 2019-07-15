@@ -9,14 +9,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/decentrandom/decentrandom/x/rand/types"
+	"github.com/decentrandom/decentrandom/x/rand"
 
-	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 
 	"github.com/tendermint/tendermint/crypto/merkle"
 	"github.com/tendermint/tendermint/crypto/tmhash"
@@ -32,26 +31,6 @@ func (hI hashItem) Hash() []byte {
 }
 */
 
-// GetTxCmd -
-func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
-	randTxCmd := &cobra.Command{
-		Use:                        types.ModuleName,
-		Short:                      "Rand transaction subcommands",
-		DisableFlagParsing:         true,
-		SuggestionsMinimumDistance: 2,
-		RunE:                       client.ValidateCmd,
-	}
-
-	randTxCmd.AddCommand(client.PostCommands(
-		GetCmdNewRound(cdc),
-		GetCmdDeployNonce(cdc),
-		GetCmdAddTargets(cdc),
-		GetCmdRemoveTargets(cdc),
-	)...)
-
-	return randTxCmd
-}
-
 // GetCmdNewRound - 신규 라운드 생성
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
@@ -59,10 +38,9 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 		Short: "신규 라운드 생성을 위한 명령어입니다. 날짜는 yyyy-mm-ddThh:mm:ss.iiiZ 형식으로 기입해야 합니다.",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			//cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
@@ -115,7 +93,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
-			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
+			msg := rand.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
 				return errValidate
@@ -136,16 +114,15 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 		Short: "논스를 배포하기 위한 명령어 입니다. 라운드 소유자만 실행할 수 있습니다.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
 
-			msg := types.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
+			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -169,10 +146,9 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 		Short: "모집단 입력을 위한 명령어입니다. 라운드 소유자만 실행할 수 있습니다.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
@@ -182,7 +158,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := types.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
@@ -202,10 +178,9 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 		Short: "기 입력된 모집단을 삭제하기 위한 명령어입니다. 라운드 소유자만 실행할 수 있습니다.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
@@ -215,7 +190,7 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := types.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 
 			err := msg.ValidateBasic()
 			if err != nil {
