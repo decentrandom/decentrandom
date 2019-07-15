@@ -2,20 +2,20 @@ package types
 
 import "strings"
 
-// QueryResResolve -
-type QueryResResolve struct {
+// QueryResRoundIDs -
+type QueryResRoundIDs struct {
 	Value string `json:"value"`
 }
 
 // implement fmt.Stringer
-func (r QueryResResolve) String() string {
+func (r QueryResRoundIDs) String() string {
 	return r.Value
 }
 
-// QueryResNames -
-type QueryResNames []string
+// QueryRoundInfo -
+type QueryRoundInfo []string
 
 // implement fmt.Stringer
-func (n QueryResNames) String() string {
+func (n QueryRoundInfo) String() string {
 	return strings.Join(n[:], "\n")
 }
