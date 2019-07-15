@@ -54,10 +54,12 @@ type (
 	// MsgDeploySeeds -
 	MsgDeploySeeds = types.MsgDeploySeeds
 
-	// QueryResResolve -
-	QueryResResolve = types.QueryResResolve
+	// QueryResRoundIDs -
+	QueryResRoundIDs = types.QueryResRoundIDs
 
-	// QueryResNames -
-	QueryResNames = types.QueryResNames
-	Whois         = types.Whois
+	// QueryRoundInfo -
+	QueryRoundInfo = types.QueryRoundInfo
+
+	// Round -
+	Round = types.Round
 )
