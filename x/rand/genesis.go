@@ -8,23 +8,17 @@ import (
 )
 
 type GenesisState struct {
-	WhoisRecords []Whois `json:"whois_records"`
+	RoundRecords []Round `json:"round_records"`
 }
 
-func NewGenesisState(whoIsRecords []Whois) GenesisState {
-	return GenesisState{WhoisRecords: nil}
+func NewGenesisState(roundRecords []Round) GenesisState {
+	return GenesisState{RoundRecords: nil}
 }
 
 func ValidateGenesis(data GenesisState) error {
-	for _, record := range data.WhoisRecords {
+	for _, record := range data.RoundRecords {
 		if record.Owner == nil {
-			return fmt.Errorf("Invalid WhoisRecord: Value: %s. Error: Missing Owner", record.Value)
-		}
-		if record.Value == "" {
-			return fmt.Errorf("Invalid WhoisRecord: Owner: %s. Error: Missing Value", record.Owner)
-		}
-		if record.Price == nil {
-			return fmt.Errorf("Invalid WhoisRecord: Value: %s. Error: Missing Price", record.Value)
+			return fmt.Errorf("Invalid RoundRecord: Value: %s. Error: Missing Owner", record.Id)
 		}
 	}
 	return nil
@@ -32,25 +26,25 @@ func ValidateGenesis(data GenesisState) error {
 
 func DefaultGenesisState() GenesisState {
 	return GenesisState{
-		WhoisRecords: []Whois{},
+		RoundRecords: []Round{},
 	}
 }
 
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) []abci.ValidatorUpdate {
-	for _, record := range data.WhoisRecords {
-		keeper.SetWhois(ctx, record.Value, record)
+	for _, record := range data.RoundRecords {
+		keeper.SetRound()(ctx, record.Id, record)
 	}
 	return []abci.ValidatorUpdate{}
 }
 
 func ExportGenesis(ctx sdk.Context, k Keeper) GenesisState {
-	var records []Whois
-	iterator := k.GetNamesIterator(ctx)
+	var records []Round
+	iterator := k.GetRoundsIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
-		name := string(iterator.Key())
-		var whois Whois
-		whois = k.GetWhois(ctx, name)
-		records = append(records, whois)
+		id := string(iterator.Key())
+		var round Round
+		round = k.GetRound(ctx, id)
+		records = append(records, round)
 	}
-	return GenesisState{WhoisRecords: records}
+	return GenesisState{RoundRecords: records}
 }
