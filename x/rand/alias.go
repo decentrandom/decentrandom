@@ -5,23 +5,59 @@ import (
 )
 
 const (
+	// ModuleName -
 	ModuleName = types.ModuleName
-	RouterKey  = types.RouterKey
-	StoreKey   = types.StoreKey
+
+	// RouterKey -
+	RouterKey = types.RouterKey
+
+	// StoreKey -
+	StoreKey = types.StoreKey
 )
 
 var (
-	NewMsgBuyName = types.NewMsgBuyName
-	NewMsgSetName = types.NewMsgSetName
-	NewWhois      = types.NewWhois
-	ModuleCdc     = types.ModuleCdc
+	// NewMsgNewRound -
+	NewMsgNewRound = types.NewMsgNewRound
+
+	// NewMsgDeployNonce -
+	NewMsgDeployNonce = types.NewMsgDeployNonce
+
+	// NewMsgAddTargets -
+	NewMsgAddTargets = types.NewMsgAddTargets
+
+	// NewMsgRemoveTargets -
+	NewMsgRemoveTargets = types.NewMsgRemoveTargets
+
+	// NewMsgDeploySeeds -
+	NewMsgDeploySeeds = types.NewMsgDeploySeeds
+
+	// ModuleCdc -
+	ModuleCdc = types.ModuleCdc
+
+	// RegisterCodec -
 	RegisterCodec = types.RegisterCodec
 )
 
 type (
-	MsgSetName      = types.MsgSetName
-	MsgBuyName      = types.MsgBuyName
+	// MsgNewRound -
+	MsgNewRound = types.MsgNewRound
+
+	// MsgDeployNonce -
+	MsgDeployNonce = types.MsgDeployNonce
+
+	// MsgAddTargets -
+	MsgAddTargets = types.MsgAddTargets
+
+	// MsgRemoveTargets -
+	MsgRemoveTargets = types.MsgRemoveTargets
+
+	// MsgDeploySeeds -
+	MsgDeploySeeds = types.MsgDeploySeeds
+
+	// QueryResResolve -
 	QueryResResolve = types.QueryResResolve
-	QueryResNames   = types.QueryResNames
-	Whois           = types.Whois
+
+	// QueryResNames -
+	QueryResNames = types.QueryResNames
+	Whois         = types.Whois
 )
