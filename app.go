@@ -163,7 +163,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.accountKeeper,
 		app.bankKeeper,
 		supply.DefaultCodespace,
-		_,
+		nil,
 	)
 
 	// Changed
