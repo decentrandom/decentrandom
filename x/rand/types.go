@@ -17,6 +17,7 @@ const (
 
 // Round - 라운드 기본 구조체
 type Round struct {
+	Id            string         `json:"id"`
 	Difficulty    uint8          `json:"difficulty"`
 	Owner         sdk.AccAddress `json:"owner"`
 	Nonce         string         `json:"nonce"`
