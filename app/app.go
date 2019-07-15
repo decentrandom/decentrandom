@@ -29,26 +29,28 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 )
 
-// appName과 초기 비밀번호 세팅
 const (
-	appName        = "RandApp"
+	appName = "RandApp"
+
+	// DefaultKeyPass -
 	DefaultKeyPass = "12345678"
 )
 
-// 바이너리 경로
 var (
-	DefaultCLIHome  = os.ExpandEnv("$HOME/.randcli")
+	// DefaultCLIHome - path for randcli
+	DefaultCLIHome = os.ExpandEnv("$HOME/.randcli")
+
+	// DefaultNodeHome - path for randd
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 )
 
-// RandApp 구조체
+// RandApp -
 type RandApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
 	assertInvariantsBlockly bool
 
-	// substore access용 키
 	keyMain          *sdk.KVStoreKey
 	keyAccount       *sdk.KVStoreKey
 	keyStaking       *sdk.KVStoreKey
@@ -62,7 +64,7 @@ type RandApp struct {
 	tkeyParams       *sdk.TransientStoreKey
 	keyRand          *sdk.KVStoreKey
 
-	// 키퍼
+	// Keepers
 	accountKeeper       auth.AccountKeeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	bankKeeper          bank.Keeper
@@ -75,7 +77,7 @@ type RandApp struct {
 	randKeeper          rand.Keeper
 }
 
-// NewRandApp - RandApp 생성
+// NewRandApp -
 func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, assertInvariantsBlockly bool, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
 
 	cdc := MakeCodec()
@@ -174,7 +176,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 	distr.RegisterInvariants(&app.crisisKeeper, app.distrKeeper, app.stakingKeeper)
 	staking.RegisterInvariants(&app.crisisKeeper, app.stakingKeeper, app.feeCollectionKeeper, app.distrKeeper, app.accountKeeper)
 
-	// 메시지 라우터 등록
 	app.Router().
 		AddRoute(bank.RouterKey, bank.NewHandler(app.bankKeeper)).
 		AddRoute(staking.RouterKey, staking.NewHandler(app.stakingKeeper)).
@@ -183,7 +184,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		AddRoute(rand.RouterKey, rand.NewHandler(app.randKeeper)).
 		AddRoute(crisis.RouterKey, crisis.NewHandler(app.crisisKeeper))
 
-	// 쿼리 라우터 등록
 	app.QueryRouter().
 		AddRoute(auth.QuerierRoute, auth.NewQuerier(app.accountKeeper)).
 		AddRoute(distr.QuerierRoute, distr.NewQuerier(app.distrKeeper)).
@@ -191,7 +191,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest, 
 		AddRoute(staking.QuerierRoute, staking.NewQuerier(app.stakingKeeper, app.cdc)).
 		AddRoute(rand.QuerierRoute, rand.NewQuerier(app.randKeeper))
 
-	// BaseApp 초기화
 	app.MountStores(
 		app.keyMain, app.keyAccount, app.keyStaking, app.keyDistr,
 		app.keySlashing, app.keyFeeCollection, app.keyParams,
@@ -228,7 +227,7 @@ func (app *RandApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 	return app.BaseApp.Query(req)
 }
 
-// MakeCodec - 커스텀 TX 코덱
+// MakeCodec -
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
 
@@ -271,7 +270,7 @@ func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 	}
 }
 
-// initFromGenesisState - 제네시스 상태 기준으로 store 초기화
+// initFromGenesisState -
 func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisState) []abci.ValidatorUpdate {
 	genesisState.Sanitize()
 
@@ -317,7 +316,7 @@ func (app *RandApp) initFromGenesisState(ctx sdk.Context, genesisState GenesisSt
 	return validators
 }
 
-// initChainer - RandApp 초기화
+// initChainer -
 func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 
 	stateJSON := req.AppStateBytes
@@ -351,7 +350,7 @@ func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 	}
 }
 
-// LoadHeight - 버전 관리를 위해
+// LoadHeight -
 func (app *RandApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height, app.keyMain)
 }
