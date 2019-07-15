@@ -59,7 +59,8 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 		Short: "신규 라운드 생성을 위한 명령어입니다. 날짜는 yyyy-mm-ddThh:mm:ss.iiiZ 형식으로 기입해야 합니다.",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+			//cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
@@ -135,7 +136,8 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 		Short: "논스를 배포하기 위한 명령어 입니다. 라운드 소유자만 실행할 수 있습니다.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+			// cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
@@ -167,7 +169,8 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 		Short: "모집단 입력을 위한 명령어입니다. 라운드 소유자만 실행할 수 있습니다.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+			// cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
@@ -199,7 +202,8 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 		Short: "기 입력된 모집단을 삭제하기 위한 명령어입니다. 라운드 소유자만 실행할 수 있습니다.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+			// cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc) sdk v0.36
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
