@@ -30,13 +30,13 @@ import (
 const appName = "rand"
 
 var (
-	// default home directories for the application CLI
+	// DefaultCLIHome - default home directories for the application CLI
 	DefaultCLIHome = os.ExpandEnv("$HOME/.randcli")
 
 	// DefaultNodeHome sets the folder where the applcation data and configuration will be stored
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
-	// ModuleBasicManager is in charge of setting up basic module elemnets
+	// ModuleBasics - is in charge of setting up basic module elemnets
 	ModuleBasics = module.NewBasicManager(
 		genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
@@ -103,7 +103,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
 
 	// Here you initialize your application with the store keys it requires
-	var app = &nameServiceApp{
+	var app = &randApp{
 		BaseApp: bApp,
 		cdc:     cdc,
 
@@ -160,7 +160,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 	app.supplyKeeper = supply.NewKeeper(
 		app.cdc,
 		app.keySupply,
-		// to-do : AccountKeeper,
+		app.accountKeeper,
 		app.bankKeeper,
 		supply.DefaultCodespace,
 		_,
@@ -172,7 +172,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 		app.keyDistr,
 		distrSubspace,
 		&stakingKeeper,
-		// To-do : Supply Keeper
+		app.supplyKeeper,
 		distr.DefaultCodespace,
 		keyFeeCollection,
 	)
@@ -268,6 +268,7 @@ func NewRandApp(logger log.Logger, db dbm.DB) *randApp {
 // GenesisState represents chain state at the start of the chain. Any initial state (account balances) are stored here.
 type GenesisState map[string]json.RawMessage
 
+// NewDefaultGenesisState -
 func NewDefaultGenesisState() GenesisState {
 	return ModuleBasics.DefaultGenesis()
 }
