@@ -112,7 +112,7 @@ func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets
 	return sdk.Result{}
 }
 
-// handleMsgDeploySeeds 0
+// handleMsgDeploySeeds -
 func handleMsgDeploySeeds(ctx sdk.Context, keeper Keeper, msg MsgDeploySeeds) sdk.Result {
 
 	// To-do
