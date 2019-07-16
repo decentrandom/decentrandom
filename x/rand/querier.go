@@ -11,7 +11,7 @@ import (
 
 // Query endpoints
 const (
-	QueryRoundInfo = "round_info"
+	QueryRoundInfo = "round"
 	QueryRoundIDs  = "round_ids"
 )
 
@@ -27,7 +27,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryRoundIDs(ctx, req, keeper)
 
 		default:
-			return nil, sdk.ErrUnknownRequest(fmt.Sprintf("Unknown rand query endpoint- %s %s", path[0], path[1]))
+			return nil, sdk.ErrUnknownRequest("Unknown rand query endpoint")
 		}
 	}
 }
