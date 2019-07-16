@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// NewHandler - 각각의 Msg에 필요한 handler를 리턴
+// NewHandler -
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
@@ -30,10 +30,10 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
-// handleMsgNewRound - 신규 라운드 생성을 위한 handler
+// handleMsgNewRound -
 func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("소유주 불일치").Result()
+		return sdk.ErrUnauthorized("Owner mismatch").Result()
 	}
 
 	keeper.SetRound(ctx, msg.ID, Round{Difficulty: msg.Difficulty, Owner: msg.Owner, Nonce: msg.Nonce, NonceHash: msg.NonceHash, Targets: msg.Targets, ScheduledTime: msg.ScheduledTime})
@@ -43,7 +43,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 // handleMsgDepoloyNonce - Nonce 배포를 위한 handler
 func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("소유주 불일치").Result()
+		return sdk.ErrUnauthorized("Owner mismatch").Result()
 	}
 
 	keeper.SetNonce(ctx, msg.ID, msg.Nonce)
@@ -53,7 +53,7 @@ func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sd
 // handleMsgAddTargets - 모집단 추가를 위한 handler
 func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("소유주 불일치").Result()
+		return sdk.ErrUnauthorized("Owner mismatch").Result()
 	}
 
 	// 기존 Targets에 추가
@@ -83,7 +83,7 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 // handleMsgRemoveTargets - 모집단 삭제를 위한 handler
 func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("소유주 불일치").Result()
+		return sdk.ErrUnauthorized("Owner mismatch").Result()
 	}
 
 	// 기존 Targets에서 일치하는 것 삭제
