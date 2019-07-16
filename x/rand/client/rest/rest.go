@@ -64,7 +64,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 		var req newRoundReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "Canno read request")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
 
