@@ -85,7 +85,7 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 }
 
 // handleMsgRemoveTargets -
-func handleMsgUpdateTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
+func handleMsgUpdateTargets(ctx sdk.Context, keeper Keeper, msg MsgUpdateTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Owner mismatch").Result()
 	}
