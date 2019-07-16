@@ -27,7 +27,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryRoundIDs(ctx, req, keeper)
 
 		default:
-			return nil, sdk.ErrUnknownRequest("Uknown query type")
+			return nil, sdk.ErrUnknownRequest("Uknown rand query endpoint")
 		}
 	}
 }
