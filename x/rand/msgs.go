@@ -197,19 +197,19 @@ func (msg MsgAddTargets) GetSigners() []sdk.AccAddress {
 }
 
 /*
-MsgRemoveTargets
+MsgUpdateTargets
 */
 
-// MsgRemoveTargets -
-type MsgRemoveTargets struct {
+// MsgUpdateTargets -
+type MsgUpdateTargets struct {
 	ID      string
 	Owner   sdk.AccAddress
 	Targets []string
 }
 
-// NewMsgRemoveTargets -
-func NewMsgRemoveTargets(id string, owner sdk.AccAddress, targets []string) MsgRemoveTargets {
-	return MsgRemoveTargets{
+// NewMsgUpdateTargets -
+func NewMsgUpdateTargets(id string, owner sdk.AccAddress, targets []string) MsgUpdateTargets {
+	return MsgUpdateTargets{
 		ID:      id,
 		Owner:   owner,
 		Targets: targets,
@@ -217,17 +217,17 @@ func NewMsgRemoveTargets(id string, owner sdk.AccAddress, targets []string) MsgR
 }
 
 // Route -
-func (msg MsgRemoveTargets) Route() string {
+func (msg MsgUpdateTargets) Route() string {
 	return "rand"
 }
 
 // Type -
-func (msg MsgRemoveTargets) Type() string {
-	return "remove_targets"
+func (msg MsgUpdateTargets) Type() string {
+	return "update_targets"
 }
 
 // ValidateBasic -
-func (msg MsgRemoveTargets) ValidateBasic() sdk.Error {
+func (msg MsgUpdateTargets) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
@@ -243,7 +243,7 @@ func (msg MsgRemoveTargets) ValidateBasic() sdk.Error {
 }
 
 // GetSignBytes -
-func (msg MsgRemoveTargets) GetSignBytes() []byte {
+func (msg MsgUpdateTargets) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
@@ -252,6 +252,6 @@ func (msg MsgRemoveTargets) GetSignBytes() []byte {
 }
 
 // GetSigners -
-func (msg MsgRemoveTargets) GetSigners() []sdk.AccAddress {
+func (msg MsgUpdateTargets) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Owner}
 }
