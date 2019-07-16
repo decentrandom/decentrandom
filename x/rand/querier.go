@@ -70,7 +70,7 @@ func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res [
 
 	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, roundIDs)
 	if err2 != nil {
-		panic("Canno marshal JSON.")
+		panic("Cannot marshal JSON.")
 	}
 
 	return bz, nil
