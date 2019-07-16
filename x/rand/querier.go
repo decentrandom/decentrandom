@@ -27,7 +27,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryRoundIDs(ctx, req, keeper)
 
 		default:
-			return nil, sdk.ErrUnknownRequest(fmt.Sprintf("Uknown rand query endpoint\n%s\n", path[0]))
+			return nil, sdk.ErrUnknownRequest(fmt.Sprintf("Unknown rand query endpoint- %s %s", path[0], path[1]))
 		}
 	}
 }
