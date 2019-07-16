@@ -93,21 +93,23 @@ func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets
 	// 기존 Targets에서 일치하는 것 삭제
 	updateTargets := keeper.GetTargets(ctx, msg.ID)
 
-	for i := 0; i < len(updateTargets); {
-		exist := false
-		for _, b := range msg.Targets {
-			if b == updateTargets[i] {
-				exist = true
-				break
-			}
+	/*
+		for i := 0; i < len(updateTargets); {
+			exist := false
+			for _, b := range msg.Targets {
+				if b == updateTargets[i] {
+					exist = true
+					break
+				}
 
-			if !exist {
-				i++
-			} else {
-				updateTargets = append(updateTargets[:i], updateTargets[i+1:]...)
+				if !exist {
+					i++
+				} else {
+					updateTargets = append(updateTargets[:i], updateTargets[i+1:]...)
+				}
 			}
 		}
-	}
+	*/
 
 	keeper.SetTargets(ctx, msg.ID, updateTargets)
 	return sdk.Result{}
