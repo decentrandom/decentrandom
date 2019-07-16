@@ -67,10 +67,10 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:   "randcli",
-		Short: "DecentRandom 명령어 입력기",
+		Short: "DecentRandom command line interface",
 	}
 
-	rootCmd.PersistentFlags().String(client.FlagChainID, "", "텐더민트 노드의 체인 아이디")
+	rootCmd.PersistentFlags().String(client.FlagChainID, "", "tendermint node's chain ID")
 	rootCmd.PersistentPreRunE = func(_ *cobra.Command, _ []string) error {
 		return initConfig(rootCmd)
 	}
@@ -92,7 +92,7 @@ func main() {
 	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
-		fmt.Printf("명령어 실행 실패 : %s, 종료합니다...\n", err)
+		fmt.Printf("execution failed : %s, closing...\n", err)
 		os.Exit(1)
 	}
 }
@@ -102,7 +102,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	queryCmd := &cobra.Command{
 		Use:     "query",
 		Aliases: []string{"q"},
-		Short:   "쿼리 하부 명령어",
+		Short:   "Querying subcommands",
 	}
 
 	queryCmd.AddCommand(
@@ -128,7 +128,7 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:   "tx",
-		Short: "트랜잭션 하부 명령어",
+		Short: "Transactions subcommands",
 	}
 
 	txCmd.AddCommand(
