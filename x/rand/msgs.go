@@ -53,14 +53,14 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 	}
 
 	if len(msg.ID) == 0 || len(msg.NonceHash) == 0 {
-		return sdk.ErrUnknownRequest("ID와 NonceHash는 필수 항목 입니다.")
+		return sdk.ErrUnknownRequest("Must specify ID, NonceHash.")
 	}
 
 	// 그럴리는 없지만 ID hash 값이 중복되는 경우는 어떻게?
 	// important ****** to-do
 
 	if msg.Difficulty < 1 {
-		return sdk.ErrUnknownRequest("난이도는 0보다 커야합니다.")
+		return sdk.ErrUnknownRequest("Difficulty must be greater than 0.")
 	}
 
 	return nil
@@ -118,7 +118,7 @@ func (msg MsgDeployNonce) ValidateBasic() sdk.Error {
 	}
 
 	if len(msg.ID) == 0 {
-		return sdk.ErrUnknownRequest("ID와 NonceHash는 필수 항목 입니다.")
+		return sdk.ErrUnknownRequest("Must specify ID, NonceHash.")
 	}
 
 	return nil
@@ -175,11 +175,11 @@ func (msg MsgAddTargets) ValidateBasic() sdk.Error {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
 	if len(msg.ID) == 0 {
-		return sdk.ErrUnknownRequest("라운드 ID는 필수 항목 입니다.")
+		return sdk.ErrUnknownRequest("Must specify ID.")
 	}
 
 	if msg.Targets == nil {
-		return sdk.ErrUnknownRequest("Targets은 필수 항목 입니다.")
+		return sdk.ErrUnknownRequest("Must specify Targets.")
 	}
 
 	return nil
@@ -236,11 +236,11 @@ func (msg MsgRemoveTargets) ValidateBasic() sdk.Error {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
 	if len(msg.ID) == 0 {
-		return sdk.ErrUnknownRequest("라운드 ID는 필수 항목 입니다.")
+		return sdk.ErrUnknownRequest("Must specify ID.")
 	}
 
 	if msg.Targets == nil {
-		return sdk.ErrUnknownRequest("Targets는 필수 항목 입니다.")
+		return sdk.ErrUnknownRequest("Must specify Targets.")
 	}
 
 	return nil
