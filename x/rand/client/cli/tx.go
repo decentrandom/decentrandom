@@ -31,11 +31,11 @@ func (hI hashItem) Hash() []byte {
 }
 */
 
-// GetCmdNewRound - 신규 라운드 생성
+// GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "new-round [difficulty] [nonce] [target1,target2,...,target(n)] [scheduled_time]",
-		Short: "신규 라운드 생성을 위한 명령어입니다. 날짜는 yyyy-mm-ddThh:mm:ss.iiiZ 형식으로 기입해야 합니다.",
+		Short: "Create new round data",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -46,14 +46,14 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// string 타입의 난이도를 uint8으로 변경
+			// string to uint8
 			difficulty64, errConvert := strconv.ParseInt(args[0], 8, 8)
 			if errConvert != nil {
 				panic(errConvert)
 			}
 			difficulty := uint8(difficulty64)
 
-			// Nonce를 해시
+			// Hashing Nonce
 			hasher := tmhash.New()
 			nonceVector := []byte(args[1])
 			_, hashError := hasher.Write(nonceVector)
@@ -63,11 +63,11 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			bz := tmhash.Sum(nonceVector)
 			nonceHash := hex.EncodeToString(bz)
 
-			// 컴마로 구분된 string을 slice로 변환
+			// string to slice
 			cleaned := strings.Replace(args[2], ",", " ", -1)
 			targets := strings.Fields(cleaned)
 
-			// string 타입의 시간을 time.Time 으로 변환
+			// string to time.Time
 			var scheduledTime time.Time
 			if args[3] != "" {
 				var err error
@@ -83,7 +83,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 				scheduledTime = time.Now()
 			}
 
-			// ID 생성, 파라메터 값들과 계정의 머클트리 해시를 이용
+			// Create ID
 			roundArgs := make([][]byte, 5)
 			roundArgs[0] = []byte(args[0])
 			roundArgs[1] = []byte(args[1])
@@ -111,7 +111,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "deploy-nonce [id] [nonce]",
-		Short: "논스를 배포하기 위한 명령어 입니다. 라운드 소유자만 실행할 수 있습니다.",
+		Short: "Deploy Nonce to network",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -143,7 +143,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 			might be changed like this, target1, target2, target3, ....
 		*/
 		Use:   "add-targets [id] [target1,target2,...,target(n)]",
-		Short: "모집단 입력을 위한 명령어입니다. 라운드 소유자만 실행할 수 있습니다.",
+		Short: "Insert target data",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -154,7 +154,7 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// 컴마로 구분된 string을 slice로 변환
+			// string to slice
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
@@ -171,11 +171,11 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdRemoveTargets - 타겟 데이터 삭제
+// GetCmdRemoveTargets -
 func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "remove-targets [id] [target1,target2,...,target(n)]",
-		Short: "기 입력된 모집단을 삭제하기 위한 명령어입니다. 라운드 소유자만 실행할 수 있습니다.",
+		Short: "Remove existing target data",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
