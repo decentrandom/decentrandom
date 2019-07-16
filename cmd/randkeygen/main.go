@@ -73,7 +73,7 @@ func main() {
 	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
-		fmt.Printf("명령어 실행 실패 : %s, 종료합니다...\n", err)
+		fmt.Printf("Execution failed : %s, closing...\n", err)
 		os.Exit(1)
 	}
 }
