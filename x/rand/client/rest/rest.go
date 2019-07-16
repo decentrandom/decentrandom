@@ -30,7 +30,7 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 }
 
 // Query Handler(s)
-// roundHandler - 라운드 정보 handler
+// roundHandler -
 func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -47,7 +47,7 @@ func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string)
 }
 
 // TX Handlers
-// newRoundReq - 라운드 생성 요청 구조체
+// newRoundReq -
 type newRoundReq struct {
 	BaseReq       rest.BaseReq `json:"base_req"`
 	Difficulty    uint8        `json:"difficulty"`
@@ -58,13 +58,13 @@ type newRoundReq struct {
 	ScheduledTime time.Time    `jsong:"scheduled_time"`
 }
 
-// newRoundHandler - 라운드 생성 handler
+// newRoundHandler -
 func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req newRoundReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "Canno read request")
 			return
 		}
 
@@ -91,7 +91,7 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 	}
 }
 
-// deployNonceReq - Nonce 배포 구조체
+// deployNonceReq -
 type deployNonceReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Nonce   string       `json:"nonce"`
@@ -99,13 +99,13 @@ type deployNonceReq struct {
 	Owner   string       `json:"owner"`
 }
 
-// deployNonceHandler - Nonce 배포 handler
+// deployNonceHandler -
 func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req deployNonceReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
 
@@ -134,7 +134,7 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 	}
 }
 
-// addTargetsReq - 라운드 모집단 추가 구조체
+// addTargetsReq -
 type addTargetsReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Targets []string     `json:"targets"`
@@ -142,13 +142,13 @@ type addTargetsReq struct {
 	Owner   string       `json:"owner"`
 }
 
-// addTargetsHandler - 라운드 모집단 추가 handler
+// addTargetsHandler -
 func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req addTargetsReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
 
@@ -176,7 +176,7 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 	}
 }
 
-// removeTargetsReq - 라운드 모집단 삭제 구조체
+// removeTargetsReq -
 type removeTargetsReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Targets []string     `json:"targets"`
@@ -184,13 +184,13 @@ type removeTargetsReq struct {
 	Owner   string       `json:"owner"`
 }
 
-// removeTargetsHandler - 라운드 모집단 삭제 handler
+// removeTargetsHandler -
 func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req removeTargetsReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "요청을 해독하는데 실패했습니다.")
+			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
 
