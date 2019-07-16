@@ -37,7 +37,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 	//}
 
 	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress("Owner is empty")
+		return sdk.ErrUnauthorized("Owner is empty").Result()
 	}
 
 	keeper.SetRound(ctx, msg.ID, Round{Difficulty: msg.Difficulty, Owner: msg.Owner, Nonce: msg.Nonce, NonceHash: msg.NonceHash, Targets: msg.Targets, ScheduledTime: msg.ScheduledTime})
