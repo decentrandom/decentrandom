@@ -24,7 +24,7 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cdc, cliCtx, storeName)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
 	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), deployNonceHandler(cdc, cliCtx, storeName)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), removeTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), updateTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
 	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restRound), roundHandler(cdc, cliCtx, storeName)).Methods("GET")
 
 }
@@ -176,18 +176,18 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 	}
 }
 
-// removeTargetsReq -
-type removeTargetsReq struct {
+// updateTargetsReq -
+type updateTargetsReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Targets []string     `json:"targets"`
 	ID      string       `json:"id"`
 	Owner   string       `json:"owner"`
 }
 
-// removeTargetsHandler -
-func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+// updateTargetsHandler -
+func updateTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req removeTargetsReq
+		var req updateTargetsReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
@@ -205,7 +205,7 @@ func removeTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 			return
 		}
 
-		msg := rand.NewMsgRemoveTargets(req.ID, addr, req.Targets)
+		msg := rand.NewMsgUpdateTargets(req.ID, addr, req.Targets)
 
 		err = msg.ValidateBasic()
 		if err != nil {
