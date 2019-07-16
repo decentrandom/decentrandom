@@ -15,7 +15,7 @@ var bech32Prefixes = []string{util.Bech32PrefixAccAddr, util.Bech32PrefixAccPub,
 // main -
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("입력 값을 넣어주세요")
+		fmt.Println("Must specify an input string")
 	}
 	arg := os.Args[1]
 	runFromBech32(arg)
@@ -26,10 +26,10 @@ func main() {
 func runFromBech32(bech32str string) {
 	hrp, bz, err := bech32.DecodeAndConvert(bech32str)
 	if err != nil {
-		fmt.Println("유효한 bech32 문자열이 아닙니다")
+		fmt.Println("Not a valid bech32 string")
 		return
 	}
-	fmt.Println("Bech32 분석:")
+	fmt.Println("Bech32 parse:")
 	fmt.Printf("Human readible part: %v\nBytes (hex): %X\n",
 		hrp,
 		bz,
@@ -40,10 +40,10 @@ func runFromBech32(bech32str string) {
 func runFromHex(hexaddr string) {
 	bz, err := hex.DecodeString(hexaddr)
 	if err != nil {
-		fmt.Println("유효한 hex 문자열이 아닙니다")
+		fmt.Println("NOt a valid hex string")
 		return
 	}
-	fmt.Println("Hex 분석:")
+	fmt.Println("Hex parse:")
 	fmt.Println("Bech32 formats:")
 	for _, prefix := range bech32Prefixes {
 		bech32Addr, err := bech32.ConvertAndEncode(prefix, bz)
