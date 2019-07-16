@@ -15,7 +15,7 @@ import (
 func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_info [id]",
-		Short: "ID에 해당하는 라운드 정보 요청",
+		Short: "get information of certain round",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
@@ -23,7 +23,7 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 
 			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", queryRoute, id), nil)
 			if err != nil {
-				fmt.Printf("ID %s에 해당하는 라운드 정보를 받아오지 못했습니다. \n", string(id))
+				fmt.Printf("Cannot receive roound %s data \n", string(id))
 				return nil
 			}
 
