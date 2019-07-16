@@ -23,7 +23,7 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 
 			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", queryRoute, id), nil)
 			if err != nil {
-				fmt.Printf("Cannot receive round %s data %s \n", string(id), err.Error())
+				fmt.Printf("Cannot receive round %s data\nError : %s \nqueryRoute : %s\n", string(id), err.Error(), queryRoute)
 				return nil
 			}
 
