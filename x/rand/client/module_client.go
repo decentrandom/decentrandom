@@ -47,7 +47,7 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 		randcmd.GetCmdNewRound(mc.cdc),
 		randcmd.GetCmdDeployNonce(mc.cdc),
 		randcmd.GetCmdAddTargets(mc.cdc),
-		randcmd.GetCmdRemoveTargets(mc.cdc),
+		randcmd.GetCmdUpdateTargets(mc.cdc),
 	)...)
 
 	return randTxCmd
