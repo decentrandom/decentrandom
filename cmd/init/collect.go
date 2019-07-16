@@ -36,7 +36,7 @@ type initConfig struct {
 func CollectGenTxsCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "collect-gentxs",
-		Short: "제네시스 트랜잭션을 모아 genesis.json 파일을 생성합니다",
+		Short: "Collect genesis transactions and make genesis.json file",
 		RunE: func(_ *cobra.Command, _ []string) error {
 			config := ctx.Config
 			config.SetRoot(viper.GetString(cli.HomeFlag))
@@ -70,7 +70,7 @@ func CollectGenTxsCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "노드의 홈 디렉토리")
+	cmd.Flags().String(cli.HomeFlag, app.DefaultNodeHome, "node's home directory")
 	cmd.Flags().String(flagGenTxDir, "",
 		"override default \"gentx\" directory from which collect and execute "+
 			"genesis transactions; default [--home]/config/gentx/")
