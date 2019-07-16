@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
-// RegisterCodec - Amino를 위한 concrete codec 등록
+// RegisterCodec -
 func RegisterCodec(cdc *codec.Codec) {
 
 	cdc.RegisterConcrete(MsgNewRound{}, "rand/NewRound", nil)
