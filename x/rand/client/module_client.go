@@ -26,7 +26,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 
 	randQueryCmd := &cobra.Command{
 		Use:   "rand",
-		Short: "rand querying commands",
+		Short: "Querying commands for the rand module",
 	}
 
 	randQueryCmd.AddCommand(client.GetCommands(
