@@ -20,8 +20,8 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgAddTargets:
 			return handleMsgAddTargets(ctx, keeper, msg)
 
-		case MsgRemoveTargets:
-			return handleMsgRemoveTargets(ctx, keeper, msg)
+		case MsgUpdateTargets:
+			return handleMsgUpdateTargets(ctx, keeper, msg)
 
 		default:
 			errMsg := fmt.Sprintf("Unknown rand Msg type: %v", msg.Type())
@@ -85,13 +85,13 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 }
 
 // handleMsgRemoveTargets -
-func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
+func handleMsgUpdateTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Owner mismatch").Result()
 	}
 
 	// 기존 Targets에서 일치하는 것 삭제
-	updateTargets := keeper.GetTargets(ctx, msg.ID)
+	//updateTargets := keeper.GetTargets(ctx, msg.ID)
 
 	/*
 		for i := 0; i < len(updateTargets); {
@@ -111,6 +111,6 @@ func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets
 		}
 	*/
 
-	keeper.SetTargets(ctx, msg.ID, updateTargets)
+	keeper.SetTargets(ctx, msg.ID, msg.Targets)
 	return sdk.Result{}
 }
