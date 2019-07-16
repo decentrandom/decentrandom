@@ -24,7 +24,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 			return handleMsgRemoveTargets(ctx, keeper, msg)
 
 		default:
-			errMsg := fmt.Sprintf("알 수 없는 rand Msg 형식: %v", msg.Type())
+			errMsg := fmt.Sprintf("Unknown rand Msg type: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}
@@ -40,7 +40,7 @@ func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Resu
 	return sdk.Result{}
 }
 
-// handleMsgDepoloyNonce - Nonce 배포를 위한 handler
+// handleMsgDepoloyNonce -
 func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Owner mismatch").Result()
@@ -50,7 +50,7 @@ func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sd
 	return sdk.Result{}
 }
 
-// handleMsgAddTargets - 모집단 추가를 위한 handler
+// handleMsgAddTargets -
 func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Owner mismatch").Result()
@@ -80,7 +80,7 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 	return sdk.Result{}
 }
 
-// handleMsgRemoveTargets - 모집단 삭제를 위한 handler
+// handleMsgRemoveTargets -
 func handleMsgRemoveTargets(ctx sdk.Context, keeper Keeper, msg MsgRemoveTargets) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 		return sdk.ErrUnauthorized("Owner mismatch").Result()
