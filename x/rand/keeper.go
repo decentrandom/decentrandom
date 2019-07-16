@@ -6,7 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 )
 
-// Keeper - struct 선언
+// Keeper -
 type Keeper struct {
 	coinKeeper bank.Keeper
 
@@ -15,7 +15,7 @@ type Keeper struct {
 	cdc *codec.Codec
 }
 
-// NewKeeper - keeper 생성
+// NewKeeper -
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		coinKeeper: coinKeeper,
@@ -24,7 +24,7 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 	}
 }
 
-// SetRound - 라운드 setter
+// SetRound -
 func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	if len(id) == 0 || round.Owner.Empty() {
 		return
@@ -34,7 +34,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 	store.Set([]byte(id), k.cdc.MustMarshalBinaryBare(round))
 }
 
-// GetRound - 라운드 getter
+// GetRound -
 func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	store := ctx.KVStore(k.storeKey)
 	var round Round
@@ -48,31 +48,31 @@ func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	return round
 }
 
-// GetOwner - 라운드 소유자 getter
+// GetOwner -
 func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
 	return k.GetRound(ctx, id).Owner
 }
 
-// GetTargets - 라운드 모집단 getter
+// GetTargets -
 func (k Keeper) GetTargets(ctx sdk.Context, id string) []string {
 	return k.GetRound(ctx, id).Targets
 }
 
-// SetTargets - 라운드 모집단 setter
+// SetTargets -
 func (k Keeper) SetTargets(ctx sdk.Context, id string, targets []string) {
 	round := k.GetRound(ctx, id)
 	round.Targets = targets
 	k.SetRound(ctx, id, round)
 }
 
-// SetNonce - 라운드 Nonce setter
+// SetNonce -
 func (k Keeper) SetNonce(ctx sdk.Context, id string, nonce string) {
 	round := k.GetRound(ctx, id)
 	round.Nonce = nonce
 	k.SetRound(ctx, id, round)
 }
 
-// GetIDsIterator - 전체 라운드 ID getter
+// GetIDsIterator -
 func (k Keeper) GetIDsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return sdk.KVStorePrefixIterator(store, []byte{})
