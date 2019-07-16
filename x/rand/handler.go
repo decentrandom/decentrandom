@@ -32,8 +32,12 @@ func NewHandler(keeper Keeper) sdk.Handler {
 
 // handleMsgNewRound -
 func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
-	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Owner mismatch").Result()
+	//if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
+	//return sdk.ErrUnauthorized("Owner mismatch").Result()
+	//}
+
+	if msg.Owner.Empty() {
+		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
 
 	keeper.SetRound(ctx, msg.ID, Round{Difficulty: msg.Difficulty, Owner: msg.Owner, Nonce: msg.Nonce, NonceHash: msg.NonceHash, Targets: msg.Targets, ScheduledTime: msg.ScheduledTime})
