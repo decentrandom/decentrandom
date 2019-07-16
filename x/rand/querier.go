@@ -9,7 +9,7 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
-// 질의 endpoints
+// Query endpoints
 const (
 	QueryRoundInfo = "round_info"
 	QueryRoundIDs  = "round_ids"
