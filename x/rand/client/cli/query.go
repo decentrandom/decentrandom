@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
-// GetCmdRoundInfo - 라운드 정보
+// GetCmdRoundInfo -
 func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_info [id]",
@@ -34,17 +34,17 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdRoundIDs - 라운드 ID 리스트
+// GetCmdRoundIDs -
 func GetCmdRoundIDs(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_ids",
-		Short: "라운드 ID 받아오기",
+		Short: "Get round IDs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
 			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", queryRoute), nil)
 			if err != nil {
-				fmt.Printf("라운드 ID 내역을 받아오지 못했습니다.\n")
+				fmt.Printf("Cannot receive IDs .\n")
 				return nil
 			}
 
