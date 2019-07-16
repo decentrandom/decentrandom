@@ -21,7 +21,7 @@ func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 	return ModuleClient{storeKey, cdc}
 }
 
-// GetQueryCmd - 질의 명령어 리턴
+// GetQueryCmd -
 func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 
 	randQueryCmd := &cobra.Command{
@@ -36,7 +36,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	return randQueryCmd
 }
 
-// GetTxCmd - 트랜잭션 명령어 리턴
+// GetTxCmd -
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	randTxCmd := &cobra.Command{
 		Use:   "rand",
