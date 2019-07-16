@@ -15,7 +15,7 @@ const (
 	QueryRoundIDs  = "round_ids"
 )
 
-// NewQuerier - 신규 질의 생성
+// NewQuerier -
 func NewQuerier(keeper Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err sdk.Error) {
 
@@ -27,12 +27,12 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryRoundIDs(ctx, req, keeper)
 
 		default:
-			return nil, sdk.ErrUnknownRequest("알 수 없는 질의입니다.")
+			return nil, sdk.ErrUnknownRequest("Uknown query type")
 		}
 	}
 }
 
-// queryRoundInfo - 라운드 정보를 위한 질의
+// queryRoundInfo -
 func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	id := path[0]
 
@@ -40,7 +40,7 @@ func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 
 	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, round)
 	if err2 != nil {
-		panic("결과를 JSON으로 만들 수 없습니다.")
+		panic("Cannot marshal JSON")
 	}
 
 	return bz, nil
@@ -57,7 +57,7 @@ ScheduledTime: %s
 `, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900")))
 }
 
-// queryRoundIDs - 라운드 ID 리스트를 위한 질의
+// queryRoundIDs -
 func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	var roundIDs QueryResRoundIDs
 
@@ -77,7 +77,7 @@ func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res [
 
 }
 
-// QueryResRoundIDs - 라운드 ID 리스트를 위한 구조체
+// QueryResRoundIDs -
 type QueryResRoundIDs []string
 
 func (n QueryResRoundIDs) String() string {
