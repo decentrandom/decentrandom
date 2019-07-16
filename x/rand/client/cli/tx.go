@@ -171,11 +171,11 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 	}
 }
 
-// GetCmdRemoveTargets -
-func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
+// GetCmdUpdateTargets -
+func GetCmdUpdateTargets(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "remove-targets [id] [target1,target2,...,target(n)]",
-		Short: "Remove existing target data",
+		Use:   "update-targets [id] [target1,target2,...,target(n)]",
+		Short: "Update target data",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -190,7 +190,7 @@ func GetCmdRemoveTargets(cdc *codec.Codec) *cobra.Command {
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := rand.NewMsgRemoveTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := rand.NewMsgUpdateTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 
 			err := msg.ValidateBasic()
 			if err != nil {
