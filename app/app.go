@@ -61,7 +61,7 @@ func init() {
 	)
 }
 
-// Custom TX codec
+// MakeCodec -
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
 	ModuleBasics.RegisterCodec(cdc)
@@ -109,7 +109,7 @@ type RandApp struct {
 	mm *module.Manager
 }
 
-// NewRandApp
+// NewRandApp -
 func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool,
 	invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
 
