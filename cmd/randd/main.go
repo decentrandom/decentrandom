@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/decentrandom/decentrandom/app"
-	randInit "github.com/decentrandom/decentrandom/cmd/init"
 	randServer "github.com/decentrandom/decentrandom/server"
 	"github.com/decentrandom/decentrandom/types/util"
 
