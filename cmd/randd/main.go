@@ -16,6 +16,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/store"
+	genaccscli "github.com/cosmos/cosmos-sdk/x/auth/genaccounts/client/cli"
+	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -45,17 +47,19 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:               "randd",
-		Short:             "DecentRandom app daemon (server)",
+		Short:             "DecentRandom daemon (server)",
 		PersistentPreRunE: randServer.PersistentPreRunEFn(ctx),
 	}
 
-	rootCmd.AddCommand(randInit.InitCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.CollectGenTxsCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.TestnetFilesCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc))
-	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc))
+	rootCmd.AddCommand(genutilcli.InitCmd(ctx, cdc, app.ModuleBasics, app.DefaultNodeHome))
+	rootCmd.AddCommand(genutilcli.CollectGenTxsCmd(ctx, cdc, genaccounts.AppModuleBasic{}, app.DefaultNodeHome))
+	rootCmd.AddCommand(genutilcli.GenTxCmd(ctx, cdc, app.ModuleBasics, staking.AppModuleBasic{},
+		genaccounts.AppModuleBasic{}, app.DefaultNodeHome, app.DefaultCLIHome))
+	rootCmd.AddCommand(genutilcli.ValidateGenesisCmd(ctx, cdc, app.ModuleBasics))
+	rootCmd.AddCommand(genaccscli.AddGenesisAccountCmd(ctx, cdc, app.DefaultNodeHome, app.DefaultCLIHome))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
+	rootCmd.AddCommand(testnetCmd(ctx, cdc, app.ModuleBasics, genaccounts.AppModuleBasic{}))
+	rootCmd.AddCommand(replayCmd())
 
 	server.AddCommands(ctx, cdc, rootCmd, newApp, exportAppStateAndTMValidators)
 
@@ -74,6 +78,7 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application
 		logger, db, traceStore, true, assertInvariantsBlockly,
 		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
 		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)),
+		baseapp.SetHaltHeight(uint64(viper.GetInt(server.FlagHaltHeight))),
 	)
 }
 
@@ -82,13 +87,13 @@ func exportAppStateAndTMValidators(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, height int64, forZeroHeight bool, jailWhiteList []string,
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
 	if height != -1 {
-		rApp := app.NewRandApp(logger, db, traceStore, false, false)
+		rApp := app.NewRandApp(logger, db, traceStore, false, uint(1))
 		err := rApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
 		}
 		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-	rApp := app.NewRandApp(logger, db, traceStore, true, false)
+	rApp := app.NewRandApp(logger, db, traceStore, true, uint(1))
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }
