@@ -4,40 +4,61 @@ import (
 	"encoding/json"
 	"log"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/types"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/bank"
+	"github.com/cosmos/cosmos-sdk/x/crisis"
+	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+
+	abci "github.com/tendermint/tendermint/abci/types"
+	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 // ExportAppStateAndValidators -
-func (app *RandApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string,
-) (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
+func (app *RandApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string) (
 
-	// as if they could withdraw from the start of the next block
+	appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
+
 	ctx := app.NewContext(true, abci.Header{Height: app.LastBlockHeight()})
 
 	if forZeroHeight {
 		app.prepForZeroHeightGenesis(ctx, jailWhiteList)
 	}
 
-	genState := app.mm.ExportGenesis(ctx)
+	accounts := []GenesisAccount{}
+	appendAccount := func(acc auth.Account) (stop bool) {
+		account := NewGenesisAccountI(acc)
+		accounts = append(accounts, account)
+		return false
+	}
+	app.accountKeeper.IterateAccounts(ctx, appendAccount)
+
+	genState := NewGenesisState(
+		accounts,
+		auth.ExportGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper),
+		bank.ExportGenesis(ctx, app.bankKeeper),
+		staking.ExportGenesis(ctx, app.stakingKeeper),
+		distr.ExportGenesis(ctx, app.distrKeeper),
+		crisis.ExportGenesis(ctx, app.crisisKeeper),
+		slashing.ExportGenesis(ctx, app.slashingKeeper),
+	)
 	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
 	if err != nil {
 		return nil, nil, err
 	}
 	validators = staking.WriteValidators(ctx, app.stakingKeeper)
+
 	return appState, validators, nil
 }
 
 // prepForZeroHeightGenesis -
 func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []string) {
+
 	applyWhiteList := false
 
-	//Check if there is a whitelist
 	if len(jailWhiteList) > 0 {
 		applyWhiteList = true
 	}
@@ -52,17 +73,32 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 		whiteListMap[addr] = true
 	}
 
-	app.crisisKeeper.AssertInvariants(ctx, app.Logger())
+	app.assertRuntimeInvariantsOnContext(ctx)
 
-	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val staking.ValidatorI) (stop bool) {
-		_, _ = app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val sdk.Validator) (stop bool) {
+
+		var err sdk.Error
+
+		_, err = app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		return false
 	})
 
 	dels := app.stakingKeeper.GetAllDelegations(ctx)
 	for _, delegation := range dels {
-		_, _ = app.distrKeeper.WithdrawDelegationRewards(ctx, delegation.DelegatorAddress, delegation.ValidatorAddress)
+		var err sdk.Error
+
+		_, err = app.distrKeeper.WithdrawDelegationRewards(ctx, delegation.DelegatorAddress, delegation.ValidatorAddress)
+
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
+
 	app.distrKeeper.DeleteAllValidatorSlashEvents(ctx)
 
 	app.distrKeeper.DeleteAllValidatorHistoricalRewards(ctx)
@@ -70,22 +106,13 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 	height := ctx.BlockHeight()
 	ctx = ctx.WithBlockHeight(0)
 
-	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val staking.ValidatorI) (stop bool) {
-
-		// donate any unwithdrawn outstanding reward fraction tokens to the community pool
-		scraps := app.distrKeeper.GetValidatorOutstandingRewards(ctx, val.GetOperator())
-		feePool := app.distrKeeper.GetFeePool(ctx)
-		feePool.CommunityPool = feePool.CommunityPool.Add(scraps)
-		app.distrKeeper.SetFeePool(ctx, feePool)
-
+	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val sdk.Validator) (stop bool) {
 		app.distrKeeper.Hooks().AfterValidatorCreated(ctx, val.GetOperator())
 		return false
 	})
 
-	// reinitialize all delegations
 	for _, del := range dels {
 		app.distrKeeper.Hooks().BeforeDelegationCreated(ctx, del.DelegatorAddress, del.ValidatorAddress)
-		app.distrKeeper.Hooks().AfterDelegationModified(ctx, del.DelegatorAddress, del.ValidatorAddress)
 	}
 
 	ctx = ctx.WithBlockHeight(height)
@@ -110,7 +137,6 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 	iter := sdk.KVStoreReversePrefixIterator(store, staking.ValidatorsKey)
 	counter := int16(0)
 
-	var valConsAddrs []sdk.ConsAddress
 	for ; iter.Valid(); iter.Next() {
 		addr := sdk.ValAddress(iter.Key()[1:])
 		validator, found := app.stakingKeeper.GetValidator(ctx, addr)
@@ -119,7 +145,6 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 		}
 
 		validator.UnbondingHeight = 0
-		valConsAddrs = append(valConsAddrs, validator.ConsAddress())
 		if applyWhiteList && !whiteListMap[addr.String()] {
 			validator.Jailed = true
 		}

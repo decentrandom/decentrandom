@@ -1,0 +1,5 @@
+---
+
+- name: restart randd
+  service: name=randd state=restarted
+

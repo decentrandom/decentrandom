@@ -1,0 +1,15 @@
+init_config:
+
+instances:
+- name: ssh
+  search_string: ['ssh', 'sshd']
+  thresholds:
+    critical: [1, 5]
+- name: randd
+  search_string: ['randd']
+  thresholds:
+    critical: [1, 1]
+- name: randcli
+  search_string: ['randcli']
+  thresholds:
+    critical: [1, 1]
