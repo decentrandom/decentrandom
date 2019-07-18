@@ -67,7 +67,7 @@ func main() {
 
 	rootCmd := &cobra.Command{
 		Use:   "randcli",
-		Short: "DecentRandom command line interface",
+		Short: "Command line interface for interacting with randd",
 	}
 
 	rootCmd.PersistentFlags().String(client.FlagChainID, "", "tendermint node's chain ID")
@@ -92,7 +92,7 @@ func main() {
 	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 	err := executor.Execute()
 	if err != nil {
-		fmt.Printf("execution failed : %s, closing...\n", err)
+		fmt.Printf("Failed executing CLI command : %s, closing...\n", err)
 		os.Exit(1)
 	}
 }
@@ -114,12 +114,17 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 		authcmd.GetAccountCmd(at.StoreKey, cdc),
 	)
 
+	/*
 	for _, m := range mc {
 		mQueryCmd := m.GetQueryCmd()
 		if mQueryCmd != nil {
 			queryCmd.AddCommand(mQueryCmd)
 		}
 	}
+	*/
+
+	// add modules' query commands
+	app.ModuleBasics.AddQueryCommands(queryCmd, cdc)
 
 	return queryCmd
 }
@@ -141,43 +146,24 @@ func txCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 		client.LineBreak,
 	)
 
+	/*
 	for _, m := range mc {
 		txCmd.AddCommand(m.GetTxCmd())
 	}
+	*/
+
+	// add modules' tx commands
+	app.ModuleBasics.AddTxCommands(txCmd, cdc)
 
 	return txCmd
-}
-
-// CLIVersionRequestHandler -
-func CLIVersionRequestHandler(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	_, _ = w.Write([]byte(fmt.Sprintf("{\"version\": \"%s\"}", version.Version)))
 }
 
 // registerRoutes -
 func registerRoutes(rs *lcd.RestServer) {
 
-	rs.Mux.HandleFunc("/version", CLIVersionRequestHandler).Methods("GET")
-	registerSwaggerUI(rs)
-
-	rpc.RegisterRoutes(rs.CliCtx, rs.Mux)
-	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
-	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, at.StoreKey)
-	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	dist.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, distcmd.StoreKey)
-	staking.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	slashing.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	randrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rand.StoreKey)
-}
-
-// registerSwaggerUI -
-func registerSwaggerUI(rs *lcd.RestServer) {
-	statikFS, err := fs.New()
-	if err != nil {
-		panic(err)
-	}
-	staticServer := http.FileServer(statikFS)
-	rs.Mux.PathPrefix("/swagger-ui/").Handler(http.StripPrefix("/swagger-ui/", staticServer))
+	client.RegisterRoutes(rs.CliCtx, rs.Mux)
+	authrest.RegisterTxRoutes(rs.CliCtx, rs.Mux)
+	app.ModuleBasics.RegisterRESTRoutes(rs.CliCtx, rs.Mux)
 }
 
 // initConfig -
