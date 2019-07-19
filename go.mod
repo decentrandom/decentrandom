@@ -43,7 +43,7 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/tendermint/go-amino v0.15.0
 	github.com/tendermint/iavl v0.12.2 // indirect
-	github.com/tendermint/tendermint v0.32.1
+	github.com/tendermint/tendermint v0.31.5
 	github.com/ugorji/go v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/exp v0.0.0-20190718202018-cfdd5522f6f6 // indirect
