@@ -249,7 +249,7 @@ func MakeCodec() *codec.Codec {
 func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 
 	distr.BeginBlocker(ctx, req, app.distrKeeper)
-	mint.BeginBlocker(ctx, app.mintKeeper)
+
 	tags := slashing.BeginBlocker(ctx, req, app.slashingKeeper)
 
 	return abci.ResponseBeginBlock{
