@@ -2,7 +2,6 @@ package app
 
 import (
 	"fmt"
-	//"github.com/decentrandom/decentrandom/types/assets"
 	"io"
 	"os"
 	"sort"
