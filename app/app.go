@@ -343,6 +343,8 @@ func (app *RandApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci
 		}
 	}
 
+	// To-do mintKeeper
+
 	app.assertRuntimeInvariants()
 
 	return abci.ResponseInitChain{
