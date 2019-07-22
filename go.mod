@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/btcsuite/btcd v0.0.0-20190629003639-c26ffa870fd8 // indirect
-	github.com/cosmos/cosmos-sdk v0.35.0
+	github.com/cosmos/cosmos-sdk v0.36.0-rc1
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d // indirect
 	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/gorilla/mux v1.7.3
@@ -21,8 +21,8 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/tendermint/go-amino v0.15.0
-	github.com/tendermint/iavl v0.12.2 // indirect
-	github.com/tendermint/tendermint v0.31.5
+	github.com/tendermint/iavl v0.12.3-0.20190712145259-c834d3192b52 // indirect
+	github.com/tendermint/tendermint v0.32.1
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/net v0.0.0-20190628185345-da137c7871d7 // indirect
 	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
