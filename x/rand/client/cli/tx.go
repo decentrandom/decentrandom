@@ -65,9 +65,11 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
+			/*
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
+			*/
 
 			// string to uint8
 			difficulty64, errConvert := strconv.ParseInt(args[0], 8, 8)
@@ -116,13 +118,13 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
-			msg := rand.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
+			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
 				return errValidate
 			}
 
-			cliCtx.PrintResponse = true
+			//cliCtx.PrintResponse = true
 
 			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
 
@@ -141,17 +143,19 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
+			/*
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
+			*/
 
-			msg := rand.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
+			msg := types.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			cliCtx.PrintResponse = true
+			//cliCtx.PrintResponse = true
 
 			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
 		},
@@ -171,23 +175,25 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
+			/*
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
+			*/
 
 			// string to slice
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := rand.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := types.NewMsgAddTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			cliCtx.PrintResponse = true
+			//cliCtx.PrintResponse = true
 
 			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
 		},
@@ -205,22 +211,24 @@ func GetCmdUpdateTargets(cdc *codec.Codec) *cobra.Command {
 
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
+			/*
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
+			*/
 
 			// 컴마로 구분된 string을 slice로 변환
 			cleaned := strings.Replace(args[1], ",", " ", -1)
 			strSlice := strings.Fields(cleaned)
 
-			msg := rand.NewMsgUpdateTargets(args[0], cliCtx.GetFromAddress(), strSlice)
+			msg := types.NewMsgUpdateTargets(args[0], cliCtx.GetFromAddress(), strSlice)
 
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			cliCtx.PrintResponse = true
+			//cliCtx.PrintResponse = true
 
 			return utils.CompleteAndBroadcastTxCLI(txBldr, cliCtx, []sdk.Msg{msg})
 		},
