@@ -32,7 +32,7 @@ func (hI hashItem) Hash() []byte {
 }
 */
 
-// GetTxCmd
+// GetTxCmd -
 func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 	randTxCmd := &cobra.Command{
 		Use:                        types.ModuleName,
