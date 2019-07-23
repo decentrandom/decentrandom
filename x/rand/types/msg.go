@@ -1,13 +1,13 @@
 package types
 
-const RouterKey = ModuleName
-
 import (
 	"encoding/json"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+const RouterKey = ModuleName
 
 /*
 NewRound

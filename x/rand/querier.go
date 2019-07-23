@@ -1,7 +1,6 @@
 package rand
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -44,17 +43,6 @@ func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 	}
 
 	return bz, nil
-}
-
-func (r Round) String() string {
-	timeString := r.ScheduledTime.Local()
-	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
-Difficulty: %d
-Nonce: %s
-NonceHash: %s
-Targets: %v
-ScheduledTime: %s
-`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900")))
 }
 
 // queryRoundIDs -

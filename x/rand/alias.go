@@ -11,9 +11,17 @@ const (
 )
 
 var (
-	RegisterCodec = types.RegisterCodec
+	NewMsgNewRound      = types.NewMsgNewRound
+	NewMsgDeployNonce   = types.NewMsgDeployNonce
+	NewMsgAddTargets    = types.NewMsgAddTargets
+	NewMsgUpdateTargets = types.NewMsgUpdateTargets
+	RegisterCodec       = types.RegisterCodec
 )
 
 type (
-	Round = types.Round
+	MsgNewRound      = types.MsgNewRound
+	MsgDeployNonce   = types.MsgDeployNonce
+	MsgAddTargets    = types.MsgAddTargets
+	MsgUpdateTargets = types.MsgUpdateTargets
+	Round            = types.Round
 )
