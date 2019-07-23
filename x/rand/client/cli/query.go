@@ -13,18 +13,18 @@ import (
 
 // GetQueryCmd -
 func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
-	songQueryCmd := &cobra.Command{
+	randQueryCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Querying commands for the rand module",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
-	songQueryCmd.AddCommand(client.GetCommands(
+	randQueryCmd.AddCommand(client.GetCommands(
 		GetCmdRoundInfo(cdc),
 		GetCmdRoundIDs(cdc),
 	)...)
-	return songQueryCmd
+	return randQueryCmd
 }
 
 
