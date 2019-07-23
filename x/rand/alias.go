@@ -15,6 +15,7 @@ var (
 	NewMsgDeployNonce   = types.NewMsgDeployNonce
 	NewMsgAddTargets    = types.NewMsgAddTargets
 	NewMsgUpdateTargets = types.NewMsgUpdateTargets
+	ModuleCdc     = types.ModuleCdc
 	RegisterCodec       = types.RegisterCodec
 )
 

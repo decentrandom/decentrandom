@@ -33,7 +33,8 @@ func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
 }
 
 func (AppModuleBasic) DefaultGenesis() json.RawMessage {
-	return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
+	//return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
+	return nil
 }
 
 // Validation check of the Genesis
