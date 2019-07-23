@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/decentrandom/decentrandom/x/rand"
+	"github.com/decentrandom/decentrandom/x/rand/types"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
