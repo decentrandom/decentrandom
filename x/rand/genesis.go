@@ -37,6 +37,7 @@ func ValidateGenesis(data GenesisState) error {
 	return nil
 }
 
+// InitGenesis -
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 
 }
@@ -45,7 +46,3 @@ func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 func ExportGenesis(ctx sdk.Context, keeper Keeper) GenesisState {
 	return GenesisState{}
 }
-
-/*func ExportGenesis(ctx sdk.Context, keeper Keeper) GenesisState {
-	return NewGenesisState()
-}*/

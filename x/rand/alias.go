@@ -7,24 +7,50 @@ import (
 const (
 	// ModuleName -
 	ModuleName = types.ModuleName
-	RouterKey  = types.RouterKey
-	StoreKey   = types.StoreKey
+
+	// RouterKey -
+	RouterKey = types.RouterKey
+
+	// StoreKey -
+	StoreKey = types.StoreKey
 )
 
 var (
-	NewMsgNewRound      = types.NewMsgNewRound
-	NewMsgDeployNonce   = types.NewMsgDeployNonce
-	NewMsgAddTargets    = types.NewMsgAddTargets
+	// NewMsgNewRound -
+	NewMsgNewRound = types.NewMsgNewRound
+
+	// NewMsgDeployNonce -
+	NewMsgDeployNonce = types.NewMsgDeployNonce
+
+	// NewMsgAddTargets -
+	NewMsgAddTargets = types.NewMsgAddTargets
+
+	// NewMsgUpdateTargets -
 	NewMsgUpdateTargets = types.NewMsgUpdateTargets
-	ModuleCdc           = types.ModuleCdc
-	RegisterCodec       = types.RegisterCodec
+
+	// ModuleCdc -
+	ModuleCdc = types.ModuleCdc
+
+	// RegisterCodec -
+	RegisterCodec = types.RegisterCodec
 )
 
 type (
-	MsgNewRound      = types.MsgNewRound
-	MsgDeployNonce   = types.MsgDeployNonce
-	MsgAddTargets    = types.MsgAddTargets
+	// MsgNewRound -
+	MsgNewRound = types.MsgNewRound
+
+	// MsgDeployNonce -
+	MsgDeployNonce = types.MsgDeployNonce
+
+	// MsgAddTargets -
+	MsgAddTargets = types.MsgAddTargets
+
+	// MsgUpdateTargets -
 	MsgUpdateTargets = types.MsgUpdateTargets
-	Round            = types.Round
+
+	// Round -
+	Round = types.Round
+
+	// QueryResRoundIDs -
 	QueryResRoundIDs = types.QueryResRoundIDs
 )
