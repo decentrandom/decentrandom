@@ -11,9 +11,25 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
+// GetQueryCmd -
+func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
+	songQueryCmd := &cobra.Command{
+		Use:                        types.ModuleName,
+		Short:                      "Querying commands for the rand module",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+	songQueryCmd.AddCommand(client.GetCommands(
+		GetCmdRoundInfo(cdc),
+		GetCmdRoundIDs(cdc),
+	)...)
+	return songQueryCmd
+}
+
 
 // GetCmdRoundInfo -
-func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdRoundInfo(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_info [id]",
 		Short: "get information of certain round",
@@ -22,9 +38,9 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			id := args[0]
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", queryRoute, id), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", types.QuerierRoute, id), nil)
 			if err != nil {
-				fmt.Printf("Cannot receive round %s data\nError : %s \nqueryRoute : %s\n", string(id), err.Error(), queryRoute)
+				//fmt.Printf("Cannot receive round %s data\nError : %s \nqueryRoute : %s\n", string(id), err.Error(), queryRoute)
 				return nil
 			}
 
@@ -36,14 +52,14 @@ func GetCmdRoundInfo(queryRoute string, cdc *codec.Codec) *cobra.Command {
 }
 
 // GetCmdRoundIDs -
-func GetCmdRoundIDs(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdRoundIDs(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "round_ids",
 		Short: "Get round IDs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", queryRoute), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", types.QuerierRoute), nil)
 			if err != nil {
 				fmt.Printf("Cannot receive IDs .\n")
 				return nil
