@@ -1,8 +1,6 @@
 package rand
 
 import (
-	"strings"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -63,11 +61,4 @@ func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res [
 
 	return bz, nil
 
-}
-
-// QueryResRoundIDs -
-type QueryResRoundIDs []string
-
-func (n QueryResRoundIDs) String() string {
-	return strings.Join(n[:], "\n")
 }

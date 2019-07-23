@@ -39,13 +39,13 @@ func GetCmdRoundInfo(cdc *codec.Codec) *cobra.Command {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			id := args[0]
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", types.QuerierRoute, id), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", types.QuerierRoute, id), nil)
 			if err != nil {
 				//fmt.Printf("Cannot receive round %s data\nError : %s \nqueryRoute : %s\n", string(id), err.Error(), queryRoute)
 				return nil
 			}
 
-			var out rand.Round
+			var out types.Round
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
@@ -60,13 +60,13 @@ func GetCmdRoundIDs(cdc *codec.Codec) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", types.QuerierRoute), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round_ids", types.QuerierRoute), nil)
 			if err != nil {
 				fmt.Printf("Cannot receive IDs .\n")
 				return nil
 			}
 
-			var out rand.QueryResRoundIDs
+			var out types.QueryResRoundIDs
 			cdc.MustUnmarshalJSON(res, &out)
 
 			return cliCtx.PrintOutput(out)

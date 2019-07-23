@@ -15,7 +15,7 @@ var (
 	NewMsgDeployNonce   = types.NewMsgDeployNonce
 	NewMsgAddTargets    = types.NewMsgAddTargets
 	NewMsgUpdateTargets = types.NewMsgUpdateTargets
-	ModuleCdc     = types.ModuleCdc
+	ModuleCdc           = types.ModuleCdc
 	RegisterCodec       = types.RegisterCodec
 )
 
@@ -25,4 +25,5 @@ type (
 	MsgAddTargets    = types.MsgAddTargets
 	MsgUpdateTargets = types.MsgUpdateTargets
 	Round            = types.Round
+	QueryResRoundIDs = types.QueryResRoundIDs
 )
