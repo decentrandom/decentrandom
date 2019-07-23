@@ -6,9 +6,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 
-	"github.com/decentrandom/decentrandom/x/rand/client/cli"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/decentrandom/decentrandom/x/rand/client/cli"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -101,4 +101,16 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
 func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
+}
+
+func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
+	var genesisState GenesisState
+	ModuleCdc.MustUnmarshalJSON(data, &genesisState)
+	InitGenesis(ctx, am.keeper, genesisState)
+	return []abci.ValidatorUpdate{}
+}
+
+func (am AppModule) ExportGenesis(ctx sdk.Context) json.RawMessage {
+	gs := ExportGenesis(ctx, am.keeper)
+	return ModuleCdc.MustMarshalJSON(gs)
 }
