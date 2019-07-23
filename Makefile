@@ -1,17 +1,15 @@
-PACKAGES_NOSIMULATION=$(shell go list ./... | grep -v '/simulation')
+#!/usr/bin/make -f
+
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
-VERSION := $(shell echo $(shell git rev-parse HEAD) | sed 's/^v//')
+VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
 LEDGER_ENABLED ?= true
-GOTOOLS = \
-	github.com/golangci/golangci-lint/cmd/golangci-lint \
-	github.com/rakyll/statik
-GOBIN ?= $(GOPATH)/bin
-SHASUM := $(shell which sha256sum)
+SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
 
 export GO111MODULE = on
 
 # process build tags
+
 build_tags = netgo
 ifeq ($(LEDGER_ENABLED),true)
   ifeq ($(OS),Windows_NT)
@@ -22,27 +20,18 @@ ifeq ($(LEDGER_ENABLED),true)
       build_tags += ledger
     endif
   else
-    GCC = $(shell command -v gcc 2> /dev/null)
-    ifeq ($(GCC),)
-      $(error gcc not installed for ledger support, please install or set LEDGER_ENABLED=false)
+    UNAME_S = $(shell uname -s)
+    ifeq ($(UNAME_S),OpenBSD)
+      $(warning OpenBSD detected, disabling ledger support (https://github.com/cosmos/cosmos-sdk/issues/1988))
     else
-      build_tags += ledger
+      GCC = $(shell command -v gcc 2> /dev/null)
+      ifeq ($(GCC),)
+        $(error gcc not installed for ledger support, please install or set LEDGER_ENABLED=false)
+      else
+        build_tags += ledger
+      endif
     endif
   endif
-endif
-
-ifeq ($(WITH_CLEVELDB),yes)
-  build_tags += gcc
-endif
-
-# process linker flags
-
-ldflags = -X github.com/decentrandom/decentrandom/version.Version=$(VERSION) \
-					-X github.com/decentrandom/decentrandom/version.Commit=$(COMMIT) \
-					-X "github.com/decentrandom/decentrandom/version.BuildTags=$(build_tags)" \
-
-ifneq ($(SHASUM),)
-	ldflags += -X github.com/decentrandom/decentrandom/version.GoSumHash=$(shell sha256sum go.sum | cut -d ' ' -f1)
 endif
 
 ifeq ($(WITH_CLEVELDB),yes)
@@ -51,74 +40,79 @@ endif
 build_tags += $(BUILD_TAGS)
 build_tags := $(strip $(build_tags))
 
+whitespace :=
+whitespace += $(whitespace)
+comma := ,
+build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
+
+# process linker flags
+
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=go-bitsong \
+		  -X github.com/cosmos/cosmos-sdk/version.ServerName=bitsongd \
+		  -X github.com/cosmos/cosmos-sdk/version.ClientName=bitsongcli \
+		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
+		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
+		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)"
+
+ifeq ($(WITH_CLEVELDB),yes)
+  ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
+endif
 ldflags += $(LDFLAGS)
 ldflags := $(strip $(ldflags))
 
 BUILD_FLAGS := -tags "$(build_tags)" -ldflags '$(ldflags)'
 
-########################################
-### All
+# The below include contains the tools target.
+include contrib/devtools/Makefile
 
-all: clean go-mod-cache install lint test
+all: install lint check
 
-########################################
-### CI
-
-ci: get_tools install lint test
-
-########################################
-### Build/Install
-
-build: update_randd_lite_docs
+build: go.sum
 ifeq ($(OS),Windows_NT)
-	go build $(BUILD_FLAGS) -o build/randd.exe ./cmd/randd
-	go build $(BUILD_FLAGS) -o build/randcli.exe ./cmd/randcli
-	go build $(BUILD_FLAGS) -o build/randkeygen.exe ./cmd/randkeygen
+	go build -mod=readonly $(BUILD_FLAGS) -o build/randd.exe ./cmd/randd
+	go build -mod=readonly $(BUILD_FLAGS) -o build/randcli.exe ./cmd/randcli
 else
-	go build $(BUILD_FLAGS) -o build/randd ./cmd/randd
-	go build $(BUILD_FLAGS) -o build/randcli ./cmd/randcli
-	go build $(BUILD_FLAGS) -o build/randkeygen ./cmd/randkeygen
+	go build -mod=readonly $(BUILD_FLAGS) -o build/randd ./cmd/randd
+	go build -mod=readonly $(BUILD_FLAGS) -o build/randcli ./cmd/randcli
 endif
 
-build-linux:
+build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
-update_randd_lite_docs:
-	@statik -src=client/lcd/swagger-ui -dest=client/lcd -f
+build-contract-tests-hooks:
+ifeq ($(OS),Windows_NT)
+	go build -mod=readonly $(BUILD_FLAGS) -o build/contract_tests.exe ./cmd/contract_tests
+else
+	go build -mod=readonly $(BUILD_FLAGS) -o build/contract_tests ./cmd/contract_tests
+endif
 
-install: update_randd_lite_docs
-	go install $(BUILD_FLAGS) ./cmd/randd
-	go install $(BUILD_FLAGS) ./cmd/randcli
-	go install $(BUILD_FLAGS) ./cmd/randkeygen
+install: go.sum check-ledger
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randd
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randcli
+
+install-debug: go.sum
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randdebug
+
 
 
 ########################################
 ### Tools & dependencies
 
-get_tools:
-	go get github.com/rakyll/statik
-	go get github.com/golangci/golangci-lint/cmd/golangci-lint
-
-update_tools:
-	@echo "--> Updating tools to correct version"
-	$(MAKE) --always-make get_tools
-
-go-mod-cache: go-sum
+go-mod-cache: go.sum
 	@echo "--> Download go modules to local cache"
-	@go mod tidy
 	@go mod download
 
-go-sum: get_tools
+go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
 	@go mod verify
 
-go-release:
-	@echo "--> Dry run for go-release"
-	BUILD_TAGS=$(shell echo \"$(build_tags)\") GOSUM=$(shell sha256sum go.sum | cut -d ' ' -f1) goreleaser release --skip-publish --rm-dist --debug
+draw-deps:
+	@# requires brew install graphviz or apt-get install graphviz
+	go get github.com/RobotsAndPencils/goviz
+	@goviz -i ./cmd/randd -d 2 | dot -Tpng -o dependency-graph.png
 
 clean:
-	rm -rf ./dist
-	rm -rf ./build
+	rm -rf snapcraft-local.yaml build/
 
 distclean: clean
 	rm -rf vendor/
@@ -126,55 +120,80 @@ distclean: clean
 ########################################
 ### Testing
 
-test: test_unit
 
-test_unit:
-	@VERSION=$(VERSION) go test $(PACKAGES_NOSIMULATION)
+check: check-unit check-build
+check-all: check check-race check-cover
 
-test_race:
-	@VERSION=$(VERSION) go test -race $(PACKAGES_NOSIMULATION)
+check-unit:
+	@VERSION=$(VERSION) go test -mod=readonly -tags='ledger test_ledger_mock' ./...
+
+check-race:
+	@VERSION=$(VERSION) go test -mod=readonly -race -tags='ledger test_ledger_mock' ./...
+
+check-cover:
+	@go test -mod=readonly -timeout 30m -race -coverprofile=coverage.txt -covermode=atomic -tags='ledger test_ledger_mock' ./...
+
+check-build: build
+	@go test -mod=readonly -p 4 `go list ./cli_test/...` -tags=cli_test -v
+
+
+lint: golangci-lint
+
+	golangci-lint run
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" | xargs gofmt -d -s
+	go mod verify
 
 format:
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs gofmt -w -s
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs misspell -w
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs goimports -w -local github.com/decentrandom/decentrandom
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs goimports -w -local github.com/cosmos/cosmos-sdk
 
 benchmark:
-	@go test -bench=. $(PACKAGES_NOSIMULATION)
+	@go test -mod=readonly -bench=. ./...
 
-lint: get_tools ci-lint
-ci-lint:
-	@echo "--> Running lint..."
-	golangci-lint run
-	go vet -composites=false -tests=false ./...
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" | xargs gofmt -d -s
-	go mod verify
 
 ########################################
 ### Local validator nodes using docker and docker-compose
 
-build-docker-randdnode:
+build-docker-bitsongdnode:
 	$(MAKE) -C networks/local
 
 # Run a 4-node testnet locally
 localnet-start: localnet-stop
-	@if ! [ -f build/node0/randd/config/genesis.json ]; then docker run --rm -v $(CURDIR)/build:/randd:Z tendermint/randdnode testnet --v 5 -o . --starting-ip-address 192.168.10.2; fi
-	# replace docker ip to local port, mapped
-	sed -i -e 's/192.168.10.2:26656/localhost:26656/g; s/192.168.10.3:26656/localhost:26659/g; s/192.168.10.4:26656/localhost:26661/g; s/192.168.10.5:26656/localhost:26663/g' $(CURDIR)/build/node4/randd/config/config.toml
-	# change allow duplicated ip option to prevent the error : cant not route ~
-	sed -i -e 's/allow_duplicate_ip \= false/allow_duplicate_ip \= true/g' `find $(CURDIR)/build -name "config.toml"`
+	@if ! [ -f build/node0/bitsongd/config/genesis.json ]; then docker run --rm -v $(CURDIR)/build:/randd:Z tendermint/randnode testnet --v 4 -o . --starting-ip-address 192.168.10.2 ; fi
 	docker-compose up -d
 
 # Stop testnet
 localnet-stop:
 	docker-compose down
 
-# To avoid unintended conflicts with file names, always add to .PHONY
-# unless there is a reason not to.
-# https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html
-.PHONY: build install clean distclean update_randd_lite_docs \
-get_tools update_tools \
-test test_cli test_unit benchmark \
-build-linux build-docker-randdnode localnet-start localnet-stop \
-format update_dev_tools lint ci ci-lint\
-go-mod-cache go-sum
+setup-contract-tests-data:
+	echo 'Prepare data for the contract tests'
+	rm -rf /tmp/contract_tests ; \
+	mkdir /tmp/contract_tests ; \
+	cp "${GOPATH}/pkg/mod/${SDK_PACK}/client/lcd/swagger-ui/swagger.yaml" /tmp/contract_tests/swagger.yaml ; \
+	./build/randd init --home /tmp/contract_tests/.randd --chain-id lcd contract-tests ; \
+	tar -xzf lcd_test/testdata/state.tar.gz -C /tmp/contract_tests/
+
+start-gaia: setup-contract-tests-data
+	./build/randd --home /tmp/contract_tests/.randd start &
+	@sleep 2s
+
+setup-transactions: start-gaia
+	@bash ./lcd_test/testdata/setup.sh
+
+run-lcd-contract-tests:
+	@echo "Running DecentRandom LCD for contract tests"
+	./build/randcli rest-server --laddr tcp://0.0.0.0:8080 --home /tmp/contract_tests/.randcli --node http://localhost:26657 --chain-id lcd --trust-node true
+
+contract-tests: setup-transactions
+	@echo "Running DecentRandom LCD for contract tests"
+	dredd && pkill bitsongd
+
+# include simulations
+include sims.mk
+
+.PHONY: all build-linux install install-debug \
+	go-mod-cache draw-deps clean build \
+	setup-transactions setup-contract-tests-data start-gaia run-lcd-contract-tests contract-tests \
+	check check-all check-build check-cover check-ledger check-unit check-race
