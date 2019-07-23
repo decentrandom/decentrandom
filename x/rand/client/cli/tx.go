@@ -36,18 +36,21 @@ func (hI hashItem) Hash() []byte {
 func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 	randTxCmd := &cobra.Command{
 		Use:                        types.ModuleName,
-		Short:                      "Song transaction subcommands",
+		Short:                      "Rand transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
 
-	songTxCmd.AddCommand(client.PostCommands(
-		GetCmdPublish(cdc),
-		GetCmdPlay(cdc),
+	randTxCmd.AddCommand(client.PostCommands(
+		GetCmdNewRound(cdc),
+		GetCmdNewRound(cdc),
+		GetCmdAddTargets(cdc),
+		GetCmdUpdateTargets(cdc),
+		GetCmdUpdateTargets(cdc),
 	)...)
 
-	return songTxCmd
+	return randTxCmd
 }
 
 // GetCmdNewRound -
