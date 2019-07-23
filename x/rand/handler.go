@@ -3,6 +3,7 @@ package rand
 import (
 	"fmt"
 
+	"github.com/decentrandom/decentrandom/x/rand/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
