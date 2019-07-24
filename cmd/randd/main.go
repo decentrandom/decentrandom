@@ -64,8 +64,7 @@ func main() {
 
 	// prepare and add flags
 	executor := cli.PrepareBaseCmd(rootCmd, "DR", app.DefaultNodeHome)
-	rootCmd.PersistentFlags().UintVar(&invCheckPeriod, flagInvCheckPeriod,
-		0, "Assert registered invariants every N blocks")
+	rootCmd.PersistentFlags().UintVar(&invCheckPeriod, flagInvCheckPeriod, 0, "Assert registered invariants every N blocks")
 	err := executor.Execute()
 	if err != nil {
 		panic(err)
