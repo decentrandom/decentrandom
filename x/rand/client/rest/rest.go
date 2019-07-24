@@ -1,5 +1,5 @@
 package rest
-
+/*
 import (
 	"fmt"
 	"net/http"
@@ -217,3 +217,4 @@ func updateTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 
 	}
 }
+*/
