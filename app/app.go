@@ -31,7 +31,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/supply"
 
 	"github.com/decentrandom/decentrandom/x/rand"
-	"github.com/decentrandom/decentrandom/x/rand/types/assets"
+	//"github.com/decentrandom/decentrandom/x/rand/types/assets"
 )
 
 const appName = "RandApp"
@@ -154,7 +154,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest b
 
 	// init params keeper and subspaces
 
-	stakingParams := staking.NewParams(staking.DefaultUnbondingTime, staking.DefaultMaxValidators, staking.DefaultMaxEntries, assets.MicroRandDenom)
 	app.paramsKeeper = params.NewKeeper(app.cdc, app.keyParams, app.tkeyParams, params.DefaultCodespace)
 	authSubspace := app.paramsKeeper.Subspace(auth.DefaultParamspace)
 	bankSubspace := app.paramsKeeper.Subspace(bank.DefaultParamspace)
@@ -264,6 +263,7 @@ func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 // InitChainer -
 func (app *RandApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	var genesisState simapp.GenesisState
+
 	app.cdc.MustUnmarshalJSON(req.AppStateBytes, &genesisState)
 	return app.mm.InitGenesis(ctx, genesisState)
 }
