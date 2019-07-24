@@ -14,17 +14,16 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/decentrandom/decentrandom/app"
-	"github.com/decentrandom/decentrandom/types/util"
 	randInit "github.com/decentrandom/decentrandom/cmd/init"
+	"github.com/decentrandom/decentrandom/types/util"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	//"github.com/cosmos/cosmos-sdk/x/genaccounts"
+	"github.com/cosmos/cosmos-sdk/x/genaccounts"
 	genaccscli "github.com/cosmos/cosmos-sdk/x/genaccounts/client/cli"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
 
@@ -56,7 +55,7 @@ func main() {
 	rootCmd.AddCommand(randInit.GenTxCmd(ctx, cdc, app.ModuleBasics, staking.AppModuleBasic{},
 		genaccounts.AppModuleBasic{}, app.DefaultNodeHome, app.DefaultCLIHome))
 	rootCmd.AddCommand(randInit.ValidateGenesisCmd(ctx, cdc, app.ModuleBasics))
-	rootCmd.AddCommand(randInit.AddGenesisAccountCmd(ctx, cdc, app.DefaultNodeHome, app.DefaultCLIHome))
+	rootCmd.AddCommand(genaccscli.AddGenesisAccountCmd(ctx, cdc, app.DefaultNodeHome, app.DefaultCLIHome))
 	rootCmd.AddCommand(client.NewCompletionCmd(rootCmd, true))
 	rootCmd.AddCommand(testnetCmd(ctx, cdc, app.ModuleBasics, genaccounts.AppModuleBasic{}))
 	rootCmd.AddCommand(replayCmd())
