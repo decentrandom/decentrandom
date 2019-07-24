@@ -72,7 +72,7 @@ func main() {
 	)
 
 	// Add flags and prefix all env exposed with GA
-	executor := cli.PrepareMainCmd(rootCmd, "GA", app.DefaultCLIHome)
+	executor := cli.PrepareMainCmd(rootCmd, "DR", app.DefaultCLIHome)
 
 	err := executor.Execute()
 	if err != nil {
