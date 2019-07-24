@@ -76,9 +76,9 @@ Example:
 		"Directory to store initialization data for the testnet")
 	cmd.Flags().String(flagNodeDirPrefix, "node",
 		"Prefix the directory name for each node with (node results in node0, node1, ...)")
-	cmd.Flags().String(flagNodeDaemonHome, "bitsongd",
+	cmd.Flags().String(flagNodeDaemonHome, "randd",
 		"Home directory of the node's daemon configuration")
-	cmd.Flags().String(flagNodeCLIHome, "bitsongcli",
+	cmd.Flags().String(flagNodeCLIHome, "randcli",
 		"Home directory of the node's cli configuration")
 	cmd.Flags().String(flagStartingIPAddress, "192.168.0.1",
 		"Starting IP address (192.168.0.1 results in persistent peers list ID0@192.168.0.1:46656, ID1@192.168.0.2:46656, ...)")
@@ -106,8 +106,8 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 	nodeIDs := make([]string, numValidators)
 	valPubKeys := make([]crypto.PubKey, numValidators)
 
-	gaiaConfig := srvconfig.DefaultConfig()
-	gaiaConfig.MinGasPrices = minGasPrices
+	randConfig := srvconfig.DefaultConfig()
+	randConfig.MinGasPrices = minGasPrices
 
 	var (
 		accs     []genaccounts.GenesisAccount
@@ -233,8 +233,8 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 
 		// TODO: Rename config file to server.toml as it's not particular to Gaia
 		// (REF: https://github.com/cosmos/cosmos-sdk/issues/4125).
-		gaiaConfigFilePath := filepath.Join(nodeDir, "config/bitsongd.toml")
-		srvconfig.WriteConfigFile(gaiaConfigFilePath, gaiaConfig)
+		randConfigFilePath := filepath.Join(nodeDir, "config/randd.toml")
+		srvconfig.WriteConfigFile(randConfigFilePath, randConfig)
 	}
 
 	if err := initGenFiles(cdc, mbm, chainID, accs, genFiles, numValidators); err != nil {
