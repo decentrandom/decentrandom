@@ -6,7 +6,6 @@ import (
 
 // GenesisState - song genesis state
 type GenesisState struct {
-	//Round Round `json:"round"`
 }
 
 // NewGenesisState creates a new GenesisState object
