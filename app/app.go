@@ -1,7 +1,7 @@
 package app
 
 import (
-	"io"
+	//"io"
 	"os"
 
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -120,13 +120,13 @@ type RandApp struct {
 }
 
 // NewRandApp -
-func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool,
-	invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
+// func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool, invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
+func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 
 	cdc := MakeCodec()
 
-	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc), baseAppOptions...)
-	bApp.SetCommitMultiStoreTracer(traceStore)
+	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
+	//bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetAppVersion(version.Version)
 
 	var app = &RandApp{
@@ -237,13 +237,29 @@ func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest b
 		auth.DefaultSigVerificationGasConsumer))
 	app.SetEndBlocker(app.EndBlocker)
 
+	/*
 	if loadLatest {
 		err := app.LoadLatestVersion(app.keyMain)
 		if err != nil {
 			cmn.Exit(err.Error())
 		}
 	}
+	*/
+
+	err := app.LoadLatestVersion(app.keyMain)
+	if err != nil {
+		cmn.Exit(err.Error())
+	}
+
 	return app
+}
+
+// GenesisState -
+type GenesisState map[string]json.RawMessage
+
+// NewDefaultGenesisState -
+func NewDefaultGenesisState() GenesisState {
+	return ModuleBasics.DefaultGenesis()
 }
 
 // BeginBlocker -
