@@ -44,7 +44,7 @@ var (
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 	// ModuleBasics -
-	ModuleBasics module.NewBasicManager(
+	ModuleBasics = module.NewBasicManager(
 		genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},
