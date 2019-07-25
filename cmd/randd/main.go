@@ -72,12 +72,9 @@ func main() {
 	}
 }
 
-func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
+func newApp(logger log.Logger, db dbm.DB) abci.Application {
 	return app.NewRandApp(
-		logger, db, traceStore, true, invCheckPeriod,
-		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
-		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)),
-		baseapp.SetHaltHeight(uint64(viper.GetInt(server.FlagHaltHeight))),
+		logger, db, invCheckPeriod,
 	)
 }
 
@@ -86,13 +83,13 @@ func exportAppStateAndTMValidators(
 ) (json.RawMessage, []tmtypes.GenesisValidator, error) {
 
 	if height != -1 {
-		rApp := app.NewRandApp(logger, db, traceStore, false, uint(1))
+		rApp := app.NewRandApp(logger, db, uint(1))
 		err := rApp.LoadHeight(height)
 		if err != nil {
 			return nil, nil, err
 		}
 		return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 	}
-	rApp := app.NewRandApp(logger, db, traceStore, true, uint(1))
+	rApp := app.NewRandApp(logger, db, uint(1))
 	return rApp.ExportAppStateAndValidators(forZeroHeight, jailWhiteList)
 }

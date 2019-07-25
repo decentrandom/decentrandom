@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -19,9 +18,7 @@ import (
 
 	"github.com/decentrandom/decentrandom/app"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -79,22 +76,23 @@ func replayTxs(rootDir string) error {
 	}
 
 	// TraceStore
-	var traceStoreWriter io.Writer
-	var traceStoreDir = filepath.Join(dataDir, "trace.log")
-	traceStoreWriter, err = os.OpenFile(
-		traceStoreDir,
-		os.O_WRONLY|os.O_APPEND|os.O_CREATE,
-		0666,
-	)
-	if err != nil {
-		return err
-	}
+	/*
+		var traceStoreWriter io.Writer
+		var traceStoreDir = filepath.Join(dataDir, "trace.log")
+		traceStoreWriter, err = os.OpenFile(
+			traceStoreDir,
+			os.O_WRONLY|os.O_APPEND|os.O_CREATE,
+			0666,
+		)
+		if err != nil {
+			return err
+		}
+	*/
 
 	// Application
 	fmt.Fprintln(os.Stderr, "Creating application")
 	myapp := app.NewRandApp(
-		ctx.Logger, appDB, traceStoreWriter, true, uint(1),
-		baseapp.SetPruning(store.PruneEverything), // nothing
+		ctx.Logger, appDB, uint(1),
 	)
 
 	// Genesis
