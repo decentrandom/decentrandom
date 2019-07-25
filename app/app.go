@@ -44,21 +44,7 @@ var (
 	DefaultNodeHome = os.ExpandEnv("$HOME/.randd")
 
 	// ModuleBasics -
-	ModuleBasics module.BasicManager
-
-	// account permissions
-	maccPerms = map[string][]string{
-		auth.FeeCollectorName:     nil,
-		distr.ModuleName:          nil,
-		mint.ModuleName:           {supply.Minter},
-		staking.BondedPoolName:    {supply.Burner, supply.Staking},
-		staking.NotBondedPoolName: {supply.Burner, supply.Staking},
-		gov.ModuleName:            {supply.Burner},
-	}
-)
-
-func init() {
-	ModuleBasics = module.NewBasicManager(
+	ModuleBasics module.NewBasicManager(
 		genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},
@@ -73,7 +59,17 @@ func init() {
 		supply.AppModuleBasic{},
 		rand.AppModule{},
 	)
-}
+
+	// account permissions
+	maccPerms = map[string][]string{
+		auth.FeeCollectorName:     nil,
+		distr.ModuleName:          nil,
+		mint.ModuleName:           {supply.Minter},
+		staking.BondedPoolName:    {supply.Burner, supply.Staking},
+		staking.NotBondedPoolName: {supply.Burner, supply.Staking},
+		gov.ModuleName:            {supply.Burner},
+	}
+)
 
 // MakeCodec -
 func MakeCodec() *codec.Codec {
