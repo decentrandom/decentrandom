@@ -131,22 +131,24 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	bApp.SetAppVersion(version.Version)
 
 	var app = &RandApp{
-		BaseApp:        bApp,
-		cdc:            cdc,
+		BaseApp: bApp,
+		cdc:     cdc,
+
 		invCheckPeriod: invCheckPeriod,
-		keyMain:        sdk.NewKVStoreKey(bam.MainStoreKey),
-		keyAccount:     sdk.NewKVStoreKey(auth.StoreKey),
-		keySupply:      sdk.NewKVStoreKey(supply.StoreKey),
-		keyStaking:     sdk.NewKVStoreKey(staking.StoreKey),
-		tkeyStaking:    sdk.NewTransientStoreKey(staking.TStoreKey),
-		keyMint:        sdk.NewKVStoreKey(mint.StoreKey),
-		keyDistr:       sdk.NewKVStoreKey(distr.StoreKey),
-		tkeyDistr:      sdk.NewTransientStoreKey(distr.TStoreKey),
-		keySlashing:    sdk.NewKVStoreKey(slashing.StoreKey),
-		keyGov:         sdk.NewKVStoreKey(gov.StoreKey),
-		keyParams:      sdk.NewKVStoreKey(params.StoreKey),
-		tkeyParams:     sdk.NewTransientStoreKey(params.TStoreKey),
-		keyRand:        sdk.NewKVStoreKey(rand.StoreKey),
+
+		keyMain:     sdk.NewKVStoreKey(bam.MainStoreKey),
+		keyAccount:  sdk.NewKVStoreKey(auth.StoreKey),
+		keySupply:   sdk.NewKVStoreKey(supply.StoreKey),
+		keyStaking:  sdk.NewKVStoreKey(staking.StoreKey),
+		tkeyStaking: sdk.NewTransientStoreKey(staking.TStoreKey),
+		keyMint:     sdk.NewKVStoreKey(mint.StoreKey),
+		keyDistr:    sdk.NewKVStoreKey(distr.StoreKey),
+		tkeyDistr:   sdk.NewTransientStoreKey(distr.TStoreKey),
+		keySlashing: sdk.NewKVStoreKey(slashing.StoreKey),
+		keyGov:      sdk.NewKVStoreKey(gov.StoreKey),
+		keyParams:   sdk.NewKVStoreKey(params.StoreKey),
+		tkeyParams:  sdk.NewTransientStoreKey(params.TStoreKey),
+		keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
 	}
 
 	// init params keeper and subspaces
