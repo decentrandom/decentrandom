@@ -2,20 +2,29 @@ package rand
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // GenesisState - song genesis state
 type GenesisState struct {
+	RoundRecords []Round `json:"round_records"`
 }
 
 // NewGenesisState creates a new GenesisState object
-func NewGenesisState() GenesisState {
-	return GenesisState{}
+func NewGenesisState(roundRecords []Round) GenesisState {
+	return GenesisState{RoundRecords: nil}
+}
+
+// ValidateGenesis validates genesis state
+func ValidateGenesis(data GenesisState) error {
+	return nil
 }
 
 // DefaultGenesisState creates a default GenesisState object
 func DefaultGenesisState() GenesisState {
-	return GenesisState{}
+	return GenesisState{
+		RoundRecords: []Round{},
+	}
 }
 
 // Checks whether 2 GenesisState structs are equivalent.
@@ -31,14 +40,9 @@ func DefaultGenesisState() GenesisState {
 	return data.Equal(emptyGenState)
 }*/
 
-// ValidateGenesis validates genesis state
-func ValidateGenesis(data GenesisState) error {
-	return nil
-}
-
 // InitGenesis -
-func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
-
+func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) []abci.ValidatorUpdate {
+	return []abci.ValidatorUpdate{}
 }
 
 // ExportGenesis returns a GenesisState for a given context and keeper.

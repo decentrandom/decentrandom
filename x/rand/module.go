@@ -36,8 +36,8 @@ func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
 
 // DefaultGenesis -
 func (AppModuleBasic) DefaultGenesis() json.RawMessage {
-	//return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
-	return nil
+	return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
+	//return nil
 }
 
 // ValidateGenesis -
@@ -120,8 +120,8 @@ func (AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.Validato
 func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	ModuleCdc.MustUnmarshalJSON(data, &genesisState)
-	InitGenesis(ctx, am.keeper, genesisState)
-	return []abci.ValidatorUpdate{}
+	//InitGenesis(ctx, am.keeper, genesisState)
+	return InitGenesis(ctx, am.keeper, genesisState)
 }
 
 // ExportGenesis -

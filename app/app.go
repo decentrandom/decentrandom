@@ -2,8 +2,8 @@ package app
 
 import (
 	//"io"
-	"os"
 	"encoding/json"
+	"os"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	cmn "github.com/tendermint/tendermint/libs/common"
@@ -239,12 +239,12 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	app.SetEndBlocker(app.EndBlocker)
 
 	/*
-	if loadLatest {
-		err := app.LoadLatestVersion(app.keyMain)
-		if err != nil {
-			cmn.Exit(err.Error())
+		if loadLatest {
+			err := app.LoadLatestVersion(app.keyMain)
+			if err != nil {
+				cmn.Exit(err.Error())
+			}
 		}
-	}
 	*/
 
 	err := app.LoadLatestVersion(app.keyMain)
