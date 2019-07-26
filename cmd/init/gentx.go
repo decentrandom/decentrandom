@@ -94,7 +94,7 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 
 			if err = mbm.ValidateGenesis(genesisState); err != nil {
 
-				return err
+				//return err
 			}
 
 			kb, err := client.NewKeyBaseFromDir(viper.GetString(flagClientHome))
