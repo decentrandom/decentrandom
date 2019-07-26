@@ -35,7 +35,7 @@ const (
 	flagClientHome = "home-client"
 )
 
-// helpers for message building gen-tx command
+// StakingMsgBuildingHelpers -
 type StakingMsgBuildingHelpers interface {
 	CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, nodeIDFlag, pubkeyFlag, amountFlag, defaultsDesc string)
 	PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string, valPubKey crypto.PubKey)
@@ -93,7 +93,7 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 			}
 
 			if err = mbm.ValidateGenesis(genesisState); err != nil {
-				
+
 				return err
 			}
 
