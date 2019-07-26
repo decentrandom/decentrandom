@@ -73,12 +73,13 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 				nodeID = nodeIDString
 			}
 
-			fmt.Println(nodeID)
+			//fmt.Println(nodeID)
 
 			// Read --pubkey, if empty take it from priv_validator.json
 			if valPubKeyString := viper.GetString(flagPubKey); valPubKeyString != "" {
 				valPubKey, err = sdk.GetConsPubKeyBech32(valPubKeyString)
-				fmt.Println(valPubKey)
+				//fmt.Println(valPubKey)
+
 				if err != nil {
 					return err
 				}
@@ -91,6 +92,7 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 
 			var genesisState map[string]json.RawMessage
 			if err = cdc.UnmarshalJSON(genDoc.AppState, &genesisState); err != nil {
+				fmt.Println("here")
 				return err
 			}
 
