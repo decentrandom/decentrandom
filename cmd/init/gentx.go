@@ -92,11 +92,8 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 				return err
 			}
 
-			for key, val := range genesisState {
-				fmt.Println(key, val)
-			}
-
 			if err = mbm.ValidateGenesis(genesisState); err != nil {
+				
 				return err
 			}
 
