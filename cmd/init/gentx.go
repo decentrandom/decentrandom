@@ -78,7 +78,6 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 			// Read --pubkey, if empty take it from priv_validator.json
 			if valPubKeyString := viper.GetString(flagPubKey); valPubKeyString != "" {
 				valPubKey, err = sdk.GetConsPubKeyBech32(valPubKeyString)
-				//fmt.Println(valPubKey)
 
 				if err != nil {
 					return err
@@ -87,21 +86,24 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 
 			genDoc, err := tmtypes.GenesisDocFromFile(config.GenesisFile())
 			if err != nil {
+				fmt.Println("here1")
 				return err
 			}
 
 			var genesisState map[string]json.RawMessage
 			if err = cdc.UnmarshalJSON(genDoc.AppState, &genesisState); err != nil {
-				fmt.Println("here")
+				fmt.Println("here2")
 				return err
 			}
 
 			if err = mbm.ValidateGenesis(genesisState); err != nil {
+				fmt.Println("here3")
 				return err
 			}
 
 			kb, err := client.NewKeyBaseFromDir(viper.GetString(flagClientHome))
 			if err != nil {
+				fmt.Println("here4")
 				return err
 			}
 
