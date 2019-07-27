@@ -1,6 +1,7 @@
 package rand
 
 import (
+	"fmt"
 	"encoding/json"
 
 	"github.com/gorilla/mux"
@@ -46,6 +47,7 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 	var data GenesisState
 	err := ModuleCdc.UnmarshalJSON(bz, &data)
 	if err != nil {
+		fmt.PrintLn("what")
 		return err
 	}
 	// Once json successfully marshalled, passes along to genesis.go
