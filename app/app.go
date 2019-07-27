@@ -58,7 +58,7 @@ var (
 		crisis.AppModuleBasic{},
 		slashing.AppModuleBasic{},
 		supply.AppModuleBasic{},
-		//rand.AppModule{},
+		rand.AppModule{},
 	)
 
 	// account permissions
@@ -101,7 +101,7 @@ type RandApp struct {
 	keyGov      *sdk.KVStoreKey
 	keyParams   *sdk.KVStoreKey
 	tkeyParams  *sdk.TransientStoreKey
-	//keyRand     *sdk.KVStoreKey
+	keyRand     *sdk.KVStoreKey
 
 	// keepers
 	accountKeeper  auth.AccountKeeper
@@ -114,7 +114,7 @@ type RandApp struct {
 	govKeeper      gov.Keeper
 	crisisKeeper   crisis.Keeper
 	paramsKeeper   params.Keeper
-	//randKeeper     rand.Keeper
+	randKeeper     rand.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -148,7 +148,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		keyGov:      sdk.NewKVStoreKey(gov.StoreKey),
 		keyParams:   sdk.NewKVStoreKey(params.StoreKey),
 		tkeyParams:  sdk.NewTransientStoreKey(params.TStoreKey),
-		//keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
+		keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
 	}
 
 	// init params keeper and subspaces
@@ -205,7 +205,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		mint.NewAppModule(app.mintKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.distrKeeper, app.accountKeeper, app.supplyKeeper),
-		//rand.NewAppModule(app.randKeeper),
+		rand.NewAppModule(app.randKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -226,14 +226,9 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter())
 
 	// initialize stores
-	/*app.MountStores(app.keyMain, app.keyAccount, app.keySupply, app.keyStaking,
-	app.keyMint, app.keyDistr, app.keySlashing, app.keyGov, app.keyParams,
-	app.tkeyParams, app.tkeyStaking, app.tkeyDistr, app.keyRand)
-	*/
-
 	app.MountStores(app.keyMain, app.keyAccount, app.keySupply, app.keyStaking,
 		app.keyMint, app.keyDistr, app.keySlashing, app.keyGov, app.keyParams,
-		app.tkeyParams, app.tkeyStaking, app.tkeyDistr)
+		app.tkeyParams, app.tkeyStaking, app.tkeyDistr, app.keyRand)
 
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
