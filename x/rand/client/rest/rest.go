@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
+	//"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/decentrandom/decentrandom/x/rand/types"
@@ -21,10 +21,10 @@ const (
 
 // RegisterRoutes -
 func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, storeName string) {
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cliCtx, storeName)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cliCtx, storeName)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), deployNonceHandler(cliCtx, storeName)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), updateTargetsHandler(cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), deployNonceHandler(cliCtx)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), updateTargetsHandler(cliCtx)).Methods("PUT")
 	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restRound), roundHandler(cliCtx, storeName)).Methods("GET")
 
 }
@@ -33,16 +33,16 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, storeName string) 
 // roundHandler -
 func roundHandler(cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		paramType := vars[restRound]
+		//vars := mux.Vars(r)
+		//paramType := vars[restRound]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeName, paramType), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeName), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }
 
@@ -163,11 +163,11 @@ func addTargetsHandler(cliCtx context.CLIContext) http.HandlerFunc {
 			return
 		}
 
-		msg := rand.NewMsgAddTargets(req.ID, addr, req.Targets)
+		msg := types.NewMsgAddTargets(req.ID, addr, req.Targets)
 
 		err = msg.ValidateBasic()
 		if err != nil {
-			types.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
