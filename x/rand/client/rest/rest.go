@@ -1,5 +1,5 @@
 package rest
-/*
+
 import (
 	"fmt"
 	"net/http"
@@ -8,11 +8,11 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
-	clientrest "github.com/cosmos/cosmos-sdk/client/rest"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/decentrandom/decentrandom/x/rand"
+	"github.com/decentrandom/decentrandom/x/rand/types"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 )
 
 const (
@@ -20,18 +20,18 @@ const (
 )
 
 // RegisterRoutes -
-func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cdc, cliCtx, storeName)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), deployNonceHandler(cdc, cliCtx, storeName)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), updateTargetsHandler(cdc, cliCtx, storeName)).Methods("PUT")
-	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restRound), roundHandler(cdc, cliCtx, storeName)).Methods("GET")
+func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, storeName string) {
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), newRoundHandler(cliCtx, storeName)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), addTargetsHandler(cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), deployNonceHandler(cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds", storeName), updateTargetsHandler(cliCtx, storeName)).Methods("PUT")
+	r.HandleFunc(fmt.Sprintf("/%s/rounds/{%s}/round", storeName, restRound), roundHandler(cliCtx, storeName)).Methods("GET")
 
 }
 
 // Query Handler(s)
 // roundHandler -
-func roundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func roundHandler(cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		paramType := vars[restRound]
@@ -59,11 +59,11 @@ type newRoundReq struct {
 }
 
 // newRoundHandler -
-func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func newRoundHandler(cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req newRoundReq
 
-		if !rest.ReadRESTReq(w, r, cdc, &req) {
+		if !rest.ReadRESTReq(w, r, cliCtx.Codec, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
@@ -79,14 +79,14 @@ func newRoundHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName stri
 			return
 		}
 
-		msg := rand.NewMsgNewRound(req.ID, req.Difficulty, addr, req.NonceHash, req.Targets, req.ScheduledTime)
+		msg := types.NewMsgNewRound(req.ID, req.Difficulty, addr, req.NonceHash, req.Targets, req.ScheduledTime)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
@@ -100,11 +100,11 @@ type deployNonceReq struct {
 }
 
 // deployNonceHandler -
-func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func deployNonceHandler(cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req deployNonceReq
 
-		if !rest.ReadRESTReq(w, r, cdc, &req) {
+		if !rest.ReadRESTReq(w, r, cliCtx.Codec, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
@@ -120,7 +120,7 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		msg := rand.NewMsgDeployNonce(req.ID, addr, req.Nonce)
+		msg := types.NewMsgDeployNonce(req.ID, addr, req.Nonce)
 
 		err = msg.ValidateBasic()
 		if err != nil {
@@ -128,7 +128,7 @@ func deployNonceHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
 		//clientrest.CompleteAndBroadcastTxREST(w, cliCtx, baseReq, []sdk.Msg{msg}, cdc)
 
 	}
@@ -143,11 +143,11 @@ type addTargetsReq struct {
 }
 
 // addTargetsHandler -
-func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func addTargetsHandler(cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req addTargetsReq
 
-		if !rest.ReadRESTReq(w, r, cdc, &req) {
+		if !rest.ReadRESTReq(w, r, cliCtx.Codec, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
@@ -167,11 +167,11 @@ func addTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName st
 
 		err = msg.ValidateBasic()
 		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			types.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
@@ -185,11 +185,11 @@ type updateTargetsReq struct {
 }
 
 // updateTargetsHandler -
-func updateTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func updateTargetsHandler(cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req updateTargetsReq
 
-		if !rest.ReadRESTReq(w, r, cdc, &req) {
+		if !rest.ReadRESTReq(w, r, cliCtx.Codec, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "Cannot read request")
 			return
 		}
@@ -205,7 +205,7 @@ func updateTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 			return
 		}
 
-		msg := rand.NewMsgUpdateTargets(req.ID, addr, req.Targets)
+		msg := types.NewMsgUpdateTargets(req.ID, addr, req.Targets)
 
 		err = msg.ValidateBasic()
 		if err != nil {
@@ -213,8 +213,7 @@ func updateTargetsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 			return
 		}
 
-		clientrest.WriteGenerateStdTxResponse(w, cdc, cliCtx, baseReq, []sdk.Msg{msg})
+		util.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
-*/

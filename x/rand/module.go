@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/decentrandom/decentrandom/x/rand/client/cli"
+	"github.com/decentrandom/decentrandom/x/rand/client/rest"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -53,7 +54,7 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 
 // RegisterRESTRoutes -
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	//rest.RegisterRoutes(ctx, rtr, StoreKey)
+	rest.RegisterRoutes(ctx, rtr, StoreKey)
 }
 
 // GetQueryCmd -
