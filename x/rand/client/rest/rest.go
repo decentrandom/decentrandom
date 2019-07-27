@@ -11,8 +11,8 @@ import (
 	//"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/decentrandom/decentrandom/x/rand/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	"github.com/decentrandom/decentrandom/x/rand/types"
 )
 
 const (
@@ -36,7 +36,7 @@ func roundHandler(cliCtx context.CLIContext, storeName string) http.HandlerFunc 
 		//vars := mux.Vars(r)
 		//paramType := vars[restRound]
 
-		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/round/%s", storeName), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/rounds", storeName), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
@@ -213,7 +213,7 @@ func updateTargetsHandler(cliCtx context.CLIContext) http.HandlerFunc {
 			return
 		}
 
-		util.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
+		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
 
 	}
 }
