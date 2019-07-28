@@ -42,7 +42,7 @@ func ValidateGenesisCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicM
 			}
 
 			if err = mbm.ValidateGenesis(genState); err != nil {
-				//return fmt.Errorf("error validating genesis file %s: %s", genesis, err.Error())
+				return fmt.Errorf("error validating genesis file %s: %s", genesis, err.Error())
 			}
 
 			// TODO test to make sure initchain doesn't panic
