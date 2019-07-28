@@ -1,8 +1,6 @@
 package rand
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 	//abci "github.com/tendermint/tendermint/abci/types"
@@ -20,7 +18,7 @@ func NewGenesisState(roundRecords []Round) GenesisState {
 
 // ValidateGenesis validates genesis state
 func ValidateGenesis(data GenesisState) error {
-	fmt.Println("OMG")
+	//fmt.Println("OMG")
 	return nil
 }
 
@@ -46,6 +44,7 @@ func DefaultGenesisState() GenesisState {
 
 // InitGenesis -
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) []abci.ValidatorUpdate {
+
 	return []abci.ValidatorUpdate{}
 }
 
