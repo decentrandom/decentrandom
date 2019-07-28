@@ -45,6 +45,7 @@ func (AppModuleBasic) DefaultGenesis() json.RawMessage {
 // ValidateGenesis -
 func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 	var data GenesisState
+	fmt.Printf("%+v\n", data)
 	err := ModuleCdc.UnmarshalJSON(bz, &data)
 	if err != nil {
 		fmt.Println("what")
