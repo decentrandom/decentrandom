@@ -7,11 +7,13 @@ import (
 )
 
 // GenesisState - song genesis state
-type GenesisState struct{}
+type GenesisState struct {
+	RoundRecords []Round `json:"round_records"`
+}
 
 // NewGenesisState creates a new GenesisState object
-func NewGenesisState() GenesisState {
-	return GenesisState{}
+func NewGenesisState(roundRecords []Round) GenesisState {
+	return GenesisState{RoundRecords: nil}
 }
 
 // ValidateGenesis validates genesis state
@@ -21,7 +23,9 @@ func ValidateGenesis(data GenesisState) error {
 
 // DefaultGenesisState creates a default GenesisState object
 func DefaultGenesisState() GenesisState {
-	return GenesisState{}
+	return GenesisState{
+		RoundRecords: []Round{},
+	}
 }
 
 // Checks whether 2 GenesisState structs are equivalent.
@@ -43,6 +47,14 @@ func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) []abci.Valid
 }
 
 // ExportGenesis returns a GenesisState for a given context and keeper.
-func ExportGenesis(ctx sdk.Context, keeper Keeper) GenesisState {
-	return NewGenesisState()
+func ExportGenesis(ctx sdk.Context, k Keeper) GenesisState {
+	var records []Round
+	iterator := k.GetIDsIterator(ctx)
+	for ; iterator.Valid(); iterator.Next() {
+		id := string(iterator.Key())
+		var round Round
+		round = k.GetRound(ctx, id)
+		records = append(records, round)
+	}
+	return GenesisState{RoundRecords: records}
 }
