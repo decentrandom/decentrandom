@@ -13,7 +13,7 @@ type GenesisState struct {
 
 // NewGenesisState -
 func NewGenesisState(roundRecords []Round) GenesisState {
-	return GenesisState{RoundRecords: nil}
+	return DefaultGenesisState()
 }
 
 // ValidateGenesis -
