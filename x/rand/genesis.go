@@ -6,23 +6,22 @@ import (
 	//abci "github.com/tendermint/tendermint/abci/types"
 )
 
-// GenesisState - song genesis state
+// GenesisState -
 type GenesisState struct {
 	RoundRecords []Round `json:"round_records"`
 }
 
-// NewGenesisState creates a new GenesisState object
+// NewGenesisState -
 func NewGenesisState(roundRecords []Round) GenesisState {
 	return GenesisState{RoundRecords: nil}
 }
 
-// ValidateGenesis validates genesis state
+// ValidateGenesis -
 func ValidateGenesis(data GenesisState) error {
-	//fmt.Println("OMG")
 	return nil
 }
 
-// DefaultGenesisState creates a default GenesisState object
+// DefaultGenesisState -
 func DefaultGenesisState() GenesisState {
 	return GenesisState{
 		RoundRecords: []Round{},
