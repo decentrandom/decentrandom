@@ -4,8 +4,9 @@ const (
 	// ModuleName -
 	ModuleName = "rand"
 
-	// StoreKey to be used when creating the KVStore
+	// StoreKey -
 	StoreKey = ModuleName
 
+	// QuerierRoute -
 	QuerierRoute = ModuleName
 )

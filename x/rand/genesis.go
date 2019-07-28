@@ -43,7 +43,9 @@ func DefaultGenesisState() GenesisState {
 
 // InitGenesis -
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) []abci.ValidatorUpdate {
-
+	for _, record := range data.RoundRecords {
+		keeper.SetRound(ctx, record.ID, record)
+	}
 	return []abci.ValidatorUpdate{}
 }
 

@@ -4,12 +4,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
+// ModuleCdc -
 var ModuleCdc = codec.New()
 
 func init() {
 	RegisterCodec(ModuleCdc)
 }
 
+// RegisterCodec -
 func RegisterCodec(cdc *codec.Codec) {
 
 	cdc.RegisterConcrete(MsgNewRound{}, "rand/NewRound", nil)

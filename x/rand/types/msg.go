@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// RouterKey -
 const RouterKey = ModuleName
 
 /*
