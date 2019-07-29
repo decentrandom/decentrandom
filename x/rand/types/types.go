@@ -36,3 +36,6 @@ type QueryResRoundIDs []string
 func (n QueryResRoundIDs) String() string {
 	return strings.Join(n[:], "\n")
 }
+
+// Rounds -
+type Rounds []*Round

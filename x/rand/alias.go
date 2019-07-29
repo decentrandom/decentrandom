@@ -51,6 +51,9 @@ type (
 	// Round -
 	Round = types.Round
 
+	// Rounds -
+	Rounds = types.Rounds
+
 	// QueryResRoundIDs -
 	QueryResRoundIDs = types.QueryResRoundIDs
 )

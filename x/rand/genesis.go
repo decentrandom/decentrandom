@@ -8,12 +8,15 @@ import (
 
 // GenesisState -
 type GenesisState struct {
-	RoundRecords []Round `json:"round_records"`
+	StartingBlockHeight uint64 `json:"starting_block_height"`
+	Rounds              Rounds `json:"rounds"`
 }
 
 // NewGenesisState -
-func NewGenesisState(roundRecords []Round) GenesisState {
-	return DefaultGenesisState()
+func NewGenesisState(startingBlockHeight uint64) GenesisState {
+	return GenesisState{
+		StartingBlockHeight: 1,
+	}
 }
 
 // ValidateGenesis -
@@ -24,7 +27,7 @@ func ValidateGenesis(data GenesisState) error {
 // DefaultGenesisState -
 func DefaultGenesisState() GenesisState {
 	return GenesisState{
-		RoundRecords: []Round{},
+		StartingBlockHeight: 1,
 	}
 }
 
@@ -43,21 +46,21 @@ func DefaultGenesisState() GenesisState {
 
 // InitGenesis -
 func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) []abci.ValidatorUpdate {
-	for _, record := range data.RoundRecords {
+	/*for _, record := range data.Rounds {
 		keeper.SetRound(ctx, record.ID, record)
-	}
+	}*/
 	return []abci.ValidatorUpdate{}
 }
 
 // ExportGenesis returns a GenesisState for a given context and keeper.
 func ExportGenesis(ctx sdk.Context, k Keeper) GenesisState {
-	var records []Round
+	/*var records []Round
 	iterator := k.GetIDsIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
 		id := string(iterator.Key())
 		var round Round
 		round = k.GetRound(ctx, id)
 		records = append(records, round)
-	}
-	return GenesisState{RoundRecords: records}
+	}*/
+	return GenesisState{StartingBlockHeight: 1}
 }
