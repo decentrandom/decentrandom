@@ -259,7 +259,9 @@ type GenesisState map[string]json.RawMessage
 
 // NewDefaultGenesisState -
 func NewDefaultGenesisState() GenesisState {
-	return ModuleBasics.DefaultGenesis()
+	genesisState := ModuleBasics.DefaultGenesis()
+
+	return genesisState
 }
 
 // BeginBlocker -

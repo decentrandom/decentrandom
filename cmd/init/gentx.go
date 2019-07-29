@@ -31,10 +31,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 )
 
-const (
-	flagClientHome = "home-client"
-)
-
 // StakingMsgBuildingHelpers -
 type StakingMsgBuildingHelpers interface {
 	CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, nodeIDFlag, pubkeyFlag, amountFlag, defaultsDesc string)
@@ -88,6 +84,7 @@ func GenTxCmd(ctx *server.Context, cdc *codec.Codec, mbm module.BasicManager, sm
 			}
 
 			var genesisState map[string]json.RawMessage
+
 			if err = cdc.UnmarshalJSON(genDoc.AppState, &genesisState); err != nil {
 				return err
 			}
