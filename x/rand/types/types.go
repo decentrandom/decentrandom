@@ -8,7 +8,23 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// Round - 라운드 기본 구조체
+// Seed -
+type Seed struct {
+	Height           string   `json:"height"`
+	SeedHashes       []string `json:"seed_hashes"`
+	SealedSeedHashes []string `json:"sealed_seed_hashes"`
+	ValidatorPubKey  string   `jsong:"validator_pub_key"`
+}
+
+func (s Seed) String() string {
+	return strings.TrimSpace(fmt.Sprintf(`Height: %s
+	SeedHashes: %v
+	SealedSeedHashes: %v
+	ValidatorPubKey: %s
+	`, s.Height, s.SeedHashes, s.SealedSeedHashes, s.ValidatorPubKey))
+}
+
+// Round -
 type Round struct {
 	ID            string         `json:"id"`
 	Difficulty    uint8          `json:"difficulty"`

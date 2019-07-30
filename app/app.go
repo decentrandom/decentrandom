@@ -265,7 +265,10 @@ func NewDefaultGenesisState() GenesisState {
 
 // BeginBlocker -
 func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
-	return app.mm.BeginBlock(ctx, req)
+
+	responseBeginBlock := app.mm.BeginBlock(ctx, req)
+
+	return responseBeginBlock
 }
 
 // EndBlocker -
