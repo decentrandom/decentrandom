@@ -273,6 +273,7 @@ func (app *RandApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) ab
 
 // EndBlocker -
 func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+
 	return app.mm.EndBlock(ctx, req)
 }
 

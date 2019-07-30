@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+/*
 // Seed -
 type Seed struct {
 	Height           string   `json:"height"`
@@ -23,6 +24,7 @@ func (s Seed) String() string {
 	ValidatorPubKey: %s
 	`, s.Height, s.SeedHashes, s.SealedSeedHashes, s.ValidatorPubKey))
 }
+*/
 
 // Round -
 type Round struct {

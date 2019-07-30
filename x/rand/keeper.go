@@ -22,6 +22,7 @@ func NewKeeper(storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	}
 }
 
+/*
 // GetSeed -
 func (k Keeper) GetSeed(ctx sdk.Context, height string) Seed {
 	store := ctx.KVStore(k.storeKey)
@@ -43,6 +44,7 @@ func (k Keeper) SetSeed(ctx sdk.Context, seed Seed) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set([]byte(seed.Height), k.cdc.MustMarshalBinaryBare(seed))
 }
+*/
 
 // SetRound -
 func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {

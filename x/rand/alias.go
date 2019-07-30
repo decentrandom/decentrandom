@@ -49,7 +49,7 @@ type (
 	MsgUpdateTargets = types.MsgUpdateTargets
 
 	// Seed -
-	Seed = types.Seed
+	//Seed = types.Seed
 
 	// Round -
 	Round = types.Round

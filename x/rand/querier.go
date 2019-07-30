@@ -18,8 +18,8 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err sdk.Error) {
 
 		switch path[0] {
-		case QuerySeedInfo:
-			return querySeedInfo(ctx, path[1:], req, keeper)
+		//case QuerySeedInfo:
+		//	return querySeedInfo(ctx, path[1:], req, keeper)
 
 		case QueryRoundInfo:
 			return queryRoundInfo(ctx, path[1:], req, keeper)
@@ -33,6 +33,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 	}
 }
 
+/*
 // querySeedInfo -
 func querySeedInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	height := path[0]
@@ -46,6 +47,7 @@ func querySeedInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 
 	return bz, nil
 }
+*/
 
 // queryRoundInfo -
 func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
