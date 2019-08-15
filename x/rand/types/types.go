@@ -34,6 +34,7 @@ type Round struct {
 	Nonce         string         `json:"nonce"`
 	NonceHash     string         `json:"nonce_hash"`
 	Targets       []string       `json:"targets"`
+	DepositCoin   sdk.Coin       `jsong:"deposit_coin"`
 	ScheduledTime time.Time      `json:"scheduled_time"`
 }
 
@@ -44,8 +45,9 @@ Difficulty: %d
 Nonce: %s
 NonceHash: %s
 Targets: %v
+DepositCoint: %s
 ScheduledTime: %s
-`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, timeString.Format("2006-01-02 15:04:05 +0900")))
+`, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, r.DepositCoin, timeString.Format("2006-01-02 15:04:05 +0900")))
 }
 
 // QueryResRoundIDs -
