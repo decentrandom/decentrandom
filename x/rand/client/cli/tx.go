@@ -11,12 +11,13 @@ import (
 
 	"github.com/decentrandom/decentrandom/x/rand/types"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+
 	//authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 
 	"github.com/tendermint/tendermint/crypto/merkle"
@@ -66,9 +67,9 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
-			if err := cliCtx.EnsureAccountExists(); err != nil {
-				return err
-			}
+				if err := cliCtx.EnsureAccountExists(); err != nil {
+					return err
+				}
 			*/
 
 			// string to uint8
@@ -109,12 +110,13 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 
 			// Create ID
-			roundArgs := make([][]byte, 5)
+			roundArgs := make([][]byte, 6)
 			roundArgs[0] = []byte(args[0])
 			roundArgs[1] = []byte(args[1])
 			roundArgs[2] = []byte(args[2])
 			roundArgs[3] = []byte(args[3])
-			roundArgs[4] = []byte(cliCtx.GetFromAddress().String())
+			roundArgs[4] = []byte("0")
+			roundArgs[5] = []byte(cliCtx.GetFromAddress().String())
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
@@ -144,9 +146,9 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
-			if err := cliCtx.EnsureAccountExists(); err != nil {
-				return err
-			}
+				if err := cliCtx.EnsureAccountExists(); err != nil {
+					return err
+				}
 			*/
 
 			msg := types.NewMsgDeployNonce(args[0], cliCtx.GetFromAddress(), args[1])
@@ -178,9 +180,9 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
-			if err := cliCtx.EnsureAccountExists(); err != nil {
-				return err
-			}
+				if err := cliCtx.EnsureAccountExists(); err != nil {
+					return err
+				}
 			*/
 
 			// string to slice
@@ -212,9 +214,9 @@ func GetCmdUpdateTargets(cdc *codec.Codec) *cobra.Command {
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
-			if err := cliCtx.EnsureAccountExists(); err != nil {
-				return err
-			}
+				if err := cliCtx.EnsureAccountExists(); err != nil {
+					return err
+				}
 			*/
 
 			// 컴마로 구분된 string을 slice로 변환
