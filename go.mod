@@ -13,8 +13,6 @@ require (
 	github.com/mattn/go-isatty v0.0.8 // indirect
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
-	github.com/otiai10/copy v1.0.1
-	github.com/otiai10/curr v0.0.0-20190513014714-f5a3d24e5776 // indirect
 	github.com/pelletier/go-toml v1.4.0 // indirect
 	github.com/prometheus/common v0.6.0 // indirect
 	github.com/prometheus/procfs v0.0.3 // indirect
@@ -22,7 +20,6 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20190704165056-9c2d0518ed81 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cobra v0.0.5
-	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.4.0
 	github.com/tendermint/go-amino v0.15.0
 	github.com/tendermint/tendermint v0.32.1
