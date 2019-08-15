@@ -5,6 +5,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/decentrandom/decentrandom/types/assets"
 )
 
 // RouterKey -
@@ -22,6 +23,7 @@ type MsgNewRound struct {
 	Nonce         string
 	NonceHash     string
 	Targets       []string
+	DepositCoin   sdk.Coin
 	ScheduledTime time.Time
 }
 
@@ -34,6 +36,7 @@ func NewMsgNewRound(id string, difficulty uint8, owner sdk.AccAddress, nonceHash
 		Nonce:         "",
 		NonceHash:     nonceHash,
 		Targets:       targets,
+		DepositCoin:   sdk.NewCoin(assets.MicroRandDenom, sdk.ZeroInt()),
 		ScheduledTime: scheduledTime,
 	}
 }
