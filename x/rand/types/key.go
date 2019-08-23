@@ -7,6 +7,9 @@ const (
 	// StoreKey -
 	StoreKey = ModuleName
 
+	// RouterKey -
+	RouterKey = ModuleName
+
 	// QuerierRoute -
 	QuerierRoute = ModuleName
 )
