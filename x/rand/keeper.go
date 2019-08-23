@@ -70,6 +70,12 @@ func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
 	return round
 }
 
+// IsIDPresent -
+func (k Keeper) IsIDPresent(ctx sdk.Context, id string) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has([]byte(id))
+}
+
 // GetOwner -
 func (k Keeper) GetOwner(ctx sdk.Context, id string) sdk.AccAddress {
 	return k.GetRound(ctx, id).Owner
