@@ -108,13 +108,14 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 
 			// Create ID
-			roundArgs := make([][]byte, 6)
+			roundArgs := make([][]byte, 7)
 			roundArgs[0] = []byte(args[0])
 			roundArgs[1] = []byte(args[1])
 			roundArgs[2] = []byte(args[2])
 			roundArgs[3] = []byte(args[3])
 			roundArgs[4] = []byte("0")
 			roundArgs[5] = []byte(cliCtx.GetFromAddress().String())
+			roundArgs[6] = []byte(time.Now().String())
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
