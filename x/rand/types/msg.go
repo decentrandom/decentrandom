@@ -61,8 +61,7 @@ func (msg MsgNewRound) ValidateBasic() sdk.Error {
 		return sdk.ErrUnknownRequest("Must specify ID, NonceHash.")
 	}
 
-	// 그럴리는 없지만 ID hash 값이 중복되는 경우는 어떻게?
-	// important ****** to-do
+	// Validate round hash
 
 	if msg.Difficulty < 1 {
 		return sdk.ErrUnknownRequest("Difficulty must be greater than 0.")
