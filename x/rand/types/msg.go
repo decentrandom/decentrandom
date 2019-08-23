@@ -30,7 +30,7 @@ func NewMsgNewRound(id string, difficulty uint8, owner sdk.AccAddress, nonceHash
 		ID:            id,
 		Difficulty:    difficulty,
 		Owner:         owner,
-		Nonce:         "hidden",
+		Nonce:         "",
 		NonceHash:     nonceHash,
 		Targets:       targets,
 		DepositCoin:   sdk.NewCoin(assets.MicroRandDenom, sdk.ZeroInt()),
