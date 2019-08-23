@@ -1,6 +1,8 @@
 package rand
 
 import (
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -52,6 +54,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 		return
 	}
 
+	fmt.Printf(k.storeKey.String())
 	store := ctx.KVStore(k.storeKey)
 	store.Set([]byte(id), k.cdc.MustMarshalBinaryBare(round))
 }
