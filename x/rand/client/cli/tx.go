@@ -46,9 +46,7 @@ func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 
 	randTxCmd.AddCommand(client.PostCommands(
 		GetCmdNewRound(cdc),
-		GetCmdNewRound(cdc),
 		GetCmdAddTargets(cdc),
-		GetCmdUpdateTargets(cdc),
 		GetCmdUpdateTargets(cdc),
 	)...)
 
