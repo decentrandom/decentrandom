@@ -190,7 +190,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	app.stakingKeeper = *stakingKeeper.SetHooks(
 		staking.NewMultiStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
 
-	//app.randKeeper = rand.NewKeeper(app.keyRand, app.cdc)
+	app.randKeeper = rand.NewKeeper(app.keyRand, app.cdc)
 
 	app.mm = module.NewManager(
 		genaccounts.NewAppModule(app.accountKeeper),
