@@ -50,12 +50,5 @@ ScheduledTime: %s
 `, r.Owner, r.Difficulty, r.Nonce, r.NonceHash, r.Targets, r.DepositCoin, timeString.Format("2006-01-02 15:04:05 +0900")))
 }
 
-// QueryResRoundIDs -
-type QueryResRoundIDs []string
-
-func (n QueryResRoundIDs) String() string {
-	return strings.Join(n[:], "\n")
-}
-
 // Rounds -
 type Rounds []*Round
