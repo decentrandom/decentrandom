@@ -8,6 +8,9 @@ import (
 	"github.com/decentrandom/decentrandom/types/assets"
 )
 
+// RouterKey -
+const RouterKey = ModuleName
+
 /*
 NewRound
 */
