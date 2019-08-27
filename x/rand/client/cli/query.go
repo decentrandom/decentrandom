@@ -28,11 +28,10 @@ func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 	return randQueryCmd
 }
 
-
 // GetCmdRoundInfo -
 func GetCmdRoundInfo(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "round_info [id]",
+		Use:   "round-info [id]",
 		Short: "get information of certain round",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -55,7 +54,7 @@ func GetCmdRoundInfo(cdc *codec.Codec) *cobra.Command {
 // GetCmdRoundIDs -
 func GetCmdRoundIDs(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "round_ids",
+		Use:   "round-ids",
 		Short: "Get round IDs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
