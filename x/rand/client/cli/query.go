@@ -87,14 +87,9 @@ func GetCmdHashNonce(cdc *codec.Codec) *cobra.Command {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			nonce := args[0]
 
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/hash_nonce/%s", types.QuerierRoute, nonce), nil)
-			if err != nil {
-				return nil
-			}
-
 			// Hashing Nonce
 			hasher := tmhash.New()
-			nonceVector := []byte(args[1])
+			nonceVector := []byte(nonce)
 			_, hashError := hasher.Write(nonceVector)
 			if hashError != nil {
 				return hashError
@@ -102,11 +97,9 @@ func GetCmdHashNonce(cdc *codec.Codec) *cobra.Command {
 			bz := tmhash.Sum(nonceVector)
 			nonceHash := hex.EncodeToString(bz)
 
-			var nonceStruct types.Nonce
+			nonceStruct := types.Nonce{Nonce: nonce, NonceHash: nonceHash}
 
-			nonceStruct = types.Nonce{nonce, nonceHash}
-
-			cdc.MustUnmarshalJSON(res, &nonceStruct)
+			//cdc.MustUnmarshalJSON(res, &nonceStruct)
 			return cliCtx.PrintOutput(nonceStruct)
 		},
 	}
