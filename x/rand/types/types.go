@@ -52,3 +52,15 @@ ScheduledTime: %s
 
 // Rounds -
 type Rounds []*Round
+
+// Nonce -
+type Nonce struct {
+	Nonce     string `json:"nonce"`
+	NonceHash string `json:"nonce_hash"`
+}
+
+func (n Nonce) String() string {
+	return strings.TrimSpace((fmt.Sprintf(`Nonce: %s
+	NonceHash: %s
+	`, n.Nonce, n.NonceHash)))
+}
