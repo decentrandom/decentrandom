@@ -59,4 +59,7 @@ type (
 
 	// QueryResRoundIDs -
 	QueryResRoundIDs = types.QueryResRoundIDs
+
+	// Nonce -
+	Nonce = types.Nonce
 )
