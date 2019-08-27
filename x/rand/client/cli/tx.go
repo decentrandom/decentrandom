@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"encoding/hex"
 	"fmt"
 	"strconv"
 	"strings"
@@ -21,7 +20,6 @@ import (
 	//authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 
 	"github.com/tendermint/tendermint/crypto/merkle"
-	"github.com/tendermint/tendermint/crypto/tmhash"
 )
 
 /*
@@ -77,16 +75,6 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 			difficulty := uint8(difficulty64)
 
-			// Hashing Nonce
-			hasher := tmhash.New()
-			nonceVector := []byte(args[1])
-			_, hashError := hasher.Write(nonceVector)
-			if hashError != nil {
-				return hashError
-			}
-			bz := tmhash.Sum(nonceVector)
-			nonceHash := hex.EncodeToString(bz)
-
 			// string to slice
 			cleaned := strings.Replace(args[2], ",", " ", -1)
 			targets := strings.Fields(cleaned)
@@ -119,7 +107,7 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
-			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), nonceHash, targets, scheduledTime)
+			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), args[1], targets, scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
 				return errValidate
