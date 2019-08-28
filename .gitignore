@@ -2,7 +2,7 @@
 .vscode
 vendor
 build
-
+binary
 client/lcd/keys/*
 client/lcd/statik/statik.go
 go.sum
