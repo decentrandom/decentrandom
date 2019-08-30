@@ -1,0 +1,499 @@
+{
+  "genesis_time": "2019-08-13T02:56:42.222181239Z",
+  "chain_id": "semidecentrandom",
+  "consensus_params": {
+    "block": {
+      "max_bytes": "22020096",
+      "max_gas": "-1",
+      "time_iota_ms": "1000"
+    },
+    "evidence": {
+      "max_age": "100000"
+    },
+    "validator": {
+      "pub_key_types": [
+        "ed25519"
+      ]
+    }
+  },
+  "validators": [
+    {
+      "address": "",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "QJ7NXTSqOfILrhEjtrU/RFqAArOGcv3WWjJL23Dsq0o="
+      },
+      "power": "100",
+      "name": "misskiwi"
+    }
+  ],
+  "app_hash": "",
+  "app_state": {
+    "crisis": {
+      "constant_fee": {
+        "denom": "urand",
+        "amount": "1000"
+      }
+    },
+    "rand": {
+      "starting_block_height": "1",
+      "rounds": null
+    },
+    "mint": {
+      "minter": {
+        "inflation": "0.134994710514545153",
+        "annual_provisions": "135683672211334.527127634629897874"
+      },
+      "params": {
+        "mint_denom": "urand",
+        "inflation_rate_change": "0.130000000000000000",
+        "inflation_max": "0.200000000000000000",
+        "inflation_min": "0.070000000000000000",
+        "goal_bonded": "0.670000000000000000",
+        "blocks_per_year": "6311520"
+      }
+    },
+    "accounts": [
+      {
+        "address": "rand199j6rsfewzwzzgxclufqxy7nl3lujyxlh29azx",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "14",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand1xs0kx77hxahszv45wj8y9as2k7fsf9f2mskwdk",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "150000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "8",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand1fl48vsnmsdzcv85q5d2q4z5ajdha8yu38u8r7n",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "100000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "3",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "bonded_tokens_pool",
+        "module_permissions": [
+          "burner",
+          "staking"
+        ]
+      },
+      {
+        "address": "rand1tygms3xhhs3yv487phx3dw4a95jn7t7lnumjg8",
+        "coins": [],
+        "sequence_number": "0",
+        "account_number": "4",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "not_bonded_tokens_pool",
+        "module_permissions": [
+          "burner",
+          "staking"
+        ]
+      },
+      {
+        "address": "rand1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nwzv8cn",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5006367611759"
+          }
+        ],
+        "sequence_number": "11",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand10d07y265gmmuvt4z0w9aw880jnsr700jg9af3h",
+        "coins": [],
+        "sequence_number": "0",
+        "account_number": "5",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "gov",
+        "module_permissions": [
+          "burner"
+        ]
+      },
+      {
+        "address": "rand13jxt5mcy08rpw7ddtdp47gqkmlwjjaleuqgrrn",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "100000101000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "13",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand1jv65s3grqf6v6jl3dp4t6c9t9rk99cd84c2swm",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "102072829079"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "2",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "distribution",
+        "module_permissions": null
+      },
+      {
+        "address": "rand14a7u9nsfsvn9smz05hdykms3uz9hfqesn2u25p",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "899675000000000"
+          }
+        ],
+        "sequence_number": "7",
+        "account_number": "1",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand1h68v8edwar2mey8x8670v2j9c2ey2ahlkqcw9w",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "12",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand1m3h30wlvsf8llruxtpukdvsy0km2kum86kf5qy",
+        "coins": [],
+        "sequence_number": "0",
+        "account_number": "6",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "mint",
+        "module_permissions": [
+          "minter"
+        ]
+      },
+      {
+        "address": "rand1ah60k3n6kr3e5umwxyj6jnp0d6jfeq3mjvupe4",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "11",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand17xpfvakm2amg962yls6f84z3kell8c5lz7dvve",
+        "coins": [],
+        "sequence_number": "0",
+        "account_number": "7",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "fee_collector",
+        "module_permissions": null
+      },
+      {
+        "address": "rand17xuy04hznwg0qp37v9nu7lwhlqtxh8jnjth7l7",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "150000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "9",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      },
+      {
+        "address": "rand177faylwqhwk04dctf5synk3uz56nshu499qg4r",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "10",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": null
+      }
+    ],
+    "genutil": null,
+    "auth": {
+      "params": {
+        "max_memo_characters": "256",
+        "tx_sig_limit": "7",
+        "tx_size_cost_per_byte": "10",
+        "sig_verify_cost_ed25519": "590",
+        "sig_verify_cost_secp256k1": "1000"
+      }
+    },
+    "bank": {
+      "send_enabled": true
+    },
+    "supply": {
+      "supply": {
+        "total": [
+          {
+            "denom": "urand",
+            "amount": "1005103641440838"
+          }
+        ]
+      }
+    },
+    "distribution": {
+      "fee_pool": {
+        "community_pool": [
+          {
+            "denom": "urand",
+            "amount": "102072829079.000000000000000000"
+          }
+        ]
+      },
+      "community_tax": "0.020000000000000000",
+      "base_proposer_reward": "0.010000000000000000",
+      "bonus_proposer_reward": "0.040000000000000000",
+      "withdraw_addr_enabled": true,
+      "delegator_withdraw_infos": [],
+      "previous_proposer": "randvalcons1sg7uautdw6eamgl5tvw2zxm5czkk7vhrk892dr",
+      "outstanding_rewards": [
+        {
+          "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "outstanding_rewards": null
+        }
+      ],
+      "validator_accumulated_commissions": [
+        {
+          "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "accumulated": null
+        }
+      ],
+      "validator_historical_rewards": [
+        {
+          "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "period": "1",
+          "rewards": {
+            "cumulative_reward_ratio": null,
+            "reference_count": 2
+          }
+        }
+      ],
+      "validator_current_rewards": [
+        {
+          "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "rewards": {
+            "rewards": null,
+            "period": "2"
+          }
+        }
+      ],
+      "delegator_starting_infos": [
+        {
+          "delegator_address": "rand1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nwzv8cn",
+          "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "starting_info": {
+            "previous_period": "1",
+            "stake": "100000000.000000000000000000",
+            "creation_height": "0"
+          }
+        }
+      ],
+      "validator_slash_events": []
+    },
+    "gov": {
+      "starting_proposal_id": "1",
+      "deposits": null,
+      "votes": null,
+      "proposals": [],
+      "deposit_params": {
+        "min_deposit": [
+          {
+            "denom": "urand",
+            "amount": "10000000"
+          }
+        ],
+        "max_deposit_period": "172800000000000"
+      },
+      "voting_params": {
+        "voting_period": "172800000000000"
+      },
+      "tally_params": {
+        "quorum": "0.334000000000000000",
+        "threshold": "0.500000000000000000",
+        "veto": "0.334000000000000000"
+      }
+    },
+    "slashing": {
+      "params": {
+        "max_evidence_age": "120000000000",
+        "signed_blocks_window": "100",
+        "min_signed_per_window": "0.500000000000000000",
+        "downtime_jail_duration": "600000000000",
+        "slash_fraction_double_sign": "0.050000000000000000",
+        "slash_fraction_downtime": "0.010000000000000000"
+      },
+      "signing_infos": {
+        "randvalcons1sg7uautdw6eamgl5tvw2zxm5czkk7vhrk892dr": {
+          "address": "randvalcons1sg7uautdw6eamgl5tvw2zxm5czkk7vhrk892dr",
+          "start_height": "0",
+          "index_offset": "242493",
+          "jailed_until": "1970-01-01T00:00:00Z",
+          "tombstoned": false,
+          "missed_blocks_counter": "0"
+        }
+      },
+      "missed_blocks": {
+        "randvalcons1sg7uautdw6eamgl5tvw2zxm5czkk7vhrk892dr": []
+      }
+    },
+    "staking": {
+      "params": {
+        "unbonding_time": "259200000000000",
+        "max_validators": 100,
+        "max_entries": 7,
+        "bond_denom": "urand"
+      },
+      "last_total_power": "100",
+      "last_validator_powers": [
+        {
+          "Address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "Power": "100"
+        }
+      ],
+      "validators": [
+        {
+          "operator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "consensus_pubkey": "randvalconspub1zcjduepqgz0v6hf54gulyzawzy3mddflg3dgqq4nsee0m4j6xf9aku8v4d9q96rw4j",
+          "jailed": false,
+          "status": 2,
+          "tokens": "100000000",
+          "delegator_shares": "100000000.000000000000000000",
+          "description": {
+            "moniker": "misskiwi",
+            "identity": "",
+            "website": "",
+            "details": ""
+          },
+          "unbonding_height": "0",
+          "unbonding_time": "1970-01-01T00:00:00Z",
+          "commission": {
+            "CommissionRates": {
+              "rate": "0.100000000000000000",
+              "max_rate": "0.200000000000000000",
+              "max_change_rate": "0.010000000000000000"
+            },
+            "update_time": "2019-08-13T02:56:42.222181239Z"
+          },
+          "min_self_delegation": "1"
+        }
+      ],
+      "delegations": [
+        {
+          "delegator_address": "rand1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nwzv8cn",
+          "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+          "shares": "100000000.000000000000000000"
+        }
+      ],
+      "unbonding_delegations": null,
+      "redelegations": null,
+      "exported": true
+    }
+  }
+}
