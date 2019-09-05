@@ -163,7 +163,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	}
 
 	// init params keeper and subspaces
-	app.paramsKeeper = params.NewKeeper(app.cdc, app.keyParams, app.tkeyParams, params.DefaultCodespace)
+	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey], params.DefaultCodespace)
 	authSubspace := app.paramsKeeper.Subspace(auth.DefaultParamspace)
 	bankSubspace := app.paramsKeeper.Subspace(bank.DefaultParamspace)
 	stakingSubspace := app.paramsKeeper.Subspace(staking.DefaultParamspace)
