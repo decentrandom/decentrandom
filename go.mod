@@ -22,10 +22,9 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/tendermint/go-amino v0.15.0
-	github.com/tendermint/tendermint v0.32.1
+	github.com/tendermint/tendermint v0.32.2
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/sys v0.0.0-20190626221950-04f50cda93cb // indirect
 	golang.org/x/text v0.3.2 // indirect
-	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20190701230453-710ae3a149df // indirect
 )
