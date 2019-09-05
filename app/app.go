@@ -7,8 +7,8 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	cmn "github.com/tendermint/tendermint/libs/common"
-	dbm "github.com/tendermint/tendermint/libs/db"
 	"github.com/tendermint/tendermint/libs/log"
+	dbm "github.com/tendermint/tendermint/tm-db"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -89,19 +89,24 @@ type RandApp struct {
 	invCheckPeriod uint
 
 	// keys to access the substores
-	keyMain     *sdk.KVStoreKey
-	keyAccount  *sdk.KVStoreKey
-	keySupply   *sdk.KVStoreKey
-	keyStaking  *sdk.KVStoreKey
-	tkeyStaking *sdk.TransientStoreKey
-	keySlashing *sdk.KVStoreKey
-	keyMint     *sdk.KVStoreKey
-	keyDistr    *sdk.KVStoreKey
-	tkeyDistr   *sdk.TransientStoreKey
-	keyGov      *sdk.KVStoreKey
-	keyParams   *sdk.KVStoreKey
-	tkeyParams  *sdk.TransientStoreKey
-	keyRand     *sdk.KVStoreKey
+	/*
+		keyMain     *sdk.KVStoreKey
+		keyAccount  *sdk.KVStoreKey
+		keySupply   *sdk.KVStoreKey
+		keyStaking  *sdk.KVStoreKey
+		tkeyStaking *sdk.TransientStoreKey
+		keySlashing *sdk.KVStoreKey
+		keyMint     *sdk.KVStoreKey
+		keyDistr    *sdk.KVStoreKey
+		tkeyDistr   *sdk.TransientStoreKey
+		keyGov      *sdk.KVStoreKey
+		keyParams   *sdk.KVStoreKey
+		tkeyParams  *sdk.TransientStoreKey
+		keyRand     *sdk.KVStoreKey
+	*/
+
+	keys  map[string]*sdk.KVStoreKey
+	tkeys map[string]*sdk.TransientStoreKey
 
 	// keepers
 	accountKeeper  auth.AccountKeeper
@@ -130,25 +135,31 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	//bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetAppVersion(version.Version)
 
+	keys := sdk.NewKVStoreKeys(bam.MainStoreKey, auth.StoreKey, supply.StoreKey, staking.StoreKey, mint.StoreKey, distr.StoreKey, slashing.StoreKey, gov.StoreKey, params.StoreKey, rand.StoreKey)
+	tkeys := sdk.NewTransientStoreKeys(staking.TStoreKey, params.TStoreKey)
+
 	var app = &RandApp{
 		BaseApp: bApp,
 		cdc:     cdc,
 
 		invCheckPeriod: invCheckPeriod,
 
-		keyMain:     sdk.NewKVStoreKey(bam.MainStoreKey),
-		keyAccount:  sdk.NewKVStoreKey(auth.StoreKey),
-		keySupply:   sdk.NewKVStoreKey(supply.StoreKey),
-		keyStaking:  sdk.NewKVStoreKey(staking.StoreKey),
-		tkeyStaking: sdk.NewTransientStoreKey(staking.TStoreKey),
-		keyMint:     sdk.NewKVStoreKey(mint.StoreKey),
-		keyDistr:    sdk.NewKVStoreKey(distr.StoreKey),
-		tkeyDistr:   sdk.NewTransientStoreKey(distr.TStoreKey),
-		keySlashing: sdk.NewKVStoreKey(slashing.StoreKey),
-		keyGov:      sdk.NewKVStoreKey(gov.StoreKey),
-		keyParams:   sdk.NewKVStoreKey(params.StoreKey),
-		tkeyParams:  sdk.NewTransientStoreKey(params.TStoreKey),
-		keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
+		keys:  keys,
+		tkeys: tkeys,
+
+		//keyMain:     sdk.NewKVStoreKey(bam.MainStoreKey),
+		//keyAccount:  sdk.NewKVStoreKey(auth.StoreKey),
+		//keySupply:   sdk.NewKVStoreKey(supply.StoreKey),
+		//keyStaking:  sdk.NewKVStoreKey(staking.StoreKey),
+		//tkeyStaking: sdk.NewTransientStoreKey(staking.TStoreKey),
+		//keyMint:     sdk.NewKVStoreKey(mint.StoreKey),
+		//keyDistr:    sdk.NewKVStoreKey(distr.StoreKey),
+		//tkeyDistr: sdk.NewTransientStoreKey(distr.TStoreKey),
+		//keySlashing: sdk.NewKVStoreKey(slashing.StoreKey),
+		//keyGov:      sdk.NewKVStoreKey(gov.StoreKey),
+		//keyParams:   sdk.NewKVStoreKey(params.StoreKey),
+		//tkeyParams: sdk.NewTransientStoreKey(params.TStoreKey),
+		//keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
 	}
 
 	// init params keeper and subspaces
