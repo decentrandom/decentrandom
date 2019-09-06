@@ -1,7 +1,7 @@
 package app
 
 import (
-	dbm "github.com/tendermint/tendermint/libs/db"
+	dbm "github.com/tendermint/tendermint/tm-db"
 	"github.com/tendermint/tendermint/libs/log"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,5 +14,5 @@ import (
 func NewRandAppUNSAFE(logger log.Logger, db dbm.DB, invCheckPeriod uint) (rapp *RandApp, keyMain, keyStaking *sdk.KVStoreKey, stakingKeeper staking.Keeper) {
 
 	rapp = NewRandApp(logger, db, invCheckPeriod)
-	return rapp, rapp.keyMain, rapp.keyStaking, rapp.stakingKeeper
+	return rapp, rapp.keyMain, rapp.keys[staking.StoreKey], rapp.stakingKeeper
 }
