@@ -9,8 +9,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
 
-// DONTCOVER
-
 // NewRandAppUNSAFE -
 func NewRandAppUNSAFE(logger log.Logger, db dbm.DB, invCheckPeriod uint) (rapp *RandApp, keyMain, keyStaking *sdk.KVStoreKey, stakingKeeper staking.Keeper) {
 
