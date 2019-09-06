@@ -173,35 +173,96 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	govSubspace := app.paramsKeeper.Subspace(gov.DefaultParamspace)
 	crisisSubspace := app.paramsKeeper.Subspace(crisis.DefaultParamspace)
 
-	// add keepers
-	app.accountKeeper = auth.NewAccountKeeper(app.cdc, app.keyAccount, authSubspace, auth.ProtoBaseAccount)
-	app.bankKeeper = bank.NewBaseKeeper(app.accountKeeper, bankSubspace, bank.DefaultCodespace)
-	app.supplyKeeper = supply.NewKeeper(app.cdc, app.keySupply, app.accountKeeper, app.bankKeeper,
-		supply.DefaultCodespace, maccPerms)
-	stakingKeeper := staking.NewKeeper(app.cdc, app.keyStaking, app.tkeyStaking,
-		app.supplyKeeper, stakingSubspace, staking.DefaultCodespace)
-	app.mintKeeper = mint.NewKeeper(app.cdc, app.keyMint, mintSubspace, &stakingKeeper, app.supplyKeeper,
-		auth.FeeCollectorName)
-	app.distrKeeper = distr.NewKeeper(app.cdc, app.keyDistr, distrSubspace, &stakingKeeper,
-		app.supplyKeeper, distr.DefaultCodespace, auth.FeeCollectorName)
-	app.slashingKeeper = slashing.NewKeeper(app.cdc, app.keySlashing, &stakingKeeper,
-		slashingSubspace, slashing.DefaultCodespace)
-	app.crisisKeeper = crisis.NewKeeper(crisisSubspace, invCheckPeriod, app.supplyKeeper, auth.FeeCollectorName)
+	app.accountKeeper = auth.NewAccountKeeper(
+		app.cdc,
+		keys[auth.StoreKey],
+		authSubspace,
+		auth.ProtoBaseAccount,
+	)
+
+	app.bankKeeper = bank.NewBaseKeeper(
+		app.accountKeeper,
+		bankSubspace,
+		bank.DefaultCodespace,
+		app.ModuleAccountAddrs(),
+	)
+
+	app.supplyKeeper = supply.NewKeeper(
+		app.cdc,
+		keys[supply.StoreKey],
+		app.accountKeeper,
+		app.bankKeeper,
+		maccPerms,
+	)
+
+	stakingKeeper := staking.NewKeeper(app.cdc,
+		keys[staking.StoreKey],
+		tkeys[staking.TStoreKey],
+		app.supplyKeeper,
+		stakingSubspace,
+		staking.DefaultCodespace,
+	)
+
+	app.mintKeeper = mint.NewKeeper(
+		app.cdc,
+		keys[mint.StoreKey],
+		mintSubspace,
+		&stakingKeeper,
+		app.supplyKeeper,
+		auth.FeeCollectorName,
+	)
+
+	app.distrKeeper = distr.NewKeeper(
+		app.cdc,
+		keys[distr.StoreKey],
+		distrSubspace,
+		&stakingKeeper,
+		app.supplyKeeper,
+		distr.DefaultCodespace,
+		auth.FeeCollectorName,
+		app.ModuleAccountAddrs(),
+	)
+
+	app.slashingKeeper = slashing.NewKeeper(
+		app.cdc,
+		keys[slashing.StoreKey],
+		&stakingKeeper,
+		slashingSubspace,
+		slashing.DefaultCodespace,
+	)
+
+	app.crisisKeeper = crisis.NewKeeper(
+		crisisSubspace,
+		invCheckPeriod,
+		app.supplyKeeper,
+		auth.FeeCollectorName,
+	)
 
 	// register the proposal types
 	govRouter := gov.NewRouter()
+
 	govRouter.AddRoute(gov.RouterKey, gov.ProposalHandler).
 		AddRoute(params.RouterKey, params.NewParamChangeProposalHandler(app.paramsKeeper)).
 		AddRoute(distr.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.distrKeeper))
-	app.govKeeper = gov.NewKeeper(app.cdc, app.keyGov, app.paramsKeeper, govSubspace,
-		app.supplyKeeper, &stakingKeeper, gov.DefaultCodespace, govRouter)
 
-	// register the staking hooks
-	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
+	app.govKeeper = gov.NewKeeper(
+		app.cdc,
+		keys[gov.StoreKey],
+		app.paramsKeeper,
+		govSubspace,
+		app.supplyKeeper,
+		&stakingKeeper,
+		gov.DefaultCodespace,
+		govRouter,
+	)
+
 	app.stakingKeeper = *stakingKeeper.SetHooks(
 		staking.NewMultiStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
 
-	app.randKeeper = rand.NewKeeper(app.keyRand, app.cdc)
+	app.randKeeper = rand.NewKeeper(
+		keys[rand.StoreKey],
+		app.cdc,
+	)
 
 	app.mm = module.NewManager(
 		genaccounts.NewAppModule(app.accountKeeper),
