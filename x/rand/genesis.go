@@ -31,6 +31,8 @@ func DefaultGenesisState() GenesisState {
 	}
 }
 
+// Rand state machine does not need genesis states
+
 // Checks whether 2 GenesisState structs are equivalent.
 /*func (data GenesisState) Equal(data2 GenesisState) bool {
 	b1 := MsgCdc.MustMarshalBinaryBare(data)
