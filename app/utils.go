@@ -1,7 +1,7 @@
 package app
 
 import (
-	dbm "github.com/tendermint/tendermint/tm-db"
+	dbm "github.com/tendermint/tm-db"
 	"github.com/tendermint/tendermint/libs/log"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
