@@ -18,4 +18,4 @@ P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 ## 가이드 문서
 
-- https://decentrandom.com/docs/ 를 참고하시기 바랍니다.
+- [https://decentrandom.com/docs/](https://decentrandom.com/docs/) 를 참고하시기 바랍니다.
