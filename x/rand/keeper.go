@@ -2,11 +2,15 @@ package rand
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/bank"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // Keeper -
 type Keeper struct {
+
+	CoinKeeper bank.Keeper
+
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
 
 	cdc *codec.Codec // The wire codec for binary encoding/decoding.
@@ -15,8 +19,9 @@ type Keeper struct {
 }
 
 // NewKeeper -
-func NewKeeper(storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
+		CoinKeeper: coinKeeper,
 		storeKey: storeKey,
 		cdc:      cdc,
 	}
