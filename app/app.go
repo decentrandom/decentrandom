@@ -260,6 +260,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		staking.NewMultiStakingHooks(app.distrKeeper.Hooks(), app.slashingKeeper.Hooks()))
 
 	app.randKeeper = rand.NewKeeper(
+		app.bankKeeper,
 		keys[rand.StoreKey],
 		app.cdc,
 	)
