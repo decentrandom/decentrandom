@@ -2,7 +2,7 @@ package rand
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/bank"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
