@@ -82,7 +82,7 @@ func NewAppModule(k Keeper. bankKeeper bank.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{},
 		keeper:         k,
-		coinKeeper: bank.Keeper,
+		coinKeeper: bankKeeper,
 	}
 }
 
