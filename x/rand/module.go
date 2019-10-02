@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/decentrandom/decentrandom/x/rand/client/cli"
 	"github.com/decentrandom/decentrandom/x/rand/client/rest"
@@ -73,13 +74,15 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 type AppModule struct {
 	AppModuleBasic
 	keeper Keeper
+	coinKeeper bank.Keeper
 }
 
 // NewAppModule -
-func NewAppModule(k Keeper) AppModule {
+func NewAppModule(k Keeper. bankKeeper bank.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{},
 		keeper:         k,
+		coinKeeper: bank.Keeper,
 	}
 }
 
