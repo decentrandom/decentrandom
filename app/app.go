@@ -195,7 +195,8 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		maccPerms,
 	)
 
-	stakingKeeper := staking.NewKeeper(app.cdc,
+	stakingKeeper := staking.NewKeeper(
+		app.cdc,
 		keys[staking.StoreKey],
 		tkeys[staking.TStoreKey],
 		app.supplyKeeper,
@@ -296,7 +297,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 
 	// genutils must occur after staking so that pools are properly
 	// initialized with tokens from genesis accounts.
-	app.mm.SetOrderInitGenesis(
+	/*app.mm.SetOrderInitGenesis(
 		genaccounts.ModuleName,
 		distr.ModuleName,
 		staking.ModuleName,
@@ -309,6 +310,24 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		crisis.ModuleName,
 		rand.ModuleName,
 		genutil.ModuleName,
+	)*/
+
+	app.mm.SetOrderInitGenesis(
+		crisis.ModuleName,
+		rand.ModuleName,
+		mint.ModuleName,
+
+		genaccounts.ModuleName,
+		genutil.ModuleName,
+		auth.ModuleName,
+		bank.ModuleName,
+		supply.ModuleName,
+
+		distr.ModuleName,
+		gov.ModuleName,
+
+		slashing.ModuleName,
+		staking.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)
@@ -370,7 +389,11 @@ func (app *RandApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.R
 func (app *RandApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	var genesisState simapp.GenesisState
 
-	app.cdc.MustUnmarshalJSON(req.AppStateBytes, &genesisState)
+	err := app.cdc.UnmarshalJSON(req.AppStateBytes, &genesisState)
+	if err != nil {
+		panic(err)
+	}
+
 	return app.mm.InitGenesis(ctx, genesisState)
 }
 
