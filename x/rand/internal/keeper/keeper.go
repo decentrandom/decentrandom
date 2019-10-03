@@ -50,7 +50,7 @@ func (k Keeper) SetSeed(ctx sdk.Context, seed Seed) {
 */
 
 // SetRound -
-func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
+func (k Keeper) SetRound(ctx sdk.Context, id string, round types.Round) {
 	if len(id) == 0 || round.Owner.Empty() {
 		return
 	}
@@ -60,9 +60,9 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round Round) {
 }
 
 // GetRound -
-func (k Keeper) GetRound(ctx sdk.Context, id string) Round {
+func (k Keeper) GetRound(ctx sdk.Context, id string) types.Round {
 	store := ctx.KVStore(k.storeKey)
-	var round Round
+	var round types.Round
 
 	if !store.Has([]byte(id)) {
 		return round
