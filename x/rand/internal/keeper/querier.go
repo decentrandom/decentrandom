@@ -3,9 +3,8 @@ package keeper
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/decentrandom/decentrandom/x/rand/internal/keeper"
 	"github.com/decentrandom/decentrandom/x/rand/internal/types"
+	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // Query endpoints
@@ -67,7 +66,7 @@ func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 
 // queryRoundIDs -
 func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
-	var roundIDs QueryResRoundIDs
+	var roundIDs types.QueryResRoundIDs
 
 	iterator := keeper.GetIDsIterator(ctx)
 
