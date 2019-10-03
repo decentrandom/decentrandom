@@ -5,6 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/decentrandom/decentrandom/x/rand/internal/keeper"
+	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 )
 
 // Query endpoints
