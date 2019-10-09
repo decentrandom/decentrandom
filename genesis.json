@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2019-10-08T23:57:13.960773Z",
+  "genesis_time": "2019-10-09T08:48:45.78343658Z",
   "chain_id": "decentrandom",
   "consensus_params": {
     "block": {
@@ -18,245 +18,32 @@
   },
   "app_hash": "",
   "app_state": {
-    "accounts": [
-      {
-        "address": "rand1qq9h6rjm7mk8w03jfgq34l7vywt0fn462vzq45",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "5000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "15",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand199j6rsfewzwzzgxclufqxy7nl3lujyxlh29azx",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "15000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "14",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand1xs0kx77hxahszv45wj8y9as2k7fsf9f2mskwdk",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "150000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "8",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nwzv8cn",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "42098798360515"
-          }
-        ],
-        "sequence_number": "16",
-        "account_number": "0",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand13jxt5mcy08rpw7ddtdp47gqkmlwjjaleuqgrrn",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "100000101000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "13",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand14a7u9nsfsvn9smz05hdykms3uz9hfqesn2u25p",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "856839999998400"
-          }
-        ],
-        "sequence_number": "23",
-        "account_number": "1",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand1h68v8edwar2mey8x8670v2j9c2ey2ahlkqcw9w",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "5000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "12",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand1cjrxw6alsf83s07cr7zwk4ngvhcp77p8jxa47d",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "2777933171342"
-          }
-        ],
-        "sequence_number": "2",
-        "account_number": "16",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand16ea80zrdycqjkxy9nqt9m2qngfqapv0e5fe79j",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "5000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "18",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand1aj8z95cndemacrg47ljd58cf7j7xrhjzqld90z",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "300000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "17",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand1ah60k3n6kr3e5umwxyj6jnp0d6jfeq3mjvupe4",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "305000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "11",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand17xuy04hznwg0qp37v9nu7lwhlqtxh8jnjth7l7",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "150000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "9",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
-      },
-      {
-        "address": "rand177faylwqhwk04dctf5synk3uz56nshu499qg4r",
-        "coins": [
-          {
-            "denom": "urand",
-            "amount": "305000000000"
-          }
-        ],
-        "sequence_number": "0",
-        "account_number": "10",
-        "original_vesting": [],
-        "delegated_free": [],
-        "delegated_vesting": [],
-        "start_time": "0",
-        "end_time": "0",
-        "module_name": "",
-        "module_permissions": null
+    "crisis": {
+      "constant_fee": {
+        "denom": "stake",
+        "amount": "1000"
       }
-    ],
-    "params": null,
-    "bank": {
-      "send_enabled": true
+    },
+    "rand": {
+      "starting_block_height": "1",
+      "rounds": null
+    },
+    "distribution": {
+      "fee_pool": {
+        "community_pool": []
+      },
+      "community_tax": "0.020000000000000000",
+      "base_proposer_reward": "0.010000000000000000",
+      "bonus_proposer_reward": "0.040000000000000000",
+      "withdraw_addr_enabled": true,
+      "delegator_withdraw_infos": [],
+      "previous_proposer": "",
+      "outstanding_rewards": [],
+      "validator_accumulated_commissions": [],
+      "validator_historical_rewards": [],
+      "validator_current_rewards": [],
+      "delegator_starting_infos": [],
+      "validator_slash_events": []
     },
     "gov": {
       "starting_proposal_id": "1",
@@ -284,6 +71,298 @@
     "supply": {
       "supply": []
     },
+    "mint": {
+      "minter": {
+        "inflation": "0.130000000000000000",
+        "annual_provisions": "0.000000000000000000"
+      },
+      "params": {
+        "mint_denom": "urand",
+        "inflation_rate_change": "0.130000000000000000",
+        "inflation_max": "0.200000000000000000",
+        "inflation_min": "0.070000000000000000",
+        "goal_bonded": "0.670000000000000000",
+        "blocks_per_year": "6311520"
+      }
+    },
+    "params": null,
+    "accounts": [
+      {
+        "address": "rand1qq9h6rjm7mk8w03jfgq34l7vywt0fn462vzq45",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand199j6rsfewzwzzgxclufqxy7nl3lujyxlh29azx",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "15000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand1xs0kx77hxahszv45wj8y9as2k7fsf9f2mskwdk",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "150000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nwzv8cn",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "53879493833430"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand13jxt5mcy08rpw7ddtdp47gqkmlwjjaleuqgrrn",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "100000101000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand14a7u9nsfsvn9smz05hdykms3uz9hfqesn2u25p",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "856839999998400"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand1h68v8edwar2mey8x8670v2j9c2ey2ahlkqcw9w",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand1cjrxw6alsf83s07cr7zwk4ngvhcp77p8jxa47d",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5294880000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand16ea80zrdycqjkxy9nqt9m2qngfqapv0e5fe79j",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "5000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand1aj8z95cndemacrg47ljd58cf7j7xrhjzqld90z",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "300000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand1ah60k3n6kr3e5umwxyj6jnp0d6jfeq3mjvupe4",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "305000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand17xuy04hznwg0qp37v9nu7lwhlqtxh8jnjth7l7",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "150000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      },
+      {
+        "address": "rand177faylwqhwk04dctf5synk3uz56nshu499qg4r",
+        "coins": [
+          {
+            "denom": "urand",
+            "amount": "305000000000"
+          }
+        ],
+        "sequence_number": "0",
+        "account_number": "0",
+        "original_vesting": [],
+        "delegated_free": [],
+        "delegated_vesting": [],
+        "start_time": "0",
+        "end_time": "0",
+        "module_name": "",
+        "module_permissions": [
+          ""
+        ]
+      }
+    ],
+    "staking": {
+      "params": {
+        "unbonding_time": "1814400000000000",
+        "max_validators": 100,
+        "max_entries": 7,
+        "bond_denom": "urand"
+      },
+      "last_total_power": "0",
+      "last_validator_powers": null,
+      "validators": null,
+      "delegations": null,
+      "unbonding_delegations": null,
+      "redelegations": null,
+      "exported": false
+    },
     "auth": {
       "params": {
         "max_memo_characters": "256",
@@ -305,64 +384,57 @@
       "signing_infos": {},
       "missed_blocks": {}
     },
-    "rand": {
-      "starting_block_height": "1",
-      "rounds": null
-    },
-    "staking": {
-      "params": {
-        "unbonding_time": "1814400000000000",
-        "max_validators": 100,
-        "max_entries": 7,
-        "bond_denom": "urand"
-      },
-      "last_total_power": "0",
-      "last_validator_powers": null,
-      "validators": null,
-      "delegations": null,
-      "unbonding_delegations": null,
-      "redelegations": null,
-      "exported": false
-    },
-    "mint": {
-      "minter": {
-        "inflation": "0.130000000000000000",
-        "annual_provisions": "0.000000000000000000"
-      },
-      "params": {
-        "mint_denom": "urand",
-        "inflation_rate_change": "0.130000000000000000",
-        "inflation_max": "0.200000000000000000",
-        "inflation_min": "0.070000000000000000",
-        "goal_bonded": "0.670000000000000000",
-        "blocks_per_year": "6311520"
-      }
-    },
     "genutil": {
-      "gentxs": null
+      "gentxs": [
+        {
+          "type": "cosmos-sdk/StdTx",
+          "value": {
+            "msg": [
+              {
+                "type": "cosmos-sdk/MsgCreateValidator",
+                "value": {
+                  "description": {
+                    "moniker": "misskiwi",
+                    "identity": "",
+                    "website": "",
+                    "details": ""
+                  },
+                  "commission": {
+                    "rate": "0.100000000000000000",
+                    "max_rate": "0.200000000000000000",
+                    "max_change_rate": "0.010000000000000000"
+                  },
+                  "min_self_delegation": "1",
+                  "delegator_address": "rand1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nwzv8cn",
+                  "validator_address": "randvaloper1vug6e3dvr7mqa67agsv0gkg8wcp5sw0nnnmfnw",
+                  "pubkey": "randvalconspub1zcjduepqctr96p0x8s295mh5ps4ec6xmuj2xev9tyq643urkka0e5elwqv2sszps6a",
+                  "value": {
+                    "denom": "urand",
+                    "amount": "11500100000000"
+                  }
+                }
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas": "200000"
+            },
+            "signatures": [
+              {
+                "pub_key": {
+                  "type": "tendermint/PubKeySecp256k1",
+                  "value": "A8yj2yVk5WnRNharzNX1+ch45YlmzBPBMh3u7gbhLJ0D"
+                },
+                "signature": "N5S5uiQ4bEkYW1/HVpZ5j3QMseVlsdL1JFn3MLw6T2k5IUDrJSNaLvR7rgGBL0JP9iiZckyuKT0KeV2PJyxreA=="
+              }
+            ],
+            "memo": "8ecb7b7e57e3b0e06b83d61946134d21eb478254@172.31.2.3:26656"
+          }
+        }
+      ]
     },
-    "crisis": {
-      "constant_fee": {
-        "denom": "urand",
-        "amount": "1000"
-      }
-    },
-    "distribution": {
-      "fee_pool": {
-        "community_pool": []
-      },
-      "community_tax": "0.020000000000000000",
-      "base_proposer_reward": "0.010000000000000000",
-      "bonus_proposer_reward": "0.040000000000000000",
-      "withdraw_addr_enabled": true,
-      "delegator_withdraw_infos": [],
-      "previous_proposer": "",
-      "outstanding_rewards": [],
-      "validator_accumulated_commissions": [],
-      "validator_historical_rewards": [],
-      "validator_current_rewards": [],
-      "delegator_starting_infos": [],
-      "validator_slash_events": []
+    "bank": {
+      "send_enabled": true
     }
   }
 }
