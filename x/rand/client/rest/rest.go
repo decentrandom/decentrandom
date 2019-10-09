@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-	"github.com/decentrandom/decentrandom/x/rand/types"
+	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 )
 
 const (

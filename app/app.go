@@ -15,6 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
@@ -69,6 +70,7 @@ var (
 		staking.BondedPoolName:    {supply.Burner, supply.Staking},
 		staking.NotBondedPoolName: {supply.Burner, supply.Staking},
 		gov.ModuleName:            {supply.Burner},
+		rand.ModuleName:           nil,
 	}
 )
 
@@ -78,6 +80,7 @@ func MakeCodec() *codec.Codec {
 	ModuleBasics.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
+	codec.RegisterEvidences(cdc)
 	return cdc
 }
 
@@ -135,7 +138,19 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	//bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetAppVersion(version.Version)
 
-	keys := sdk.NewKVStoreKeys(bam.MainStoreKey, auth.StoreKey, supply.StoreKey, staking.StoreKey, mint.StoreKey, distr.StoreKey, slashing.StoreKey, gov.StoreKey, params.StoreKey, rand.StoreKey)
+	keys := sdk.NewKVStoreKeys(
+		bam.MainStoreKey,
+		auth.StoreKey,
+		staking.StoreKey,
+		supply.StoreKey,
+		mint.StoreKey,
+		distr.StoreKey,
+		slashing.StoreKey,
+		gov.StoreKey,
+		params.StoreKey,
+		rand.StoreKey,
+	)
+
 	tkeys := sdk.NewTransientStoreKeys(staking.TStoreKey, params.TStoreKey)
 
 	var app = &RandApp{
@@ -298,36 +313,36 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	// genutils must occur after staking so that pools are properly
 	// initialized with tokens from genesis accounts.
 	/*app.mm.SetOrderInitGenesis(
-		genaccounts.ModuleName,
-		distr.ModuleName,
-		staking.ModuleName,
-		auth.ModuleName,
-		bank.ModuleName,
-		slashing.ModuleName,
-		gov.ModuleName,
-		mint.ModuleName,
-		supply.ModuleName,
 		crisis.ModuleName,
 		rand.ModuleName,
+		mint.ModuleName,
+
+		genaccounts.ModuleName,
 		genutil.ModuleName,
+		auth.ModuleName,
+		bank.ModuleName,
+		supply.ModuleName,
+
+		distr.ModuleName,
+		gov.ModuleName,
+
+		slashing.ModuleName,
+		staking.ModuleName,
 	)*/
 
 	app.mm.SetOrderInitGenesis(
-		crisis.ModuleName,
-		rand.ModuleName,
-		mint.ModuleName,
-
 		genaccounts.ModuleName,
-		genutil.ModuleName,
+		distr.ModuleName,
+		staking.ModuleName,
 		auth.ModuleName,
 		bank.ModuleName,
-		supply.ModuleName,
-
-		distr.ModuleName,
-		gov.ModuleName,
-
 		slashing.ModuleName,
-		staking.ModuleName,
+		gov.ModuleName,
+		mint.ModuleName,
+		supply.ModuleName,
+		crisis.ModuleName,
+		rand.ModuleName,
+		genutil.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)
