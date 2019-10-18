@@ -54,7 +54,7 @@ func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 // GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "new-round [difficulty] [nonce] [target1,target2,...,target(n)] [scheduled_time]",
+		Use:   "new-round [difficulty] [nonce] [target1,target2,...,target(n)] [deposit] [scheduled_time]",
 		Short: "Create new round data",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -81,10 +81,10 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 
 			// string to time.Time
 			var scheduledTime time.Time
-			if args[3] != "" {
+			if args[4] != "" {
 				var err error
 				// Sample : "2014-09-12T11:45:26.371Z"
-				scheduledTime, err = time.Parse(time.RFC3339, args[3])
+				scheduledTime, err = time.Parse(time.RFC3339, args[4])
 
 				if err != nil {
 					panic(err)
@@ -96,18 +96,21 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 
 			// Create ID
-			roundArgs := make([][]byte, 7)
+			roundArgs := make([][]byte, 8)
 			roundArgs[0] = []byte(args[0])
 			roundArgs[1] = []byte(args[1])
 			roundArgs[2] = []byte(args[2])
 			roundArgs[3] = []byte(args[3])
-			roundArgs[4] = []byte("0")
-			roundArgs[5] = []byte(cliCtx.GetFromAddress().String())
-			roundArgs[6] = []byte(time.Now().String())
+			roundArgs[4] = []byte(args[4])
+			roundArgs[5] = []byte("0")
+			roundArgs[6] = []byte(cliCtx.GetFromAddress().String())
+			roundArgs[7] = []byte(time.Now().String())
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
-			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), args[1], targets, scheduledTime)
+			depositAmount, _ := sdk.NewIntFromString(args[3])
+
+			msg := types.NewMsgNewRound(fmt.Sprintf("%X", []byte(rootHash)), difficulty, cliCtx.GetFromAddress(), args[1], targets, sdk.NewCoin("urand", depositAmount), scheduledTime)
 			errValidate := msg.ValidateBasic()
 			if errValidate != nil {
 				return errValidate
