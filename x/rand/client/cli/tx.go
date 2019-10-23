@@ -54,7 +54,7 @@ func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 // GetCmdNewRound -
 func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "new-round [difficulty] [nonce] [target1,target2,...,target(n)] [deposit] [scheduled_time]",
+		Use:   "new-round [difficulty] [nonce_hash] [target1,target2,...,target(n)] [deposit] [scheduled_time]",
 		Short: "Create new round data",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -96,15 +96,14 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 			}
 
 			// Create ID
-			roundArgs := make([][]byte, 8)
+			roundArgs := make([][]byte, 7)
 			roundArgs[0] = []byte(args[0])
 			roundArgs[1] = []byte(args[1])
 			roundArgs[2] = []byte(args[2])
 			roundArgs[3] = []byte(args[3])
 			roundArgs[4] = []byte(args[4])
-			roundArgs[5] = []byte("0")
-			roundArgs[6] = []byte(cliCtx.GetFromAddress().String())
-			roundArgs[7] = []byte(time.Now().String())
+			roundArgs[5] = []byte(cliCtx.GetFromAddress().String())
+			roundArgs[6] = []byte(time.Now().String())
 
 			rootHash := merkle.SimpleHashFromByteSlices(roundArgs)
 
