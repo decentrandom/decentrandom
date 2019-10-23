@@ -10,6 +10,8 @@ import (
 func EndBlocker(ctx sdk.Context, k Keeper) {
 
 	fmt.Println()
+	fmt.Printf("----------------")
+	fmt.Println()
 	fmt.Printf("RAND Deposit")
 	fmt.Println()
 
