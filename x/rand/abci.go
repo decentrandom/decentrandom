@@ -14,4 +14,6 @@ func EndBlocker(ctx sdk.Context, k Keeper) {
 	fmt.Println()
 
 	// TODO : process RAND depost
+	// ex : sdk.DecCoins{{urand, sdk.NewDec()}}
+	// ex : k.AllocateOkensToAccount(ctx, 주소, tokens)
 }
