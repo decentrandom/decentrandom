@@ -54,7 +54,8 @@ type newRoundReq struct {
 	ID            string       `json:"id"`
 	Owner         string       `json:"owner"`
 	Targets       []string     `json:"targets"`
-	ScheduledTime time.Time    `jsong:"scheduled_time"`
+	DepositCoin   sdk.Coin     `json:"deposit_coin"`
+	ScheduledTime time.Time    `json:"scheduled_time"`
 }
 
 // newRoundHandler -
@@ -78,7 +79,7 @@ func newRoundHandler(cliCtx context.CLIContext) http.HandlerFunc {
 			return
 		}
 
-		msg := types.NewMsgNewRound(req.ID, req.Difficulty, addr, req.NonceHash, req.Targets, req.ScheduledTime)
+		msg := types.NewMsgNewRound(req.ID, req.Difficulty, addr, req.NonceHash, req.Targets, req.DepositCoin, req.ScheduledTime)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
