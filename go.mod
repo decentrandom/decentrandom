@@ -1,6 +1,6 @@
 module github.com/decentrandom/decentrandom
 
-go 1.12
+go 1.13
 
 require (
 	github.com/btcsuite/btcd v0.0.0-20190523000118-16327141da8c // indirect
