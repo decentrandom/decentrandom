@@ -34,7 +34,7 @@ type Round struct {
 	Nonce         string         `json:"nonce"`
 	NonceHash     string         `json:"nonce_hash"`
 	Targets       []string       `json:"targets"`
-	DepositCoin   sdk.Coin       `jsong:"deposit_coin"`
+	DepositCoin   sdk.Coin       `json:"deposit_coin"`
 	ScheduledTime time.Time      `json:"scheduled_time"`
 }
 
