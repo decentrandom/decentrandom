@@ -19,5 +19,5 @@ func EndBlocker(ctx sdk.Context, k Keeper) {
 	// ex : sdk.DecCoins{{urand, sdk.NewDec()}}
 	// ex : k.AllocateTokensToAccount(ctx, 주소, tokens)
 	//
-	// supply keeper의 DelegateCoinsFromModuleToAccount, UndelegateCoinsFromModuleToAccount 사용
+	// supply keeper의 SendCoinsFromModuleToAccount, SendCoinsFromAccountToModule 사용
 }
