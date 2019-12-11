@@ -18,4 +18,6 @@ func EndBlocker(ctx sdk.Context, k Keeper) {
 	// TODO : process RAND deposit
 	// ex : sdk.DecCoins{{urand, sdk.NewDec()}}
 	// ex : k.AllocateTokensToAccount(ctx, 주소, tokens)
+	//
+	// supply keeper의 DelegateCoinsFromModuleToAccount, UndelegateCoinsFromModuleToAccount 사용
 }
