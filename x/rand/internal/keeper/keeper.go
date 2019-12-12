@@ -4,12 +4,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
+	"github.com/cosmos/cosmos-sdk/x/supply"
 	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 )
 
 // Keeper -
 type Keeper struct {
 	CoinKeeper bank.Keeper
+	SupplyKeeper supply.Keeper
 
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
 
@@ -17,9 +19,10 @@ type Keeper struct {
 }
 
 // NewKeeper -
-func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, supplyKeeper supply.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		CoinKeeper: coinKeeper,
+		SupplyKeeper: supplyKeeper,
 		storeKey:   storeKey,
 		cdc:        cdc,
 	}
