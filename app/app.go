@@ -277,6 +277,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 
 	app.randKeeper = rand.NewKeeper(
 		app.bankKeeper,
+		app.supplyKeeper,
 		keys[rand.StoreKey],
 		app.cdc,
 	)
@@ -293,7 +294,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		mint.NewAppModule(app.mintKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.distrKeeper, app.accountKeeper, app.supplyKeeper),
-		rand.NewAppModule(app.randKeeper, app.bankKeeper),
+		rand.NewAppModule(app.randKeeper, app.bankKeeper, app.supplyKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
