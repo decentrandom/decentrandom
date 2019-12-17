@@ -20,4 +20,6 @@ func EndBlocker(ctx sdk.Context, k Keeper) {
 	// ex : k.AllocateTokensToAccount(ctx, 주소, tokens)
 	//
 	// supply keeper의 SendCoinsFromModuleToAccount, SendCoinsFromAccountToModule 사용
+
+	
 }
