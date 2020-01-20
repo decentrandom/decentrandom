@@ -1,8 +1,8 @@
 package rand
 
 import (
-	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 	"github.com/decentrandom/decentrandom/x/rand/internal/keeper"
+	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 )
 
 const (
@@ -18,8 +18,11 @@ const (
 
 var (
 
-	NewKeeper        = keeper.NewKeeper
-	NewQuerier       = keeper.NewQuerier
+	// NewKeeper -
+	NewKeeper = keeper.NewKeeper
+
+	// NewQuerier -
+	NewQuerier = keeper.NewQuerier
 
 	// NewMsgNewRound -
 	NewMsgNewRound = types.NewMsgNewRound
@@ -42,8 +45,9 @@ var (
 
 type (
 
-	Keeper          = keeper.Keeper
-	
+	// Keeper -
+	Keeper = keeper.Keeper
+
 	// MsgNewRound -
 	MsgNewRound = types.MsgNewRound
 
