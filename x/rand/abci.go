@@ -21,5 +21,7 @@ func EndBlocker(ctx sdk.Context, k Keeper) {
 	//
 	// supply keeper의 SendCoinsFromModuleToAccount, SendCoinsFromAccountToModule 사용
 
-	
+	// 기초 데이터 불러오기
+
+	//
 }
