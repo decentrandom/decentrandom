@@ -10,7 +10,7 @@ import (
 
 // Keeper -
 type Keeper struct {
-	CoinKeeper bank.Keeper
+	CoinKeeper   bank.Keeper
 	SupplyKeeper supply.Keeper
 
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
@@ -21,10 +21,10 @@ type Keeper struct {
 // NewKeeper -
 func NewKeeper(coinKeeper bank.Keeper, supplyKeeper supply.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
-		CoinKeeper: coinKeeper,
+		CoinKeeper:   coinKeeper,
 		SupplyKeeper: supplyKeeper,
-		storeKey:   storeKey,
-		cdc:        cdc,
+		storeKey:     storeKey,
+		cdc:          cdc,
 	}
 }
 
@@ -56,6 +56,11 @@ func (k Keeper) SetSeed(ctx sdk.Context, seed Seed) {
 func (k Keeper) SetRound(ctx sdk.Context, id string, round types.Round) {
 	if len(id) == 0 || round.Owner.Empty() {
 		return
+	}
+
+	// ***** 이게 맞는건가?????
+	if sdk.Coin.IsPositive(round.DepositCoin) {
+		k.SupplyKeeper.SendCoinsFromAccountToModule(ctx, round.Owner, types.ModuleName, sdk.NewCoins(round.DepositCoin))
 	}
 
 	store := ctx.KVStore(k.storeKey)
