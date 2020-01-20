@@ -1,11 +1,11 @@
-# DecentRandom
+# DecentRandom v0.1.5
 
 P2P기반 탈중앙화 오픈 소스 난수 발생기
 
-- [https://decentrandom.com](https://decentrandom.com)
-- Cosmos SDK v0.37.1
-- Tendermint v0.32.5
-- Go 1.12 이상
+- [공식 웹사이트](https://decentrandom.com)
+- Cosmos SDK v0.37.4
+- Tendermint v0.32.7
+- Go 1.13 이상
 - Ledger 지원 시 gcc 필요
 
 ## Warnings

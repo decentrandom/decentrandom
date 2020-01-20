@@ -4,12 +4,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
+	"github.com/cosmos/cosmos-sdk/x/supply"
 	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 )
 
 // Keeper -
 type Keeper struct {
-	CoinKeeper bank.Keeper
+	CoinKeeper   bank.Keeper
+	SupplyKeeper supply.Keeper
 
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
 
@@ -17,11 +19,12 @@ type Keeper struct {
 }
 
 // NewKeeper -
-func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, supplyKeeper supply.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
-		CoinKeeper: coinKeeper,
-		storeKey:   storeKey,
-		cdc:        cdc,
+		CoinKeeper:   coinKeeper,
+		SupplyKeeper: supplyKeeper,
+		storeKey:     storeKey,
+		cdc:          cdc,
 	}
 }
 
@@ -53,6 +56,11 @@ func (k Keeper) SetSeed(ctx sdk.Context, seed Seed) {
 func (k Keeper) SetRound(ctx sdk.Context, id string, round types.Round) {
 	if len(id) == 0 || round.Owner.Empty() {
 		return
+	}
+
+	// ***** 이게 맞는건가?????
+	if sdk.Coin.IsPositive(round.DepositCoin) {
+		k.SupplyKeeper.SendCoinsFromAccountToModule(ctx, round.Owner, types.ModuleName, sdk.NewCoins(round.DepositCoin))
 	}
 
 	store := ctx.KVStore(k.storeKey)
