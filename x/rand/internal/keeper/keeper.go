@@ -58,7 +58,7 @@ func (k Keeper) SetRound(ctx sdk.Context, id string, round types.Round) {
 		return
 	}
 
-	// ***** 이게 맞는건가?????
+	// ***** 이게 맞는건가????? 테스트 필요. testnet
 	if sdk.Coin.IsPositive(round.DepositCoin) {
 		k.SupplyKeeper.SendCoinsFromAccountToModule(ctx, round.Owner, types.ModuleName, sdk.NewCoins(round.DepositCoin))
 	}
