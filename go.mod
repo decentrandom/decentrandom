@@ -3,7 +3,7 @@ module github.com/decentrandom/decentrandom
 go 1.13
 
 require (
-	github.com/cosmos/cosmos-sdk v0.37.11
+	github.com/cosmos/cosmos-sdk v0.37.12
 	github.com/golang/mock v1.3.1 // indirect
 	github.com/gorilla/mux v1.7.3
 	github.com/mattn/go-isatty v0.0.8 // indirect
