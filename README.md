@@ -3,8 +3,8 @@
 P2P기반 탈중앙화 오픈 소스 난수 발생기
 
 - [공식 웹사이트](https://decentrandom.com)
-- Cosmos SDK v0.37.4
-- Tendermint v0.32.7
+- Cosmos SDK v0.37.12
+- Tendermint v0.32.11
 - Go 1.13 이상
 - Ledger Nano 시리즈 지원 시 gcc 필요
 
