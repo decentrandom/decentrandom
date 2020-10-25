@@ -76,7 +76,7 @@ endif
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
-install: go.sum check-ledger
+install: go.sum
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randd
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/randcli
 
