@@ -172,16 +172,16 @@ func (msg MsgAddTargets) Type() string {
 }
 
 // ValidateBasic - 모집단 추가 ValidateBasic
-func (msg MsgAddTargets) ValidateBasic() sdk.Error {
+func (msg MsgAddTargets) ValidateBasic() error {
 	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress(msg.Owner.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address can not be empty.")
 	}
 	if len(msg.ID) == 0 {
-		return sdk.ErrUnknownRequest("Must specify ID.")
+		return ssdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "id can not be empty.")
 	}
 
 	if msg.Targets == nil {
-		return sdk.ErrUnknownRequest("Must specify Targets.")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "target can not be empty.")
 	}
 
 	return nil
