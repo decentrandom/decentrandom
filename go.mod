@@ -8,8 +8,6 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
-	github.com/pelletier/go-toml v1.6.0 // indirect
-	github.com/rakyll/statik v0.1.6 // indirect
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.6.3
 	github.com/tendermint/go-amino v0.15.1
