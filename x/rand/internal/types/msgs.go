@@ -5,6 +5,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // RouterKey -
@@ -51,7 +52,7 @@ func (msg MsgNewRound) Type() string {
 }
 
 // ValidateBasic -
-func (msg MsgNewRound) ValidateBasic() sdk.Error {
+func (msg MsgNewRound) ValidateBasic() error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
