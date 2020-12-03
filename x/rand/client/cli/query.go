@@ -10,7 +10,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
+
 	"github.com/tendermint/tendermint/crypto/tmhash"
 )
 
@@ -23,7 +25,7 @@ func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
-	randQueryCmd.AddCommand(client.GetCommands(
+	randQueryCmd.AddCommand(flags.GetCommands(
 		GetCmdRoundInfo(cdc),
 		GetCmdRoundIDs(cdc),
 		GetCmdHashNonce(cdc),
