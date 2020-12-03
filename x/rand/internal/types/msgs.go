@@ -177,7 +177,7 @@ func (msg MsgAddTargets) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address can not be empty.")
 	}
 	if len(msg.ID) == 0 {
-		return ssdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "id can not be empty.")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "id can not be empty.")
 	}
 
 	if msg.Targets == nil {
