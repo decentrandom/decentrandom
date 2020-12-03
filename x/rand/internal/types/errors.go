@@ -1,18 +1,15 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const (
-	// DefaultCodespace -
-	DefaultCodespace sdk.CodespaceType = ModuleName
-
-	// CodeRoundDoesNotExist -
-	CodeRoundDoesNotExist sdk.CodeType = 101
+	ErrCodeRoundNotFound = 1
 )
 
-// ErrRoundDoesNotExist -
-func ErrRoundDoesNotExist(codespace sdk.CodespaceType) sdk.Error {
-	return sdk.NewError(codespace, CodeRoundDoesNotExist, "Round does not exist")
-}
+var (
+	DefaultCodespace = ModuleName
+
+	ErrRoundNotFound = sdkerrors.Register(ModuleName, ErrCodeRoundNotFound, "round not found")
+)
