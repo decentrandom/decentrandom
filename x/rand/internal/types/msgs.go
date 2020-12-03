@@ -58,13 +58,13 @@ func (msg MsgNewRound) ValidateBasic() error {
 	}
 
 	if len(msg.ID) == 0 || len(msg.NonceHash) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ID, NonceHash can not be empty")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "id, noncehash can not be empty")
 	}
 
 	// Validate round hash
 
 	if msg.Difficulty < 1 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Difficulty must be greater than 0.")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "difficulty must be greater than 0.")
 	}
 
 	return nil
@@ -115,13 +115,13 @@ func (msg MsgDeployNonce) Type() string {
 }
 
 // ValidateBasic -
-func (msg MsgDeployNonce) ValidateBasic() sdk.Error {
+func (msg MsgDeployNonce) ValidateBasic() error {
 	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress(msg.Owner.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address can not be empty.")
 	}
 
 	if len(msg.ID) == 0 {
-		return sdk.ErrUnknownRequest("Must specify ID, NonceHash.")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "id, noncehash can not be empty.")
 	}
 
 	return nil
