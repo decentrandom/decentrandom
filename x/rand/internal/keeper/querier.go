@@ -3,6 +3,7 @@ package keeper
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/decentrandom/decentrandom/x/rand/internal/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
@@ -16,7 +17,7 @@ const (
 
 // NewQuerier -
 func NewQuerier(keeper Keeper) sdk.Querier {
-	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err sdk.Error) {
+	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, error) {
 
 		switch path[0] {
 		//case QuerySeedInfo:
@@ -29,7 +30,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 			return queryRoundIDs(ctx, req, keeper)
 
 		default:
-			return nil, sdk.ErrUnknownRequest("Unknown rand query endpoint")
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown rand query endpoint")
 		}
 	}
 }
@@ -51,7 +52,7 @@ func querySeedInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 */
 
 // queryRoundInfo -
-func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
+func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, error) {
 	id := path[0]
 
 	round := keeper.GetRound(ctx, id)
@@ -65,7 +66,7 @@ func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 }
 
 // queryRoundIDs -
-func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
+func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, error) {
 	var roundIDs types.QueryResRoundIDs
 
 	iterator := keeper.GetIDsIterator(ctx)
