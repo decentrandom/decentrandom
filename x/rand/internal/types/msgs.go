@@ -232,16 +232,16 @@ func (msg MsgUpdateTargets) Type() string {
 }
 
 // ValidateBasic -
-func (msg MsgUpdateTargets) ValidateBasic() sdk.Error {
+func (msg MsgUpdateTargets) ValidateBasic() error {
 	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress(msg.Owner.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address can not be empty.")
 	}
 	if len(msg.ID) == 0 {
-		return sdk.ErrUnknownRequest("Must specify ID.")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "id can not be empty.")
 	}
 
 	if msg.Targets == nil {
-		return sdk.ErrUnknownRequest("Must specify Targets.")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "target can not be empty")
 	}
 
 	return nil
