@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"io"
-	"log"
 
 	"github.com/spf13/cobra"
 	//"github.com/spf13/viper"
@@ -12,7 +11,7 @@ import (
 	"github.com/tendermint/tendermint/libs/cli"
 	dbm "github.com/tendermint/tm-db"
 
-	//"github.com/tendermint/tendermint/libs/log"
+	"github.com/tendermint/tendermint/libs/log"
 	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/decentrandom/decentrandom/app"
