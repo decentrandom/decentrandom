@@ -82,14 +82,21 @@ func (app *RandApp) prepForZeroHeightGenesis(ctx sdk.Context, jailWhiteList []st
 	// reinitialize all validators
 	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val staking.ValidatorI) (stop bool) {
 
-		// donate any unwithdrawn outstanding reward fraction tokens to the community pool
-		scraps := app.distrKeeper.GetValidatorOutstandingRewards(ctx, val.GetOperator())
-		feePool := app.distrKeeper.GetFeePool(ctx)
-		feePool.CommunityPool = feePool.CommunityPool.Add(scraps)
-		app.distrKeeper.SetFeePool(ctx, feePool)
-
-		app.distrKeeper.Hooks().AfterValidatorCreated(ctx, val.GetOperator())
+		_, err := app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+		if err != nil {
+			log.Fatal(err)
+		}
 		return false
+
+		/*
+			scraps := app.distrKeeper.GetValidatorOutstandingRewards(ctx, val.GetOperator())
+			feePool := app.distrKeeper.GetFeePool(ctx)
+			feePool.CommunityPool = feePool.CommunityPool.Add(scraps)
+			app.distrKeeper.SetFeePool(ctx, feePool)
+
+			app.distrKeeper.Hooks().AfterValidatorCreated(ctx, val.GetOperator())
+			return false
+		*/
 	})
 
 	// reinitialize all delegations
