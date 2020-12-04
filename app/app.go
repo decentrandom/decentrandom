@@ -214,16 +214,14 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	stakingKeeper := staking.NewKeeper(
 		app.cdc,
 		keys[staking.StoreKey],
-		tkeys[staking.TStoreKey],
 		app.supplyKeeper,
-		stakingSubspace,
-		staking.DefaultCodespace,
+		app.subspaces[staking.ModuleName],
 	)
 
 	app.mintKeeper = mint.NewKeeper(
 		app.cdc,
 		keys[mint.StoreKey],
-		mintSubspace,
+		app.subspaces[mint.ModuleName],
 		&stakingKeeper,
 		app.supplyKeeper,
 		auth.FeeCollectorName,
@@ -232,10 +230,9 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	app.distrKeeper = distr.NewKeeper(
 		app.cdc,
 		keys[distr.StoreKey],
-		distrSubspace,
+		app.subspaces[distr.ModuleName],
 		&stakingKeeper,
 		app.supplyKeeper,
-		distr.DefaultCodespace,
 		auth.FeeCollectorName,
 		app.ModuleAccountAddrs(),
 	)
@@ -244,12 +241,11 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		app.cdc,
 		keys[slashing.StoreKey],
 		&stakingKeeper,
-		slashingSubspace,
-		slashing.DefaultCodespace,
+		app.subspaces[slashing.ModuleName],
 	)
 
 	app.crisisKeeper = crisis.NewKeeper(
-		crisisSubspace,
+		app.subspaces[crisis.ModuleName],
 		invCheckPeriod,
 		app.supplyKeeper,
 		auth.FeeCollectorName,
@@ -265,11 +261,9 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	app.govKeeper = gov.NewKeeper(
 		app.cdc,
 		keys[gov.StoreKey],
-		app.paramsKeeper,
-		govSubspace,
+		app.subspaces[gov.ModuleName],
 		app.supplyKeeper,
 		&stakingKeeper,
-		gov.DefaultCodespace,
 		govRouter,
 	)
 
@@ -284,7 +278,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	)
 
 	app.mm = module.NewManager(
-		genaccounts.NewAppModule(app.accountKeeper),
+		//genaccounts.NewAppModule(app.accountKeeper),
 		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx),
 		auth.NewAppModule(app.accountKeeper),
 		bank.NewAppModule(app.bankKeeper, app.accountKeeper),
