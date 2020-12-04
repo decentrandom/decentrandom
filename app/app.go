@@ -22,6 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrclient "github.com/cosmos/cosmos-sdk/x/distribution/client"
+
 	//"github.com/cosmos/cosmos-sdk/x/genaccounts"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/gov"
@@ -181,14 +182,14 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 
 	// init params keeper and subspaces
 	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey])
-	authSubspace := app.paramsKeeper.Subspace(auth.DefaultParamspace)
-	bankSubspace := app.paramsKeeper.Subspace(bank.DefaultParamspace)
-	stakingSubspace := app.paramsKeeper.Subspace(staking.DefaultParamspace)
-	mintSubspace := app.paramsKeeper.Subspace(mint.DefaultParamspace)
-	distrSubspace := app.paramsKeeper.Subspace(distr.DefaultParamspace)
-	slashingSubspace := app.paramsKeeper.Subspace(slashing.DefaultParamspace)
-	govSubspace := app.paramsKeeper.Subspace(gov.DefaultParamspace)
-	crisisSubspace := app.paramsKeeper.Subspace(crisis.DefaultParamspace)
+	//authSubspace := app.paramsKeeper.Subspace(auth.DefaultParamspace)
+	//bankSubspace := app.paramsKeeper.Subspace(bank.DefaultParamspace)
+	//stakingSubspace := app.paramsKeeper.Subspace(staking.DefaultParamspace)
+	//mintSubspace := app.paramsKeeper.Subspace(mint.DefaultParamspace)
+	//distrSubspace := app.paramsKeeper.Subspace(distr.DefaultParamspace)
+	//slashingSubspace := app.paramsKeeper.Subspace(slashing.DefaultParamspace)
+	//govSubspace := app.paramsKeeper.Subspace(gov.DefaultParamspace)
+	//crisisSubspace := app.paramsKeeper.Subspace(crisis.DefaultParamspace)
 
 	app.accountKeeper = auth.NewAccountKeeper(
 		app.cdc,
@@ -284,11 +285,11 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		bank.NewAppModule(app.bankKeeper, app.accountKeeper),
 		crisis.NewAppModule(&app.crisisKeeper),
 		supply.NewAppModule(app.supplyKeeper, app.accountKeeper),
-		distr.NewAppModule(app.distrKeeper, app.supplyKeeper),
-		gov.NewAppModule(app.govKeeper, app.supplyKeeper),
+		distr.NewAppModule(app.distrKeeper, app.accountKeeper, app.supplyKeeper, app.stakingKeeper),
+		gov.NewAppModule(app.govKeeper, app.accountKeeper, app.supplyKeeper),
 		mint.NewAppModule(app.mintKeeper),
-		slashing.NewAppModule(app.slashingKeeper, app.stakingKeeper),
-		staking.NewAppModule(app.stakingKeeper, app.distrKeeper, app.accountKeeper, app.supplyKeeper),
+		slashing.NewAppModule(app.slashingKeeper, app.accountKeeper, app.stakingKeeper),
+		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
 		rand.NewAppModule(app.randKeeper, app.bankKeeper, app.supplyKeeper),
 	)
 
@@ -327,7 +328,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	)*/
 
 	app.mm.SetOrderInitGenesis(
-		genaccounts.ModuleName,
+		//genaccounts.ModuleName,
 		distr.ModuleName,
 		staking.ModuleName,
 		auth.ModuleName,
