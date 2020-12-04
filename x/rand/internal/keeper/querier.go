@@ -17,7 +17,7 @@ const (
 
 // NewQuerier -
 func NewQuerier(keeper Keeper) sdk.Querier {
-	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, error) {
+	return func(ctx sdk.Context, path []string, req abci.RequestQuery) ([]byte, error) {
 
 		switch path[0] {
 		//case QuerySeedInfo:
@@ -52,7 +52,7 @@ func querySeedInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 */
 
 // queryRoundInfo -
-func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, error) {
+func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) ([]byte, error) {
 	id := path[0]
 
 	round := keeper.GetRound(ctx, id)
@@ -66,7 +66,7 @@ func queryRoundInfo(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 }
 
 // queryRoundIDs -
-func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, error) {
+func queryRoundIDs(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, error) {
 	var roundIDs types.QueryResRoundIDs
 
 	iterator := keeper.GetIDsIterator(ctx)
