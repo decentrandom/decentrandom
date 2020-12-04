@@ -22,7 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrclient "github.com/cosmos/cosmos-sdk/x/distribution/client"
-	"github.com/cosmos/cosmos-sdk/x/genaccounts"
+	//"github.com/cosmos/cosmos-sdk/x/genaccounts"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	"github.com/cosmos/cosmos-sdk/x/mint"
@@ -47,7 +47,7 @@ var (
 
 	// ModuleBasics -
 	ModuleBasics = module.NewBasicManager(
-		genaccounts.AppModuleBasic{},
+		//	genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		bank.AppModuleBasic{},
@@ -110,6 +110,8 @@ type RandApp struct {
 
 	keys  map[string]*sdk.KVStoreKey
 	tkeys map[string]*sdk.TransientStoreKey
+
+	subspaces map[string]params.Subspace
 
 	// keepers
 	accountKeeper  auth.AccountKeeper
@@ -178,7 +180,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	}
 
 	// init params keeper and subspaces
-	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey], params.DefaultCodespace)
+	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey])
 	authSubspace := app.paramsKeeper.Subspace(auth.DefaultParamspace)
 	bankSubspace := app.paramsKeeper.Subspace(bank.DefaultParamspace)
 	stakingSubspace := app.paramsKeeper.Subspace(staking.DefaultParamspace)
@@ -191,14 +193,13 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	app.accountKeeper = auth.NewAccountKeeper(
 		app.cdc,
 		keys[auth.StoreKey],
-		authSubspace,
+		app.subspaces[auth.ModuleName],
 		auth.ProtoBaseAccount,
 	)
 
 	app.bankKeeper = bank.NewBaseKeeper(
 		app.accountKeeper,
-		bankSubspace,
-		bank.DefaultCodespace,
+		app.subspaces[bank.ModuleName],
 		app.ModuleAccountAddrs(),
 	)
 
