@@ -4,11 +4,12 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // NewHandler -
 func NewHandler(keeper Keeper) sdk.Handler {
-	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
+	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		switch msg := msg.(type) {
 
 		case MsgNewRound:
@@ -25,39 +26,42 @@ func NewHandler(keeper Keeper) sdk.Handler {
 
 		default:
 			errMsg := fmt.Sprintf("Unknown rand Msg type: %v", msg.Type())
-			return sdk.ErrUnknownRequest(errMsg).Result()
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
 		}
 	}
 }
 
 // handleMsgNewRound -
-func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) sdk.Result {
+func handleMsgNewRound(ctx sdk.Context, keeper Keeper, msg MsgNewRound) (*sdk.Result, error) {
 	//if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
 	//return sdk.ErrUnauthorized("Owner mismatch").Result()
 	//}
 
 	if msg.Owner.Empty() {
-		return sdk.ErrUnauthorized("Owner is empty").Result()
+		errMsg := fmt.Sprintf("unauthorized")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
 	}
 
 	keeper.SetRound(ctx, msg.ID, Round{Difficulty: msg.Difficulty, Owner: msg.Owner, Nonce: msg.Nonce, NonceHash: msg.NonceHash, Targets: msg.Targets, DepositCoin: msg.DepositCoin, ScheduledTime: msg.ScheduledTime})
-	return sdk.Result{}
+	return &sdk.Result{}, nil
 }
 
 // handleMsgDepoloyNonce -
-func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) sdk.Result {
+func handleMsgDeployNonce(ctx sdk.Context, keeper Keeper, msg MsgDeployNonce) (*sdk.Result, error) {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Owner mismatch").Result()
+		errMsg := fmt.Sprintf("unauthorized")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
 	}
 
 	keeper.SetNonce(ctx, msg.ID, msg.Nonce)
-	return sdk.Result{}
+	return &sdk.Result{}, nil
 }
 
 // handleMsgAddTargets -
-func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.Result {
+func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) (*sdk.Result, error) {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Owner mismatch").Result()
+		errMsg := fmt.Sprintf("unauthorized")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
 	}
 
 	// 기존 Targets에 추가
@@ -81,13 +85,14 @@ func handleMsgAddTargets(ctx sdk.Context, keeper Keeper, msg MsgAddTargets) sdk.
 	}
 
 	keeper.SetTargets(ctx, msg.ID, newTargets)
-	return sdk.Result{}
+	return &sdk.Result{}, nil
 }
 
 // handleMsgRemoveTargets -
-func handleMsgUpdateTargets(ctx sdk.Context, keeper Keeper, msg MsgUpdateTargets) sdk.Result {
+func handleMsgUpdateTargets(ctx sdk.Context, keeper Keeper, msg MsgUpdateTargets) (*sdk.Result, error) {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) {
-		return sdk.ErrUnauthorized("Owner mismatch").Result()
+		errMsg := fmt.Sprintf("unauthorized")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
 	}
 
 	// 기존 Targets에서 일치하는 것 삭제
@@ -112,5 +117,5 @@ func handleMsgUpdateTargets(ctx sdk.Context, keeper Keeper, msg MsgUpdateTargets
 	*/
 
 	keeper.SetTargets(ctx, msg.ID, msg.Targets)
-	return sdk.Result{}
+	return &sdk.Result{}, nil
 }
