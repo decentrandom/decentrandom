@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
 	"strconv"
 	"strings"
@@ -12,7 +13,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
@@ -42,7 +45,7 @@ func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	randTxCmd.AddCommand(client.PostCommands(
+	randTxCmd.AddCommand(flags.PostCommands(
 		GetCmdNewRound(cdc),
 		GetCmdAddTargets(cdc),
 		GetCmdUpdateTargets(cdc),
@@ -58,9 +61,11 @@ func GetCmdNewRound(cdc *codec.Codec) *cobra.Command {
 		Short: "Create new round data",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+			cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
+
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
 				if err := cliCtx.EnsureAccountExists(); err != nil {
@@ -130,9 +135,11 @@ func GetCmdDeployNonce(cdc *codec.Codec) *cobra.Command {
 		Short: "Deploy Nonce to network",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+
+			cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
 				if err := cliCtx.EnsureAccountExists(); err != nil {
@@ -164,9 +171,11 @@ func GetCmdAddTargets(cdc *codec.Codec) *cobra.Command {
 		Short: "Insert target data",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+
+			cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
 				if err := cliCtx.EnsureAccountExists(); err != nil {
@@ -198,9 +207,11 @@ func GetCmdUpdateTargets(cdc *codec.Codec) *cobra.Command {
 		Short: "Update target data",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+
+			cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			/*
 				if err := cliCtx.EnsureAccountExists(); err != nil {
