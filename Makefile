@@ -88,6 +88,10 @@ go-mod-cache: go.sum
 	@echo "--> Download go modules to local cache"
 	@go mod download
 
+go-mod-vendor: go.mod
+	@echo "--> Download go modules to vendor directory"
+	@go mod vendor
+
 go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
 	@go mod verify
@@ -97,7 +101,6 @@ clean:
 
 distclean: clean
 	rm -rf vendor/
-
 
 .PHONY: all build-linux install \
 	go-mod-cache clean build distclean
