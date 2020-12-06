@@ -92,6 +92,10 @@ go-mod-vendor: go.mod
 	@echo "--> Download go modules to vendor directory"
 	@go mod vendor
 
+go-mod-tidy: go.mod
+	@echo "--> Optimize go modules"
+	@go mod tidy
+
 go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
 	@go mod verify
