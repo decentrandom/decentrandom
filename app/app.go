@@ -74,10 +74,12 @@ var (
 // MakeCodec -
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
+
 	ModuleBasics.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 	codec.RegisterEvidences(cdc)
+
 	return cdc
 }
 
@@ -234,7 +236,6 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 	)
 
 	app.mm = module.NewManager(
-		//genaccounts.NewAppModule(app.accountKeeper),
 		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx),
 		auth.NewAppModule(app.accountKeeper),
 		bank.NewAppModule(app.bankKeeper, app.accountKeeper),
@@ -262,28 +263,7 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 		staking.ModuleName,
 	)
 
-	// genutils must occur after staking so that pools are properly
-	// initialized with tokens from genesis accounts.
-	/*app.mm.SetOrderInitGenesis(
-		crisis.ModuleName,
-		rand.ModuleName,
-		mint.ModuleName,
-
-		genaccounts.ModuleName,
-		genutil.ModuleName,
-		auth.ModuleName,
-		bank.ModuleName,
-		supply.ModuleName,
-
-		distr.ModuleName,
-		gov.ModuleName,
-
-		slashing.ModuleName,
-		staking.ModuleName,
-	)*/
-
 	app.mm.SetOrderInitGenesis(
-		//genaccounts.ModuleName,
 		distr.ModuleName,
 		staking.ModuleName,
 		auth.ModuleName,
