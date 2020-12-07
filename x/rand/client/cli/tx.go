@@ -20,8 +20,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 
-	//authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
-
 	"github.com/tendermint/tendermint/crypto/merkle"
 )
 
