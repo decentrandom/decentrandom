@@ -1,7 +1,6 @@
 package app
 
 import (
-	//"io"
 	"encoding/json"
 	"os"
 
@@ -23,7 +22,6 @@ import (
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrclient "github.com/cosmos/cosmos-sdk/x/distribution/client"
 
-	//"github.com/cosmos/cosmos-sdk/x/genaccounts"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	"github.com/cosmos/cosmos-sdk/x/mint"
@@ -34,7 +32,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/supply"
 
 	"github.com/decentrandom/decentrandom/x/rand"
-	//"github.com/decentrandom/decentrandom/x/rand/types/assets"
 )
 
 const appName = "RandApp"
