@@ -1,7 +1,7 @@
 package util
 
 const (
-	// Bech32PrefixAccAddr -
+	// Bech32PrefixAccAddr - Address
 	Bech32PrefixAccAddr = "rand"
 	// Bech32PrefixAccPub -
 	Bech32PrefixAccPub = "randpub"
