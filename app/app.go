@@ -45,7 +45,6 @@ var (
 
 	// ModuleBasics -
 	ModuleBasics = module.NewBasicManager(
-		//	genaccounts.AppModuleBasic{},
 		genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},
 		bank.AppModuleBasic{},
@@ -89,23 +88,6 @@ type RandApp struct {
 
 	invCheckPeriod uint
 
-	// keys to access the substores
-	/*
-		keyMain     *sdk.KVStoreKey
-		keyAccount  *sdk.KVStoreKey
-		keySupply   *sdk.KVStoreKey
-		keyStaking  *sdk.KVStoreKey
-		tkeyStaking *sdk.TransientStoreKey
-		keySlashing *sdk.KVStoreKey
-		keyMint     *sdk.KVStoreKey
-		keyDistr    *sdk.KVStoreKey
-		tkeyDistr   *sdk.TransientStoreKey
-		keyGov      *sdk.KVStoreKey
-		keyParams   *sdk.KVStoreKey
-		tkeyParams  *sdk.TransientStoreKey
-		keyRand     *sdk.KVStoreKey
-	*/
-
 	keys  map[string]*sdk.KVStoreKey
 	tkeys map[string]*sdk.TransientStoreKey
 
@@ -129,13 +111,11 @@ type RandApp struct {
 }
 
 // NewRandApp -
-// func NewRandApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool, invCheckPeriod uint, baseAppOptions ...func(*bam.BaseApp)) *RandApp {
 func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 
 	cdc := MakeCodec()
 
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
-	//bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetAppVersion(version.Version)
 
 	keys := sdk.NewKVStoreKeys(
@@ -161,32 +141,10 @@ func NewRandApp(logger log.Logger, db dbm.DB, invCheckPeriod uint) *RandApp {
 
 		keys:  keys,
 		tkeys: tkeys,
-
-		//keyMain:     sdk.NewKVStoreKey(bam.MainStoreKey),
-		//keyAccount:  sdk.NewKVStoreKey(auth.StoreKey),
-		//keySupply:   sdk.NewKVStoreKey(supply.StoreKey),
-		//keyStaking:  sdk.NewKVStoreKey(staking.StoreKey),
-		//tkeyStaking: sdk.NewTransientStoreKey(staking.TStoreKey),
-		//keyMint:     sdk.NewKVStoreKey(mint.StoreKey),
-		//keyDistr:    sdk.NewKVStoreKey(distr.StoreKey),
-		//tkeyDistr: sdk.NewTransientStoreKey(distr.TStoreKey),
-		//keySlashing: sdk.NewKVStoreKey(slashing.StoreKey),
-		//keyGov:      sdk.NewKVStoreKey(gov.StoreKey),
-		//keyParams:   sdk.NewKVStoreKey(params.StoreKey),
-		//tkeyParams: sdk.NewTransientStoreKey(params.TStoreKey),
-		//keyRand:     sdk.NewKVStoreKey(rand.StoreKey),
 	}
 
 	// init params keeper and subspaces
 	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey])
-	//authSubspace := app.paramsKeeper.Subspace(auth.DefaultParamspace)
-	//bankSubspace := app.paramsKeeper.Subspace(bank.DefaultParamspace)
-	//stakingSubspace := app.paramsKeeper.Subspace(staking.DefaultParamspace)
-	//mintSubspace := app.paramsKeeper.Subspace(mint.DefaultParamspace)
-	//distrSubspace := app.paramsKeeper.Subspace(distr.DefaultParamspace)
-	//slashingSubspace := app.paramsKeeper.Subspace(slashing.DefaultParamspace)
-	//govSubspace := app.paramsKeeper.Subspace(gov.DefaultParamspace)
-	//crisisSubspace := app.paramsKeeper.Subspace(crisis.DefaultParamspace)
 
 	app.accountKeeper = auth.NewAccountKeeper(
 		app.cdc,
