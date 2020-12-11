@@ -4,6 +4,7 @@
 
 ## Keeper
 
+- To-do : Rand Seed, Nonce 전체 관리를 위한 내용
 - SetRound
 - GetRound
 - GetOwner
